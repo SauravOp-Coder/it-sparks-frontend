@@ -1,0 +1,110 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap");
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", sans-serif;
+
+  --color-primary: #0066e6;
+  --color-primaryDark: #003b8e;
+  --color-dark: #0b1220;
+  --color-softDark: #172033;
+  --color-lightBg: #f5f8fc;
+  --color-borderSoft: #e5eaf2;
+  --color-textGray: #5b6472;
+
+  --radius-card: 24px;
+  --radius-button: 12px;
+
+  --shadow-soft: 0 24px 70px rgba(11, 18, 32, 0.12);
+  --shadow-card: 0 14px 40px rgba(11, 18, 32, 0.08);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: "Inter", sans-serif;
+  background: #ffffff;
+  color: #0b1220;
+}
+
+a {
+  text-decoration: none;
+}
+
+button,
+input,
+textarea,
+select {
+  font-family: inherit;
+}
+
+.container-custom {
+  width: min(1180px, calc(100% - 32px));
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.section-padding {
+  padding: 96px 0;
+}
+
+.primary-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #0066e6, #003b8e);
+  color: white;
+  padding: 14px 22px;
+  border-radius: 12px;
+  font-weight: 800;
+  border: none;
+  transition: all 0.25s ease;
+  box-shadow: 0 14px 30px rgba(0, 102, 230, 0.22);
+}
+
+.primary-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 40px rgba(0, 102, 230, 0.3);
+}
+
+.secondary-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  color: #0b1220;
+  padding: 14px 22px;
+  border-radius: 12px;
+  font-weight: 800;
+  border: 1px solid #e5eaf2;
+  transition: all 0.25s ease;
+}
+
+.secondary-btn:hover {
+  border-color: #0066e6;
+  color: #0066e6;
+  transform: translateY(-2px);
+}
+
+.card-hover {
+  transition: all 0.28s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 24px 70px rgba(11, 18, 32, 0.12);
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
