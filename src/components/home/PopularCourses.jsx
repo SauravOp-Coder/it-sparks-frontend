@@ -76,11 +76,11 @@ const PopularCourses = () => {
             Loading courses...
           </div>
         ) : courses.length === 0 ? (
-          <div className="mt-14 bg-lightBg border border-borderSoft rounded-card p-10 text-center text-textGray font-semibold">
+          <div className="mt-14 rounded-card bg-lightBg p-10 text-center text-textGray font-semibold">
             Popular courses will be updated soon.
           </div>
         ) : (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-7 mt-14">
+          <div className="mt-14 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
             {courses.map((course) => (
               <CourseCard key={course._id} course={course} />
             ))}

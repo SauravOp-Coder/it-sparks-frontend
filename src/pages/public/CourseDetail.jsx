@@ -295,10 +295,6 @@ const downloadBrochure = async () => {
 
           <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-12 items-center mt-10">
             <div>
-              <span className="inline-flex bg-primary/20 border border-white/15 px-4 py-2 rounded-full text-sm font-extrabold">
-                {course.category}
-              </span>
-
               <h1 className="text-4xl md:text-6xl font-black leading-tight mt-5">
                 {course.title}
               </h1>
@@ -407,11 +403,6 @@ const downloadBrochure = async () => {
               </h3>
 
               <div className="grid gap-4 mt-6">
-                <div>
-                  <p className="text-sm text-textGray">Category</p>
-                  <p className="font-extrabold text-dark">{course.category}</p>
-                </div>
-
                 <div>
                   <p className="text-sm text-textGray">Duration</p>
                   <p className="font-extrabold text-dark">

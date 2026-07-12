@@ -6,7 +6,6 @@ import { getCoursesApi } from "../../api/courseApi";
 
 const Courses = () => {
   const [courses, setCourses] = useState([]);
-  const [activeCategory, setActiveCategory] = useState("All");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -25,16 +24,6 @@ const Courses = () => {
   useEffect(() => {
     fetchCourses();
   }, []);
-
-  const categories = [
-    "All",
-    ...new Set(courses.map((course) => course.category).filter(Boolean)),
-  ];
-
-  const filteredCourses =
-    activeCategory === "All"
-      ? courses
-      : courses.filter((course) => course.category === activeCategory);
 
   return (
     <main>
@@ -61,24 +50,6 @@ const Courses = () => {
             </p>
           </div>
 
-          {!loading && courses.length > 0 && (
-            <div className="flex flex-wrap justify-center gap-3 mt-10">
-              {categories.map((category) => (
-                <button
-                  key={category}
-                  onClick={() => setActiveCategory(category)}
-                  className={`px-5 py-3 rounded-full font-extrabold border transition ${
-                    activeCategory === category
-                      ? "bg-primary text-white border-primary"
-                      : "bg-white text-softDark border-borderSoft hover:border-primary hover:text-primary"
-                  }`}
-                >
-                  {category}
-                </button>
-              ))}
-            </div>
-          )}
-
           {loading ? (
             <div className="mt-14 bg-lightBg border border-borderSoft rounded-card p-10 text-center text-textGray font-semibold">
               Loading courses...
@@ -87,13 +58,13 @@ const Courses = () => {
             <div className="mt-14 bg-red-50 border border-red-100 rounded-card p-10 text-center text-red-600 font-semibold">
               {error}
             </div>
-          ) : filteredCourses.length === 0 ? (
+          ) : courses.length === 0 ? (
             <div className="mt-14 bg-lightBg border border-borderSoft rounded-card p-10 text-center text-textGray font-semibold">
               No courses available right now.
             </div>
           ) : (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-7 mt-14">
-              {filteredCourses.map((course) => (
+              {courses.map((course) => (
                 <CourseCard key={course._id} course={course} />
               ))}
             </div>
