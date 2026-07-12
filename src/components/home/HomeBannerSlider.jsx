@@ -92,7 +92,7 @@ const HomeBannerSlider = () => {
         <div className="max-w-3xl">
 
           <span className="inline-flex items-center rounded-full bg-primary/20 backdrop-blur-md border border-primary/40 text-white px-5 py-2 text-sm font-semibold tracking-wide">
-            🚀 IT Sparks Technologies
+          IT Sparks Technologies
           </span>
 
           <h1 className="mt-8 text-white text-5xl md:text-7xl font-black leading-[1.15]">
