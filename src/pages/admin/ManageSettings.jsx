@@ -10,6 +10,12 @@ const ManageSettings = () => {
     googleMapLink: "",
     googleReviewReadLink: "",
     googleReviewWriteLink: "",
+    seoTitle: "",
+    seoDescription: "",
+    seoKeywords: "",
+    seoImage: "",
+    seoCanonicalBase: "",
+    siteName: "",
     facebookLink: "",
     instagramLink: "",
     linkedinLink: "",
@@ -41,6 +47,12 @@ const ManageSettings = () => {
         googleMapLink: settings.googleMapLink || "",
         googleReviewReadLink: settings.googleReviewReadLink || "",
         googleReviewWriteLink: settings.googleReviewWriteLink || "",
+        seoTitle: settings.seoTitle || "",
+        seoDescription: settings.seoDescription || "",
+        seoKeywords: settings.seoKeywords || "",
+        seoImage: settings.seoImage || "",
+        seoCanonicalBase: settings.seoCanonicalBase || "",
+        siteName: settings.siteName || "",
         facebookLink: settings.facebookLink || "",
         instagramLink: settings.instagramLink || "",
         linkedinLink: settings.linkedinLink || "",
@@ -202,6 +214,61 @@ const ManageSettings = () => {
             value={formData.googleReviewWriteLink}
             onChange={handleChange}
             placeholder="Google Review Write Link"
+            className="border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
+          />
+        </div>
+
+        <h3 className="text-xl font-extrabold text-dark mt-8 mb-6">
+          SEO Defaults
+        </h3>
+
+        <div className="grid gap-5">
+          <input
+            name="siteName"
+            value={formData.siteName}
+            onChange={handleChange}
+            placeholder="Site Name"
+            className="border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
+          />
+
+          <input
+            name="seoTitle"
+            value={formData.seoTitle}
+            onChange={handleChange}
+            placeholder="Default Page Title"
+            className="border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
+          />
+
+          <textarea
+            name="seoDescription"
+            value={formData.seoDescription}
+            onChange={handleChange}
+            placeholder="Default Meta Description"
+            rows="3"
+            className="border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary resize-none"
+          />
+
+          <input
+            name="seoKeywords"
+            value={formData.seoKeywords}
+            onChange={handleChange}
+            placeholder="Default Keywords"
+            className="border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
+          />
+
+          <input
+            name="seoImage"
+            value={formData.seoImage}
+            onChange={handleChange}
+            placeholder="Default OG Image Path (e.g. /og-image.jpg)"
+            className="border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
+          />
+
+          <input
+            name="seoCanonicalBase"
+            value={formData.seoCanonicalBase}
+            onChange={handleChange}
+            placeholder="Canonical Base URL"
             className="border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
           />
         </div>

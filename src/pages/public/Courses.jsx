@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import CourseCard from "../../components/courses/CourseCard";
 import ReviewSection from "../../components/common/ReviewSection";
 import PageBanner from "../../components/common/PageBanner";
+import SEO from "../../components/common/SEO";
 import { getCoursesApi } from "../../api/courseApi";
 
 const Courses = () => {
@@ -27,6 +28,12 @@ const Courses = () => {
 
   return (
     <main>
+      <SEO
+        title="Professional IT Courses"
+        description="Explore practical IT courses in AI, data science, full stack development, cloud computing, and software training at IT Sparks Technologies."
+        keywords="IT courses, AI courses, data science training, cloud computing course, full stack development, software training"
+        canonical="/courses"
+      />
       <PageBanner
         page="courses"
         fallbackTitle="Explore Our Professional IT Courses"

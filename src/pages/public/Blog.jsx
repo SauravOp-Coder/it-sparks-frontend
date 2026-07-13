@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import BlogCard from "../../components/blogs/BlogCard";
+import SEO from "../../components/common/SEO";
 import { getBlogsApi } from "../../api/blogApi";
 
 const Blog = () => {
@@ -25,6 +26,12 @@ const Blog = () => {
 
   return (
     <main>
+      <SEO
+        title="IT Sparks Blog"
+        description="Read practical articles on IT courses, career guidance, placement preparation, and technology learning from IT Sparks Technologies."
+        keywords="IT blogs, career guidance, technology learning, placement preparation, IT training articles"
+        canonical="/blog"
+      />
       <section className="bg-gradient-to-br from-white via-lightBg to-white py-20">
         <div className="container-custom text-center max-w-3xl">
           <span className="text-primary font-bold uppercase tracking-wide text-sm">

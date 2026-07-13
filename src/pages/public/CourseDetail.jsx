@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { getCourseByIdApi } from "../../api/courseApi";
 import { createEnquiryApi } from "../../api/enquiryApi";
+import SEO from "../../components/common/SEO";
 
 const textCaseClass = {
   normal: "",
@@ -283,6 +284,13 @@ const downloadBrochure = async () => {
 
   return (
     <main>
+      <SEO
+        title={course.title}
+        description={course.description || "Explore this IT training course and learn practical skills with project-based education."}
+        keywords={`${course.title}, IT training, practical learning, career guidance`}
+        canonical={`/courses/${id}`}
+        ogImage={course.image?.url || undefined}
+      />
       <section className="bg-gradient-to-br from-dark via-softDark to-dark text-white py-20">
         <div className="container-custom">
           <Link

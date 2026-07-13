@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import ReviewSection from "../../components/common/ReviewSection";
 import PageBanner from "../../components/common/PageBanner";
+import SEO from "../../components/common/SEO";
 
 import {
   ArrowRight,
@@ -91,6 +92,12 @@ const workSteps = [
 const About = () => {
   return (
     <main>
+      <SEO
+        title="About IT Sparks Technologies"
+        description="Learn about IT Sparks Technologies, its practical IT training approach, industry-led curriculum, and placement-focused student support."
+        keywords="about IT Sparks, practical IT training, placement support, AI training institute"
+        canonical="/about"
+      />
       <PageBanner
         page="about"
         fallbackTitle="About IT Sparks Technologies"
