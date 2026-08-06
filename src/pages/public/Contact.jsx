@@ -12,6 +12,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getSettingsApi } from "../../api/settingApi";
 import PageBanner from "../../components/common/PageBanner";
+import SEO from "../../components/common/SEO";
 
 const Contact = () => {
   const navigate = useNavigate();
@@ -84,6 +85,12 @@ const handleSubmit = async (e) => {
 
   return (
     <main>
+     <SEO
+       title="Contact IT Sparks Technologies"
+       description="Get in touch with IT Sparks Technologies for course enquiries, demo sessions, training details, and placement support."
+       keywords="contact IT Sparks, course enquiry, training support, placement guidance"
+       canonical="/contact"
+     />
      <PageBanner
   page="contact"
   fallbackTitle="Contact Us"

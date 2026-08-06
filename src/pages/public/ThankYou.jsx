@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { CheckCircle, Home, Phone, Mail } from "lucide-react";
+import SEO from "../../components/common/SEO";
 
 const ThankYou = () => {
   const navigate = useNavigate();
@@ -16,6 +17,13 @@ const ThankYou = () => {
 
   return (
     <main className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/5 via-white to-primary/5">
+      <SEO
+        title="Thank You"
+        description="Thank you for contacting IT Sparks Technologies. Your enquiry has been received and our team will get back to you shortly."
+        keywords="thank you, IT Sparks enquiry"
+        canonical="/thank-you"
+        noIndex
+      />
       <div className="container-custom">
         <div className="max-w-2xl mx-auto text-center py-12 px-4">
           {/* Success Icon */}

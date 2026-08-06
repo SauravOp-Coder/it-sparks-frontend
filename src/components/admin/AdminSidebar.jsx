@@ -1,16 +1,15 @@
-import { useNavigate } from "react-router-dom";
-import { NavLink } from "react-router-dom";
+import { useNavigate, NavLink } from "react-router-dom";
 import {
-  BookOpen,
-  Home,
-  Image,
   LayoutDashboard,
-  LogOut,
-  MessageSquare,
+  Home,
+  BookOpen,
   Newspaper,
-  Settings,
   Star,
   Trophy,
+  Image,
+  MessageSquare,
+  Settings,
+  LogOut,
 } from "lucide-react";
 import logo from "../../assets/logo/it-sparks-logo.png";
 
@@ -51,7 +50,7 @@ const menuItems = [
     icon: Image,
   },
   {
-    title: "Banners",
+    title: "Manage Banners",
     path: "/admin/banners",
     icon: Image,
   },
@@ -68,14 +67,13 @@ const menuItems = [
 ];
 
 const AdminSidebar = () => {
-
   const navigate = useNavigate();
 
-const handleLogout = () => {
-  localStorage.removeItem("adminToken");
-  localStorage.removeItem("adminInfo");
-  navigate("/admin/login");
-};
+  const handleLogout = () => {
+    localStorage.removeItem("adminToken");
+    localStorage.removeItem("adminInfo");
+    navigate("/admin/login");
+  };
 
   return (
     <aside className="fixed left-0 top-0 h-screen w-[270px] bg-dark text-white z-50 hidden lg:flex flex-col">
@@ -111,7 +109,10 @@ const handleLogout = () => {
       </nav>
 
       <div className="p-4 border-t border-white/10">
-        <button onClick={handleLogout} className="w-full flex items-center gap-3 px-4 py-3 rounded-button font-semibold text-white/70 hover:bg-white/10 hover:text-white transition">
+        <button
+          onClick={handleLogout}
+          className="w-full flex items-center gap-3 px-4 py-3 rounded-button font-semibold text-white/70 hover:bg-white/10 hover:text-white transition"
+        >
           <LogOut size={20} />
           Logout
         </button>

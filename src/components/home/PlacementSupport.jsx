@@ -20,6 +20,12 @@ const defaultSupportItems = [
 
 const icons = [FileCheck2, Mic, UsersRound];
 
+const getTextLines = (text = "") =>
+  text
+    .split(/\n/)
+    .map((line) => line.trim())
+    .filter(Boolean);
+
 const PlacementSupport = () => {
   const [home, setHome] = useState(null);
 
@@ -51,33 +57,34 @@ const PlacementSupport = () => {
   return (
     <section className="section-padding bg-lightBg">
       <div className="container-custom">
-        <div className="grid lg:grid-cols-[0.9fr_1.1fr] gap-12 items-center">
+        <div className="grid items-center gap-12 lg:grid-cols-[0.9fr_1.1fr]">
           <div>
-            <span className="text-primary font-bold uppercase tracking-wide text-sm">
+            <span className="text-sm font-bold uppercase tracking-[0.2em] text-primary">
               Placement Support
             </span>
 
-            <h2 className="text-3xl md:text-4xl font-extrabold text-dark mt-3">
+            <h2 className="mt-3 text-3xl font-extrabold leading-tight text-dark md:text-4xl">
               {title}
             </h2>
 
-            <p className="text-textGray leading-8 mt-5">{subtitle}</p>
+            <p className="mt-5 text-base leading-8 text-textGray">{subtitle}</p>
 
             <Link to="/placements" className="primary-btn mt-7">
               View Placement Support <ArrowRight size={19} className="ml-2" />
             </Link>
           </div>
 
-          <div className="grid gap-5">
+          <div className="grid gap-6">
             {supportItems.map((item, index) => {
               const Icon = icons[index % icons.length];
+              const lines = getTextLines(item.text);
 
               return (
                 <div
                   key={`${item.title}-${index}`}
-                  className="bg-white border border-borderSoft rounded-card p-6 shadow-card card-hover flex gap-5"
+                  className="flex gap-5 rounded-card bg-white p-6 shadow-card transition duration-300 hover:-translate-y-1 hover:shadow-lg"
                 >
-                  <div className="h-14 w-14 rounded-2xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                  <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary">
                     <Icon size={28} />
                   </div>
 
@@ -85,7 +92,18 @@ const PlacementSupport = () => {
                     <h3 className="text-xl font-extrabold text-dark">
                       {item.title}
                     </h3>
-                    <p className="text-textGray leading-7 mt-2">{item.text}</p>
+
+                    <div className="mt-3 space-y-2">
+                      {lines.length > 0 ? (
+                        lines.map((line, lineIndex) => (
+                          <p key={`${item.title}-${lineIndex}`} className="text-sm leading-7 text-textGray">
+                            {line.replace(/^[-•*]\s*/, "")}
+                          </p>
+                        ))
+                      ) : (
+                        <p className="text-sm leading-7 text-textGray">{item.text}</p>
+                      )}
+                    </div>
                   </div>
                 </div>
               );

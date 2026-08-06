@@ -1,4 +1,8 @@
-import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  ArrowRight,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getBannersByPageApi } from "../../api/bannerApi";
@@ -12,14 +16,15 @@ const HomeBannerSlider = () => {
   const fetchBanners = async () => {
     try {
       setLoading(true);
+
       const data = await getBannersByPageApi("home");
 
-      const sliderBanners = (data.banners || []).filter(
+      const slider = (data.banners || []).filter(
         (banner) => banner.type === "slider"
       );
 
-      setBanners(sliderBanners);
-    } catch (error) {
+      setBanners(slider);
+    } catch (err) {
       setBanners([]);
     } finally {
       setLoading(false);
@@ -38,91 +43,116 @@ const HomeBannerSlider = () => {
     }, 5000);
 
     return () => clearInterval(interval);
-  }, [banners.length]);
-
-  const nextSlide = () => {
-    setActiveIndex((prev) => (prev + 1) % banners.length);
-  };
-
-  const prevSlide = () => {
-    setActiveIndex((prev) =>
-      prev === 0 ? banners.length - 1 : prev - 1
-    );
-  };
+  }, [banners]);
 
   if (loading) {
     return (
-      <section className="min-h-[620px] bg-lightBg flex items-center justify-center">
-        <p className="text-textGray font-semibold">Loading...</p>
+      <section className="h-screen flex items-center justify-center bg-slate-100">
+        <p className="text-lg font-semibold">Loading...</p>
       </section>
     );
   }
 
-  if (banners.length === 0) {
+  if (!banners.length) {
     return <HeroSection />;
   }
 
   const banner = banners[activeIndex];
 
+  const nextSlide = () =>
+    setActiveIndex((prev) => (prev + 1) % banners.length);
+
+  const prevSlide = () =>
+    setActiveIndex((prev) =>
+      prev === 0 ? banners.length - 1 : prev - 1
+    );
+
   return (
-    <section className="relative min-h-[680px] overflow-hidden bg-dark">
+    <section className="relative h-[100vh] min-h-[700px] overflow-hidden">
+
+      {/* Background */}
       <div className="absolute inset-0">
         <img
           src={banner.image?.url}
           alt={banner.title}
           className="h-full w-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-dark via-dark/75 to-dark/20" />
+
+        {/* Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#020817]/95 via-[#020817]/70 to-[#020817]/30" />
+
+        <div className="absolute inset-0 bg-black/20" />
+
+        <div className="absolute bottom-0 left-0 w-full h-40 bg-gradient-to-t from-white via-white/60 to-transparent" />
       </div>
 
-      <div className="container-custom relative min-h-[680px] flex items-center">
-        <div className="max-w-3xl text-white py-20">
-          <span className="inline-flex bg-primary/20 text-white border border-white/20 backdrop-blur px-4 py-2 rounded-full text-sm font-extrabold">
-            IT Sparks Technologies
+      {/* Content */}
+      <div className="container-custom relative z-20 h-full flex items-center">
+
+        <div className="max-w-3xl">
+
+          <span className="inline-flex items-center rounded-full bg-primary/20 backdrop-blur-md border border-primary/40 text-white px-5 py-2 text-sm font-semibold tracking-wide">
+            🚀 IT Sparks Technologies
           </span>
 
-          <h1 className="text-4xl md:text-6xl font-black leading-tight mt-6">
+          <h1 className="mt-8 text-white text-5xl md:text-7xl font-black leading-[1.15]">
             {banner.title}
           </h1>
 
-          <p className="text-white/80 text-lg leading-8 mt-6 max-w-2xl">
+          <p className="mt-8 text-xl text-slate-200 leading-9 max-w-2xl">
             {banner.subtitle}
           </p>
 
-          {banner.buttonText && banner.buttonLink && (
-            <Link to={banner.buttonLink} className="primary-btn mt-8">
-              {banner.buttonText}
-              <ArrowRight size={19} className="ml-2" />
+          <div className="flex flex-wrap gap-5 mt-10">
+
+            {banner.buttonText && (
+              <Link
+                to={banner.buttonLink}
+                className="inline-flex items-center px-8 py-4 bg-primary text-white rounded-xl font-bold hover:scale-105 hover:shadow-2xl transition duration-300"
+              >
+                {banner.buttonText}
+                <ArrowRight className="ml-3" size={20} />
+              </Link>
+            )}
+
+            <Link
+              to="/courses"
+              className="inline-flex items-center px-8 py-4 border border-white/40 text-white rounded-xl font-bold backdrop-blur hover:bg-white hover:text-dark transition"
+            >
+              Explore Courses
             </Link>
-          )}
+
+          </div>
         </div>
       </div>
 
+      {/* Left Arrow */}
       {banners.length > 1 && (
         <>
           <button
             onClick={prevSlide}
-            className="absolute left-6 top-1/2 -translate-y-1/2 h-12 w-12 rounded-full bg-white/15 backdrop-blur text-white border border-white/20 flex items-center justify-center hover:bg-primary transition"
+            className="absolute left-8 top-1/2 -translate-y-1/2 z-30 w-14 h-14 rounded-full bg-white/10 backdrop-blur border border-white/30 text-white hover:bg-primary transition"
           >
-            <ChevronLeft size={26} />
+            <ChevronLeft className="mx-auto" size={28} />
           </button>
 
           <button
             onClick={nextSlide}
-            className="absolute right-6 top-1/2 -translate-y-1/2 h-12 w-12 rounded-full bg-white/15 backdrop-blur text-white border border-white/20 flex items-center justify-center hover:bg-primary transition"
+            className="absolute right-8 top-1/2 -translate-y-1/2 z-30 w-14 h-14 rounded-full bg-white/10 backdrop-blur border border-white/30 text-white hover:bg-primary transition"
           >
-            <ChevronRight size={26} />
+            <ChevronRight className="mx-auto" size={28} />
           </button>
 
-          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-3">
-            {banners.map((item, index) => (
+          {/* Indicators */}
+          <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex gap-3 z-30">
+            {banners.map((_, index) => (
               <button
-                key={item._id}
+                key={index}
                 onClick={() => setActiveIndex(index)}
-                className={`h-3 rounded-full transition-all ${
+                className={`transition-all duration-300 rounded-full ${
                   activeIndex === index
-                    ? "w-10 bg-primary"
-                    : "w-3 bg-white/50"
+                    ? "w-10 h-3 bg-primary"
+                    : "w-3 h-3 bg-white/50"
                 }`}
               />
             ))}

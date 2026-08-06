@@ -13,6 +13,7 @@ import {
   Target,
 } from "lucide-react";
 import PageBanner from "../../components/common/PageBanner";
+import SEO from "../../components/common/SEO";
 
 const support = [
   {
@@ -62,6 +63,12 @@ useEffect(() => {
 }, []);
   return (
     <main>
+      <SEO
+        title="Placement Support"
+        description="Get placement-focused career guidance, interview preparation, resume support, and project guidance from IT Sparks Technologies."
+        keywords="placement support, interview preparation, job guidance, career support, IT placement"
+        canonical="/placements"
+      />
       <PageBanner
   page="placements"
   fallbackTitle="Placement Support"
