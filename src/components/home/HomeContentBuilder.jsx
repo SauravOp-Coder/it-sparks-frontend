@@ -87,24 +87,32 @@ const HomeContentBuilder = () => {
   const [home, setHome] = useState(null);
   const [openFaqs, setOpenFaqs] = useState({});
 
-  useEffect(() => {
-    const fetchHome = async () => {
-      try {
-        const data = await getHomeContentApi();
-        setHome(data.homeContent);
-      } catch (error) {
-        setHome(null);
-      }
-    };
+ useEffect(() => {
+  const fetchHome = async () => {
+    try {
+      const data = await getHomeContentApi();
 
-    fetchHome();
-  }, []);
+      console.log("FULL RESPONSE:", data);
+      console.log("HOME CONTENT:", data.homeContent);
+      console.log("HOME FAQS:", data.homeContent?.faqs);
+
+      setHome(data.homeContent);
+    } catch (error) {
+      console.error("ERROR:", error);
+    }
+  };
+
+  fetchHome();
+}, []);
 
   const sections =
     Array.isArray(home?.homeSections) && home.homeSections.length > 0
       ? home.homeSections
       : defaultContentSections;
   const faqs = Array.isArray(home?.faqs) ? home.faqs : [];
+
+  console.log("Rendered FAQs:", faqs);
+console.log("FAQ Count:", faqs.length);
 
   const renderSection = (section, index) => {
     const textCaseClass =
