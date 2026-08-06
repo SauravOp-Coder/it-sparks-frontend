@@ -2,15 +2,19 @@ import { useNavigate } from "react-router-dom";
 import { NavLink } from "react-router-dom";
 import {
   BookOpen,
-  Home,
-  Image,
   LayoutDashboard,
-  LogOut,
   MessageSquare,
-  Newspaper,
-  Settings,
-  Star,
   Trophy,
+  Home,
+  BookOpenCheck,
+  Newspaper,
+  Star,
+  BriefcaseBusiness,
+  Images,
+  MessageSquareText,
+  Settings,
+  LogOut,
+  Image,
 } from "lucide-react";
 import logo from "../../assets/logo/it-sparks-logo.png";
 
