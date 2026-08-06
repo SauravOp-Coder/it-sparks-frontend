@@ -87,6 +87,19 @@ const HomeContentBuilder = () => {
   const [home, setHome] = useState(null);
   const [openFaqs, setOpenFaqs] = useState({});
 
+  const parseJsonArray = (value) => {
+    if (Array.isArray(value)) return value;
+    if (typeof value === "string") {
+      try {
+        const parsed = JSON.parse(value);
+        return Array.isArray(parsed) ? parsed : [];
+      } catch {
+        return [];
+      }
+    }
+    return [];
+  };
+
   useEffect(() => {
     const fetchHome = async () => {
       try {
@@ -100,11 +113,9 @@ const HomeContentBuilder = () => {
     fetchHome();
   }, []);
 
-  const sections =
-    Array.isArray(home?.homeSections) && home.homeSections.length > 0
-      ? home.homeSections
-      : defaultContentSections;
-  const faqs = Array.isArray(home?.faqs) ? home.faqs : [];
+  const homeSections = parseJsonArray(home?.homeSections);
+  const sections = homeSections.length > 0 ? homeSections : defaultContentSections;
+  const faqs = parseJsonArray(home?.faqs);
 
   const renderSection = (section, index) => {
     const textCaseClass =

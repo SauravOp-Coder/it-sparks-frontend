@@ -47,6 +47,19 @@ const createEmptyFaq = () => ({
   answer: "",
 });
 
+const parseJsonArray = (value) => {
+  if (Array.isArray(value)) return value;
+  if (typeof value === "string") {
+    try {
+      const parsed = JSON.parse(value);
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
+    }
+  }
+  return [];
+};
+
 const ManageHome = () => {
   const [formData, setFormData] = useState(emptyForm);
   const [currentHeroImage, setCurrentHeroImage] = useState("");
@@ -130,24 +143,20 @@ const fetchHomeContent = async () => {
       ctaButtonText: home.ctaButtonText || "",
       ctaButtonLink: home.ctaButtonLink || "",
       heroImage: null,
-      homeSections: Array.isArray(home.homeSections)
-        ? home.homeSections.map((section) => ({
-            type: section.type || "paragraph",
-            title: section.title || "",
-            content: section.content || "",
-            itemsText: Array.isArray(section.items)
-              ? section.items.join("\n")
-              : "",
-            textCase: section.textCase || "normal",
-            layout: section.layout || "full",
-          }))
-        : [],
-      faqs: Array.isArray(home.faqs)
-        ? home.faqs.map((faq) => ({
-            question: faq.question || "",
-            answer: faq.answer || "",
-          }))
-        : [],
+      homeSections: parseJsonArray(home.homeSections).map((section) => ({
+        type: section.type || "paragraph",
+        title: section.title || "",
+        content: section.content || "",
+        itemsText: Array.isArray(section.items)
+          ? section.items.join("\n")
+          : "",
+        textCase: section.textCase || "normal",
+        layout: section.layout || "full",
+      })),
+      faqs: parseJsonArray(home.faqs).map((faq) => ({
+        question: faq.question || "",
+        answer: faq.answer || "",
+      })),
 
       // New mapped fields added below
       whyChooseCardsText: Array.isArray(home.whyChooseCards)
