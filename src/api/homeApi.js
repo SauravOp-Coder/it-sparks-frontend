@@ -1,17 +1,16 @@
-import axios from "axios";
-
-const API = axios.create({ baseURL: "/api/home" });
+import API from "./axiosConfig";
 
 export const getHomeContentApi = async () => {
-  const response = await API.get("/");
+  const response = await API.get("/home");
   return response.data;
 };
 
-export const updateHomeContentApi = async (payload) => {
-  const response = await API.put("/", payload, {
+export const updateHomeContentApi = async (formData) => {
+  const response = await API.put("/home", formData, {
     headers: {
-      "Content-Type": "application/json", // change to multipart/form-data if sending FormData
+      "Content-Type": "multipart/form-data",
     },
   });
+
   return response.data;
 };

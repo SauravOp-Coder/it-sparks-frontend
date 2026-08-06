@@ -1,6 +1,17 @@
 import { useEffect, useState } from "react";
 import { getHomeContentApi, updateHomeContentApi } from "../../api/homeApi";
-import { Plus, Trash2, Upload, Image as ImageIcon } from "lucide-react";
+
+const defaultSections = [
+  { key: "hero", title: "Hero Banner", enabled: true, order: 0 },
+  { key: "courses", title: "Popular Courses", enabled: true, order: 1 },
+  { key: "whyChoose", title: "Why Choose Us", enabled: true, order: 2 },
+  { key: "training", title: "Training Process", enabled: true, order: 3 },
+  { key: "placement", title: "Placement Support", enabled: true, order: 4 },
+  { key: "recruiters", title: "Our Recruiters", enabled: true, order: 5 },
+  { key: "reviews", title: "Student Reviews", enabled: true, order: 6 },
+  { key: "faqs", title: "Frequently Asked Questions", enabled: true, order: 7 },
+  { key: "cta", title: "Call To Action", enabled: true, order: 8 },
+];
 
 const emptyForm = {
   heroBadge: "",
@@ -24,88 +35,28 @@ const emptyForm = {
   ctaSubtitle: "",
   ctaButtonText: "",
   ctaButtonLink: "",
+  faqTitle: "",
+  faqSubtitle: "",
   whyChooseCardsText: "",
   trainingStepsText: "",
   placementSupportCardsText: "",
   recruitersText: "",
   heroImage: null,
-  homeSections: [],
-  faqs: [],
 };
-
-const createEmptySection = () => ({
-  type: "paragraph",
-  title: "",
-  content: "",
-  itemsText: "",
-  textCase: "normal",
-  layout: "full",
-});
-
-const createEmptyFaq = () => ({
-  question: "",
-  answer: "",
-});
 
 const ManageHome = () => {
   const [formData, setFormData] = useState(emptyForm);
+  const [faqs, setFaqs] = useState([]);
+  const [sections, setSections] = useState(defaultSections);
   const [currentHeroImage, setCurrentHeroImage] = useState("");
-  const [imagePreview, setImagePreview] = useState("");
   const [pageLoading, setPageLoading] = useState(true);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState("");
   const [error, setError] = useState("");
 
-  const addHomeSection = () => {
-    setFormData((prev) => ({
-      ...prev,
-      homeSections: [...(prev.homeSections || []), createEmptySection()],
-    }));
-  };
-
-  const removeHomeSection = (index) => {
-    setFormData((prev) => ({
-      ...prev,
-      homeSections: (prev.homeSections || []).filter((_, i) => i !== index),
-    }));
-  };
-
-  const updateHomeSection = (index, field, value) => {
-    setFormData((prev) => ({
-      ...prev,
-      homeSections: (prev.homeSections || []).map((section, i) =>
-        i === index ? { ...section, [field]: value } : section
-      ),
-    }));
-  };
-
-  const addFaq = () => {
-    setFormData((prev) => ({
-      ...prev,
-      faqs: [...(prev.faqs || []), createEmptyFaq()],
-    }));
-  };
-
-  const removeFaq = (index) => {
-    setFormData((prev) => ({
-      ...prev,
-      faqs: (prev.faqs || []).filter((_, i) => i !== index),
-    }));
-  };
-
-  const updateFaq = (index, field, value) => {
-    setFormData((prev) => ({
-      ...prev,
-      faqs: (prev.faqs || []).map((faq, i) =>
-        i === index ? { ...faq, [field]: value } : faq
-      ),
-    }));
-  };
-
   const fetchHomeContent = async () => {
     try {
       setPageLoading(true);
-      setError("");
       const data = await getHomeContentApi();
       const home = data.homeContent || {};
 
@@ -131,47 +82,33 @@ const ManageHome = () => {
         ctaSubtitle: home.ctaSubtitle || "",
         ctaButtonText: home.ctaButtonText || "",
         ctaButtonLink: home.ctaButtonLink || "",
+        faqTitle: home.faqTitle || "Frequently Asked Questions",
+        faqSubtitle: home.faqSubtitle || "Find answers to common questions about our programs.",
         heroImage: null,
-        homeSections: Array.isArray(home.homeSections)
-          ? home.homeSections.map((section) => ({
-              type: section.type || "paragraph",
-              title: section.title || "",
-              content: section.content || "",
-              itemsText: Array.isArray(section.items)
-                ? section.items.join("\n")
-                : "",
-              textCase: section.textCase || "normal",
-              layout: section.layout || "full",
-            }))
-          : [],
-        faqs: Array.isArray(home.faqs)
-          ? home.faqs.map((faq) => ({
-              question: faq.question || "",
-              answer: faq.answer || "",
-            }))
-          : [],
+
         whyChooseCardsText: Array.isArray(home.whyChooseCards)
-          ? home.whyChooseCards
-              .map((item) => `${item.title} | ${item.text}`)
-              .join("\n")
+          ? home.whyChooseCards.map((item) => `${item.title} | ${item.text}`).join("\n")
           : "",
+
         trainingStepsText: Array.isArray(home.trainingSteps)
-          ? home.trainingSteps
-              .map((item) => `${item.number} | ${item.title} | ${item.text}`)
-              .join("\n")
+          ? home.trainingSteps.map((item) => `${item.number} | ${item.title} | ${item.text}`).join("\n")
           : "",
+
         placementSupportCardsText: Array.isArray(home.placementSupportCards)
-          ? home.placementSupportCards
-              .map((item) => `${item.title} | ${item.text}`)
-              .join("\n")
+          ? home.placementSupportCards.map((item) => `${item.title} | ${item.text}`).join("\n")
           : "",
-        recruitersText: Array.isArray(home.recruiters)
-          ? home.recruiters.join(", ")
-          : "",
+
+        recruitersText: Array.isArray(home.recruiters) ? home.recruiters.join(", ") : "",
       });
 
+      setFaqs(Array.isArray(home.faqs) ? home.faqs : []);
+      if (Array.isArray(home.sections) && home.sections.length > 0) {
+        setSections(home.sections.sort((a, b) => a.order - b.order));
+      } else {
+        setSections(defaultSections);
+      }
+
       setCurrentHeroImage(home.heroImage?.url || "");
-      setImagePreview("");
     } catch (err) {
       setError(err.response?.data?.message || "Failed to fetch home content");
     } finally {
@@ -185,54 +122,46 @@ const ManageHome = () => {
 
   const handleChange = (e) => {
     const { name, value, type, files } = e.target;
-
     if (type === "file") {
-      const file = files[0];
-      if (file) {
-        setFormData((prev) => ({
-          ...prev,
-          [name]: file,
-        }));
-        setImagePreview(URL.createObjectURL(file));
-      }
+      setFormData((prev) => ({ ...prev, [name]: files[0] }));
       return;
     }
-
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const parsePipeDelimitedCards = (text) => {
-    if (!text) return [];
-    return text
-      .split("\n")
-      .map((line) => line.trim())
-      .filter(Boolean)
-      .map((line) => {
-        const parts = line.split("|").map((p) => p.trim());
-        return {
-          title: parts[0] || "",
-          text: parts[1] || "",
-        };
-      });
+  // Section Order & Active Status Handlers
+  const toggleSection = (index) => {
+    setSections((prev) =>
+      prev.map((sec, i) => (i === index ? { ...sec, enabled: !sec.enabled } : sec))
+    );
   };
 
-  const parsePipeDelimitedSteps = (text) => {
-    if (!text) return [];
-    return text
-      .split("\n")
-      .map((line) => line.trim())
-      .filter(Boolean)
-      .map((line) => {
-        const parts = line.split("|").map((p) => p.trim());
-        return {
-          number: parts[0] || "",
-          title: parts[1] || "",
-          text: parts[2] || "",
-        };
-      });
+  const moveSection = (index, direction) => {
+    const targetIndex = index + direction;
+    if (targetIndex < 0 || targetIndex >= sections.length) return;
+    const updated = [...sections];
+    const temp = updated[index];
+    updated[index] = updated[targetIndex];
+    updated[targetIndex] = temp;
+
+    // Update order key
+    const reordered = updated.map((sec, idx) => ({ ...sec, order: idx }));
+    setSections(reordered);
+  };
+
+  // FAQ Handlers
+  const handleFaqChange = (index, field, value) => {
+    setFaqs((prev) =>
+      prev.map((faq, i) => (i === index ? { ...faq, [field]: value } : faq))
+    );
+  };
+
+  const addFaq = () => {
+    setFaqs((prev) => [...prev, { question: "", answer: "", order: prev.length }]);
+  };
+
+  const removeFaq = (index) => {
+    setFaqs((prev) => prev.filter((_, i) => i !== index));
   };
 
   const buildPayload = () => {
@@ -241,63 +170,20 @@ const ManageHome = () => {
     Object.entries(formData).forEach(([key, value]) => {
       if (key === "heroImage") {
         if (value) payload.append("heroImage", value);
-      } else if (key === "homeSections") {
-        payload.append(
-          "homeSections",
-          JSON.stringify(
-            (value || []).map((section) => ({
-              type: section.type,
-              title: section.title,
-              content: section.content,
-              textCase: section.textCase,
-              layout: section.layout,
-              items: section.itemsText
-                ? section.itemsText
-                    .split("\n")
-                    .map((item) => item.trim())
-                    .filter(Boolean)
-                : [],
-            }))
-          )
-        );
-      } else if (key === "faqs") {
-        payload.append(
-          "faqs",
-          JSON.stringify(
-            (value || []).map((faq) => ({
-              question: faq.question,
-              answer: faq.answer,
-            }))
-          )
-        );
-      } else if (key === "whyChooseCardsText") {
-        const parsed = parsePipeDelimitedCards(value);
-        payload.append("whyChooseCards", JSON.stringify(parsed));
-      } else if (key === "trainingStepsText") {
-        const parsed = parsePipeDelimitedSteps(value);
-        payload.append("trainingSteps", JSON.stringify(parsed));
-      } else if (key === "placementSupportCardsText") {
-        const parsed = parsePipeDelimitedCards(value);
-        payload.append("placementSupportCards", JSON.stringify(parsed));
-      } else if (key === "recruitersText") {
-        const list = value
-          ? value
-              .split(",")
-              .map((item) => item.trim())
-              .filter(Boolean)
-          : [];
-        payload.append("recruiters", JSON.stringify(list));
       } else {
         payload.append(key, value ?? "");
       }
     });
+
+    // Serialize dynamic arrays to stringified JSON for backend parsing
+    payload.append("sections", JSON.stringify(sections));
+    payload.append("faqs", JSON.stringify(faqs));
 
     return payload;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
       setLoading(true);
       setError("");
@@ -306,7 +192,7 @@ const ManageHome = () => {
       const payload = buildPayload();
       await updateHomeContentApi(payload);
 
-      setSuccess("Home content updated successfully!");
+      setSuccess("Home content updated successfully");
       await fetchHomeContent();
     } catch (err) {
       setError(err.response?.data?.message || "Failed to update home content");
@@ -324,11 +210,11 @@ const ManageHome = () => {
   }
 
   return (
-    <div className="max-w-6xl mx-auto pb-12">
+    <div className="max-w-5xl mx-auto pb-12">
       <div className="mb-8">
         <h2 className="text-3xl font-extrabold text-dark">Manage Home Page</h2>
         <p className="text-textGray mt-2">
-          Update hero section, homepage titles, feature lists, CTA content, and hero image.
+          Update homepage content, reorder sections, enable/disable modules, and manage FAQs.
         </p>
       </div>
 
@@ -344,505 +230,375 @@ const ManageHome = () => {
         </div>
       )}
 
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white border border-borderSoft rounded-card shadow-card p-7 space-y-10"
-      >
-        {/* HERO SECTION */}
-        <div>
-          <h3 className="text-xl font-extrabold text-dark border-b border-borderSoft pb-3 mb-6">
-            Hero Section
-          </h3>
+      <form onSubmit={handleSubmit} className="space-y-8">
+        {/* Section Management Block */}
+        <div className="bg-white border border-borderSoft rounded-card shadow-card p-7">
+          <h3 className="text-xl font-extrabold text-dark mb-2">Section Layout & Display</h3>
+          <p className="text-sm text-textGray mb-6">
+            Enable, disable, or reorder the visibility of sections on the live homepage.
+          </p>
 
-          <div className="grid md:grid-cols-2 gap-5">
-            <div className="md:col-span-2">
-              <label className="block text-sm font-bold text-dark mb-1">Hero Badge Text</label>
-              <input
-                name="heroBadge"
-                value={formData.heroBadge}
-                onChange={handleChange}
-                placeholder="e.g. #1 IT Training Institute"
-                className="w-full border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
-              />
-            </div>
+          <div className="space-y-3">
+            {sections.map((section, idx) => (
+              <div
+                key={section.key}
+                className="flex items-center justify-between p-4 border border-borderSoft rounded-button bg-gray-50 hover:bg-white transition-colors"
+              >
+                <div className="flex items-center space-x-4">
+                  <span className="font-bold text-gray-400 w-6">#{idx + 1}</span>
+                  <span className="font-semibold text-dark">{section.title}</span>
+                </div>
 
-            <div className="md:col-span-2">
-              <label className="block text-sm font-bold text-dark mb-1">Hero Heading</label>
-              <input
-                name="heroHeading"
-                value={formData.heroHeading}
-                onChange={handleChange}
-                placeholder="Main Hero Heading"
-                className="w-full border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
-              />
-            </div>
+                <div className="flex items-center space-x-3">
+                  <button
+                    type="button"
+                    onClick={() => toggleSection(idx)}
+                    className={`px-3 py-1 text-xs font-bold rounded-full transition-colors ${
+                      section.enabled
+                        ? "bg-green-100 text-green-700 hover:bg-green-200"
+                        : "bg-gray-200 text-gray-600 hover:bg-gray-300"
+                    }`}
+                  >
+                    {section.enabled ? "Active" : "Hidden"}
+                  </button>
 
-            <div className="md:col-span-2">
-              <label className="block text-sm font-bold text-dark mb-1">Hero Subheading</label>
-              <textarea
-                name="heroSubheading"
-                value={formData.heroSubheading}
-                onChange={handleChange}
-                rows="3"
-                placeholder="Brief description under main heading"
-                className="w-full border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary resize-none"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-bold text-dark mb-1">Primary Button Text</label>
-              <input
-                name="primaryButtonText"
-                value={formData.primaryButtonText}
-                onChange={handleChange}
-                placeholder="e.g. Explore Courses"
-                className="w-full border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-bold text-dark mb-1">Primary Button Link</label>
-              <input
-                name="primaryButtonLink"
-                value={formData.primaryButtonLink}
-                onChange={handleChange}
-                placeholder="/courses"
-                className="w-full border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-bold text-dark mb-1">Secondary Button Text</label>
-              <input
-                name="secondaryButtonText"
-                value={formData.secondaryButtonText}
-                onChange={handleChange}
-                placeholder="e.g. Contact Us"
-                className="w-full border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-bold text-dark mb-1">Secondary Button Link</label>
-              <input
-                name="secondaryButtonLink"
-                value={formData.secondaryButtonLink}
-                onChange={handleChange}
-                placeholder="/contact"
-                className="w-full border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
-              />
-            </div>
-
-            {/* HERO IMAGE UPLOAD */}
-            <div className="md:col-span-2 mt-2">
-              <label className="block text-sm font-bold text-dark mb-2">Hero Image</label>
-              <div className="flex flex-col sm:flex-row items-center gap-6 p-4 border border-borderSoft rounded-card bg-lightBg/30">
-                {(imagePreview || currentHeroImage) ? (
-                  <div className="relative w-40 h-28 rounded-button overflow-hidden border border-borderSoft bg-white">
-                    <img
-                      src={imagePreview || currentHeroImage}
-                      alt="Hero Preview"
-                      className="w-full h-full object-cover"
-                    />
+                  <div className="flex space-x-1">
+                    <button
+                      type="button"
+                      disabled={idx === 0}
+                      onClick={() => moveSection(idx, -1)}
+                      className="px-2 py-1 text-sm border border-borderSoft rounded bg-white hover:bg-gray-100 disabled:opacity-40"
+                    >
+                      ↑
+                    </button>
+                    <button
+                      type="button"
+                      disabled={idx === sections.length - 1}
+                      onClick={() => moveSection(idx, 1)}
+                      className="px-2 py-1 text-sm border border-borderSoft rounded bg-white hover:bg-gray-100 disabled:opacity-40"
+                    >
+                      ↓
+                    </button>
                   </div>
-                ) : (
-                  <div className="w-40 h-28 rounded-button border border-dashed border-borderSoft bg-white flex flex-col items-center justify-center text-textGray">
-                    <ImageIcon size={28} />
-                    <span className="text-xs mt-1">No Image</span>
-                  </div>
-                )}
-
-                <div className="flex-1">
-                  <label className="cursor-pointer inline-flex items-center gap-2 bg-white border border-borderSoft text-dark px-4 py-2.5 rounded-button font-medium text-sm hover:border-primary transition-colors">
-                    <Upload size={16} /> Choose New Image
-                    <input
-                      type="file"
-                      name="heroImage"
-                      accept="image/*"
-                      onChange={handleChange}
-                      className="hidden"
-                    />
-                  </label>
-                  <p className="text-xs text-textGray mt-2">
-                    PNG, JPG or WEBP. Max size 5MB.
-                  </p>
                 </div>
               </div>
-            </div>
+            ))}
           </div>
         </div>
 
-        {/* SECTION TITLES & SUBTITLES */}
-        <div>
-          <h3 className="text-xl font-extrabold text-dark border-b border-borderSoft pb-3 mb-6">
-            Homepage Section Titles
-          </h3>
-
+        {/* Hero Section */}
+        <div className="bg-white border border-borderSoft rounded-card shadow-card p-7">
+          <h3 className="text-xl font-extrabold text-dark mb-6">Hero Section</h3>
           <div className="grid md:grid-cols-2 gap-5">
-            <div>
-              <label className="block text-sm font-bold text-dark mb-1">Popular Courses Title</label>
-              <input
-                name="popularCoursesTitle"
-                value={formData.popularCoursesTitle}
-                onChange={handleChange}
-                className="w-full border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-bold text-dark mb-1">Popular Courses Subtitle</label>
-              <input
-                name="popularCoursesSubtitle"
-                value={formData.popularCoursesSubtitle}
-                onChange={handleChange}
-                className="w-full border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-bold text-dark mb-1">Why Choose Us Title</label>
-              <input
-                name="whyChooseTitle"
-                value={formData.whyChooseTitle}
-                onChange={handleChange}
-                className="w-full border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-bold text-dark mb-1">Why Choose Us Subtitle</label>
-              <input
-                name="whyChooseSubtitle"
-                value={formData.whyChooseSubtitle}
-                onChange={handleChange}
-                className="w-full border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-bold text-dark mb-1">Training Steps Title</label>
-              <input
-                name="trainingTitle"
-                value={formData.trainingTitle}
-                onChange={handleChange}
-                className="w-full border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-bold text-dark mb-1">Training Steps Subtitle</label>
-              <input
-                name="trainingSubtitle"
-                value={formData.trainingSubtitle}
-                onChange={handleChange}
-                className="w-full border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-bold text-dark mb-1">Placement Support Title</label>
-              <input
-                name="placementTitle"
-                value={formData.placementTitle}
-                onChange={handleChange}
-                className="w-full border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-bold text-dark mb-1">Placement Support Subtitle</label>
-              <input
-                name="placementSubtitle"
-                value={formData.placementSubtitle}
-                onChange={handleChange}
-                className="w-full border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-bold text-dark mb-1">Recruiters Title</label>
-              <input
-                name="recruiterTitle"
-                value={formData.recruiterTitle}
-                onChange={handleChange}
-                className="w-full border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-bold text-dark mb-1">Recruiters Subtitle</label>
-              <input
-                name="recruiterSubtitle"
-                value={formData.recruiterSubtitle}
-                onChange={handleChange}
-                className="w-full border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
-              />
-            </div>
+            <input
+              name="heroBadge"
+              value={formData.heroBadge}
+              onChange={handleChange}
+              placeholder="Hero Badge"
+              className="border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
+            />
+            <input
+              name="heroHeading"
+              value={formData.heroHeading}
+              onChange={handleChange}
+              placeholder="Hero Heading"
+              className="border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
+            />
+            <input
+              name="primaryButtonText"
+              value={formData.primaryButtonText}
+              onChange={handleChange}
+              placeholder="Primary Button Text"
+              className="border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
+            />
+            <input
+              name="primaryButtonLink"
+              value={formData.primaryButtonLink}
+              onChange={handleChange}
+              placeholder="Primary Button Link e.g. /courses"
+              className="border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
+            />
+            <input
+              name="secondaryButtonText"
+              value={formData.secondaryButtonText}
+              onChange={handleChange}
+              placeholder="Secondary Button Text"
+              className="border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
+            />
+            <input
+              name="secondaryButtonLink"
+              value={formData.secondaryButtonLink}
+              onChange={handleChange}
+              placeholder="Secondary Button Link e.g. /contact"
+              className="border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
+            />
+            <input
+              name="heroImage"
+              type="file"
+              accept="image/*"
+              onChange={handleChange}
+              className="md:col-span-2 border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
+            />
           </div>
+
+          <textarea
+            name="heroSubheading"
+            value={formData.heroSubheading}
+            onChange={handleChange}
+            placeholder="Hero Subheading"
+            rows="4"
+            className="w-full border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary resize-none mt-5"
+          />
+
+          {currentHeroImage && (
+            <div className="mt-5">
+              <p className="font-bold text-dark mb-3">Current Hero Image</p>
+              <img
+                src={currentHeroImage}
+                alt="Hero"
+                className="w-full max-w-xl h-[260px] object-cover rounded-card border border-borderSoft"
+              />
+            </div>
+          )}
         </div>
 
-        {/* STRUCTURED CARD / LIST TEXT AREAS */}
-        <div>
-          <h3 className="text-xl font-extrabold text-dark border-b border-borderSoft pb-3 mb-6">
-            Feature & List Content
-          </h3>
+        {/* Dynamic Titles & Text Lists */}
+        <div className="bg-white border border-borderSoft rounded-card shadow-card p-7">
+          <h3 className="text-xl font-extrabold text-dark mb-6">Homepage Section Text</h3>
+          <div className="grid md:grid-cols-2 gap-5">
+            <input
+              name="popularCoursesTitle"
+              value={formData.popularCoursesTitle}
+              onChange={handleChange}
+              placeholder="Popular Courses Title"
+              className="border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
+            />
+            <input
+              name="popularCoursesSubtitle"
+              value={formData.popularCoursesSubtitle}
+              onChange={handleChange}
+              placeholder="Popular Courses Subtitle"
+              className="border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
+            />
+            <input
+              name="whyChooseTitle"
+              value={formData.whyChooseTitle}
+              onChange={handleChange}
+              placeholder="Why Choose Title"
+              className="border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
+            />
+            <input
+              name="whyChooseSubtitle"
+              value={formData.whyChooseSubtitle}
+              onChange={handleChange}
+              placeholder="Why Choose Subtitle"
+              className="border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
+            />
 
-          <div className="space-y-6">
-            <div>
-              <label className="block font-bold text-dark">Why Choose Us Cards</label>
-              <p className="text-xs text-textGray mt-1 mb-2">
-                Format each line as: <code className="bg-lightBg px-1.5 py-0.5 rounded text-dark">Title | Description</code>
-              </p>
+            <div className="md:col-span-2">
+              <label className="font-bold text-dark">Why Choose Us Cards</label>
+              <p className="text-sm text-textGray mt-1 mb-2">Format: Title | Description. Add one card per line.</p>
               <textarea
                 name="whyChooseCardsText"
                 value={formData.whyChooseCardsText}
                 onChange={handleChange}
-                rows="4"
-                placeholder="Expert Mentors | Learn directly from industry veterans.&#10;Hands-on Projects | Build real-world applications."
-                className="w-full border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary resize-none text-sm font-mono"
+                rows="5"
+                className="w-full border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary resize-none"
               />
             </div>
 
-            <div>
-              <label className="block font-bold text-dark">Training Steps</label>
-              <p className="text-xs text-textGray mt-1 mb-2">
-                Format each line as: <code className="bg-lightBg px-1.5 py-0.5 rounded text-dark">Step Number | Step Title | Description</code>
-              </p>
+            <input
+              name="trainingTitle"
+              value={formData.trainingTitle}
+              onChange={handleChange}
+              placeholder="Training Process Title"
+              className="border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
+            />
+            <input
+              name="trainingSubtitle"
+              value={formData.trainingSubtitle}
+              onChange={handleChange}
+              placeholder="Training Process Subtitle"
+              className="border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
+            />
+
+            <div className="md:col-span-2">
+              <label className="font-bold text-dark">Training Process Steps</label>
+              <p className="text-sm text-textGray mt-1 mb-2">Format: Number | Title | Description. Add one step per line.</p>
               <textarea
                 name="trainingStepsText"
                 value={formData.trainingStepsText}
                 onChange={handleChange}
-                rows="4"
-                placeholder="01 | Enrollment | Choose your preferred stack and get onboarded.&#10;02 | Live Training | Attend interactive live sessions with mentors."
-                className="w-full border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary resize-none text-sm font-mono"
+                rows="5"
+                className="w-full border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary resize-none"
               />
             </div>
 
-            <div>
-              <label className="block font-bold text-dark">Placement Support Cards</label>
-              <p className="text-xs text-textGray mt-1 mb-2">
-                Format each line as: <code className="bg-lightBg px-1.5 py-0.5 rounded text-dark">Title | Description</code>
-              </p>
+            <input
+              name="placementTitle"
+              value={formData.placementTitle}
+              onChange={handleChange}
+              placeholder="Placement Title"
+              className="border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
+            />
+            <input
+              name="placementSubtitle"
+              value={formData.placementSubtitle}
+              onChange={handleChange}
+              placeholder="Placement Subtitle"
+              className="border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
+            />
+
+            <div className="md:col-span-2">
+              <label className="font-bold text-dark">Placement Support Cards</label>
+              <p className="text-sm text-textGray mt-1 mb-2">Format: Title | Description. Add one card per line.</p>
               <textarea
                 name="placementSupportCardsText"
                 value={formData.placementSupportCardsText}
                 onChange={handleChange}
                 rows="4"
-                placeholder="Resume Building | Crafted to pass ATS filters.&#10;Mock Interviews | Conducted by senior tech leads."
-                className="w-full border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary resize-none text-sm font-mono"
+                className="w-full border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary resize-none"
               />
             </div>
 
-            <div>
-              <label className="block font-bold text-dark">Recruiters / Hiring Partners</label>
-              <p className="text-xs text-textGray mt-1 mb-2">
-                Enter company names separated by commas.
-              </p>
+            <input
+              name="recruiterTitle"
+              value={formData.recruiterTitle}
+              onChange={handleChange}
+              placeholder="Recruiter Title"
+              className="border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
+            />
+            <input
+              name="recruiterSubtitle"
+              value={formData.recruiterSubtitle}
+              onChange={handleChange}
+              placeholder="Recruiter Subtitle"
+              className="border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
+            />
+
+            <div className="md:col-span-2">
+              <label className="font-bold text-dark">Recruiters / Hiring Partners</label>
+              <p className="text-sm text-textGray mt-1 mb-2">Add company names comma separated.</p>
               <textarea
                 name="recruitersText"
                 value={formData.recruitersText}
                 onChange={handleChange}
                 rows="3"
-                placeholder="TCS, Infosys, Wipro, Capgemini, Accenture, Cognizant"
-                className="w-full border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary resize-none text-sm"
+                className="w-full border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary resize-none"
               />
             </div>
           </div>
         </div>
 
-        {/* CUSTOM HOME SECTIONS */}
-        <div>
-          <div className="flex items-center justify-between border-b border-borderSoft pb-3 mb-6">
+        {/* FAQs Management Block */}
+        <div className="bg-white border border-borderSoft rounded-card shadow-card p-7">
+          <div className="flex items-center justify-between mb-6">
             <div>
-              <h3 className="text-xl font-extrabold text-dark">Custom Home Sections</h3>
-              <p className="text-xs text-textGray mt-1">
-                Add flexible blocks (headings, lists, highlight blocks) to the page.
-              </p>
-            </div>
-            <button
-              type="button"
-              onClick={addHomeSection}
-              className="secondary-btn flex items-center gap-1.5 py-2 px-4 text-sm"
-            >
-              <Plus size={16} /> Add Section
-            </button>
-          </div>
-
-          <div className="space-y-4">
-            {(formData.homeSections || []).map((section, index) => (
-              <div
-                key={index}
-                className="relative rounded-card border border-borderSoft bg-lightBg/40 p-5 transition-all"
-              >
-                <button
-                  type="button"
-                  onClick={() => removeHomeSection(index)}
-                  className="absolute right-4 top-4 text-red-500 hover:text-red-700 p-1"
-                  title="Remove Section"
-                >
-                  <Trash2 size={18} />
-                </button>
-
-                <div className="grid gap-4 md:grid-cols-3 pr-8">
-                  <input
-                    value={section.title}
-                    onChange={(e) => updateHomeSection(index, "title", e.target.value)}
-                    placeholder="Section Title"
-                    className="rounded-button border border-borderSoft bg-white px-3 py-2 text-sm outline-none focus:border-primary"
-                  />
-                  <select
-                    value={section.type}
-                    onChange={(e) => updateHomeSection(index, "type", e.target.value)}
-                    className="rounded-button border border-borderSoft bg-white px-3 py-2 text-sm outline-none focus:border-primary"
-                  >
-                    <option value="heading">Heading</option>
-                    <option value="paragraph">Paragraph</option>
-                    <option value="bulletList">Bullet List</option>
-                    <option value="numberedList">Numbered List</option>
-                    <option value="highlight">Highlight</option>
-                  </select>
-                  <select
-                    value={section.layout || "full"}
-                    onChange={(e) => updateHomeSection(index, "layout", e.target.value)}
-                    className="rounded-button border border-borderSoft bg-white px-3 py-2 text-sm outline-none focus:border-primary"
-                  >
-                    <option value="full">Full width</option>
-                    <option value="split">Two columns</option>
-                  </select>
-                </div>
-
-                <textarea
-                  value={section.content}
-                  onChange={(e) => updateHomeSection(index, "content", e.target.value)}
-                  placeholder="Section Main Content / Description"
-                  rows="3"
-                  className="mt-3 w-full resize-none rounded-button border border-borderSoft bg-white px-3 py-2 text-sm outline-none focus:border-primary"
-                />
-
-                {(section.type === "bulletList" || section.type === "numberedList") && (
-                  <textarea
-                    value={section.itemsText || ""}
-                    onChange={(e) => updateHomeSection(index, "itemsText", e.target.value)}
-                    placeholder="Add one list item per line"
-                    rows="3"
-                    className="mt-3 w-full resize-none rounded-button border border-borderSoft bg-white px-3 py-2 text-sm outline-none focus:border-primary font-mono"
-                  />
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* FAQS SECTION */}
-        <div>
-          <div className="flex items-center justify-between border-b border-borderSoft pb-3 mb-6">
-            <div>
-              <h3 className="text-xl font-extrabold text-dark">FAQ Section</h3>
-              <p className="text-xs text-textGray mt-1">
-                Frequently asked questions for the home page.
-              </p>
+              <h3 className="text-xl font-extrabold text-dark">FAQs Management</h3>
+              <p className="text-sm text-textGray mt-1">Add, update, or remove questions displayed on the home page.</p>
             </div>
             <button
               type="button"
               onClick={addFaq}
-              className="secondary-btn flex items-center gap-1.5 py-2 px-4 text-sm"
+              className="px-4 py-2 bg-primary text-white rounded-button text-sm font-bold hover:bg-primary/90 transition-colors"
             >
-              <Plus size={16} /> Add FAQ
+              + Add FAQ
             </button>
           </div>
 
+          <div className="grid md:grid-cols-2 gap-5 mb-6">
+            <input
+              name="faqTitle"
+              value={formData.faqTitle}
+              onChange={handleChange}
+              placeholder="FAQ Section Title"
+              className="border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
+            />
+            <input
+              name="faqSubtitle"
+              value={formData.faqSubtitle}
+              onChange={handleChange}
+              placeholder="FAQ Section Subtitle"
+              className="border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
+            />
+          </div>
+
           <div className="space-y-4">
-            {(formData.faqs || []).map((faq, index) => (
-              <div
-                key={index}
-                className="relative rounded-card border border-borderSoft bg-lightBg/40 p-5"
-              >
+            {faqs.map((faq, index) => (
+              <div key={index} className="p-4 border border-borderSoft rounded-button bg-gray-50 relative">
                 <button
                   type="button"
                   onClick={() => removeFaq(index)}
-                  className="absolute right-4 top-4 text-red-500 hover:text-red-700 p-1"
-                  title="Remove FAQ"
+                  className="absolute top-3 right-3 text-red-500 hover:text-red-700 font-bold text-sm"
                 >
-                  <Trash2 size={18} />
+                  ✕ Remove
                 </button>
-
-                <input
-                  value={faq.question}
-                  onChange={(e) => updateFaq(index, "question", e.target.value)}
-                  placeholder="Question"
-                  className="w-full rounded-button border border-borderSoft bg-white px-3 py-2 text-sm outline-none focus:border-primary pr-10"
-                />
-
-                <textarea
-                  value={faq.answer}
-                  onChange={(e) => updateFaq(index, "answer", e.target.value)}
-                  placeholder="Answer"
-                  rows="3"
-                  className="mt-3 w-full resize-none rounded-button border border-borderSoft bg-white px-3 py-2 text-sm outline-none focus:border-primary"
-                />
+                <div className="space-y-3">
+                  <input
+                    type="text"
+                    value={faq.question}
+                    onChange={(e) => handleFaqChange(index, "question", e.target.value)}
+                    placeholder={`Question #${index + 1}`}
+                    className="w-full border border-borderSoft rounded-button px-3 py-2 text-sm bg-white outline-none focus:border-primary"
+                  />
+                  <textarea
+                    value={faq.answer}
+                    onChange={(e) => handleFaqChange(index, "answer", e.target.value)}
+                    placeholder={`Answer #${index + 1}`}
+                    rows="2"
+                    className="w-full border border-borderSoft rounded-button px-3 py-2 text-sm bg-white outline-none focus:border-primary resize-none"
+                  />
+                </div>
               </div>
             ))}
+            {faqs.length === 0 && (
+              <p className="text-textGray text-sm italic text-center py-4">No FAQs added yet. Click "+ Add FAQ" above.</p>
+            )}
           </div>
         </div>
 
-        {/* CTA SECTION */}
-        <div>
-          <h3 className="text-xl font-extrabold text-dark border-b border-borderSoft pb-3 mb-6">
-            Call To Action (CTA) Section
-          </h3>
-
+        {/* CTA Section */}
+        <div className="bg-white border border-borderSoft rounded-card shadow-card p-7">
+          <h3 className="text-xl font-extrabold text-dark mb-6">CTA Section</h3>
           <div className="grid md:grid-cols-2 gap-5">
-            <div className="md:col-span-2">
-              <label className="block text-sm font-bold text-dark mb-1">CTA Title</label>
-              <input
-                name="ctaTitle"
-                value={formData.ctaTitle}
-                onChange={handleChange}
-                placeholder="Ready to Start Your Career?"
-                className="w-full border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
-              />
-            </div>
-
-            <div className="md:col-span-2">
-              <label className="block text-sm font-bold text-dark mb-1">CTA Subtitle</label>
-              <input
-                name="ctaSubtitle"
-                value={formData.ctaSubtitle}
-                onChange={handleChange}
-                placeholder="Join thousands of successful graduates who transformed their careers with us."
-                className="w-full border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-bold text-dark mb-1">CTA Button Text</label>
-              <input
-                name="ctaButtonText"
-                value={formData.ctaButtonText}
-                onChange={handleChange}
-                placeholder="Get Started Now"
-                className="w-full border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-bold text-dark mb-1">CTA Button Link</label>
-              <input
-                name="ctaButtonLink"
-                value={formData.ctaButtonLink}
-                onChange={handleChange}
-                placeholder="/apply"
-                className="w-full border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
-              />
-            </div>
+            <input
+              name="ctaTitle"
+              value={formData.ctaTitle}
+              onChange={handleChange}
+              placeholder="CTA Title"
+              className="border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
+            />
+            <input
+              name="ctaSubtitle"
+              value={formData.ctaSubtitle}
+              onChange={handleChange}
+              placeholder="CTA Subtitle"
+              className="border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
+            />
+            <input
+              name="ctaButtonText"
+              value={formData.ctaButtonText}
+              onChange={handleChange}
+              placeholder="CTA Button Text"
+              className="border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
+            />
+            <input
+              name="ctaButtonLink"
+              value={formData.ctaButtonLink}
+              onChange={handleChange}
+              placeholder="CTA Button Link"
+              className="border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
+            />
           </div>
         </div>
 
-        {/* SUBMIT BUTTON */}
-        <div className="pt-4 border-t border-borderSoft">
-          <button
-            type="submit"
-            disabled={loading}
-            className="primary-btn w-full md:w-auto px-8 py-3 text-base font-bold shadow-md hover:shadow-lg transition-all"
-          >
-            {loading ? "Saving Changes..." : "Save Home Content"}
-          </button>
-        </div>
+        <button
+          type="submit"
+          disabled={loading}
+          className="w-full py-4 bg-primary text-white font-bold rounded-button shadow-md hover:bg-primary/90 transition-all disabled:opacity-50"
+        >
+          {loading ? "Saving Changes..." : "Save Home Content"}
+        </button>
       </form>
     </div>
   );
