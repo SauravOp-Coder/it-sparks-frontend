@@ -13,39 +13,38 @@ const defaultSections = [
   { key: "cta", title: "Call To Action", enabled: true, order: 8 },
 ];
 
-const emptyForm = {
-  heroBadge: "",
-  heroHeading: "",
-  heroSubheading: "",
-  primaryButtonText: "",
-  primaryButtonLink: "",
-  secondaryButtonText: "",
-  secondaryButtonLink: "",
-  popularCoursesTitle: "",
-  popularCoursesSubtitle: "",
-  whyChooseTitle: "",
-  whyChooseSubtitle: "",
-  trainingTitle: "",
-  trainingSubtitle: "",
-  placementTitle: "",
-  placementSubtitle: "",
-  recruiterTitle: "",
-  recruiterSubtitle: "",
-  ctaTitle: "",
-  ctaSubtitle: "",
-  ctaButtonText: "",
-  ctaButtonLink: "",
-  faqTitle: "",
-  faqSubtitle: "",
-  whyChooseCardsText: "",
-  trainingStepsText: "",
-  placementSupportCardsText: "",
-  recruitersText: "",
-  heroImage: null,
-};
-
 const ManageHome = () => {
-  const [formData, setFormData] = useState(emptyForm);
+  const [formData, setFormData] = useState({
+    heroBadge: "",
+    heroHeading: "",
+    heroSubheading: "",
+    primaryButtonText: "",
+    primaryButtonLink: "",
+    secondaryButtonText: "",
+    secondaryButtonLink: "",
+    popularCoursesTitle: "",
+    popularCoursesSubtitle: "",
+    whyChooseTitle: "",
+    whyChooseSubtitle: "",
+    trainingTitle: "",
+    trainingSubtitle: "",
+    placementTitle: "",
+    placementSubtitle: "",
+    recruiterTitle: "",
+    recruiterSubtitle: "",
+    ctaTitle: "",
+    ctaSubtitle: "",
+    ctaButtonText: "",
+    ctaButtonLink: "",
+    faqTitle: "",
+    faqSubtitle: "",
+    whyChooseCardsText: "",
+    trainingStepsText: "",
+    placementSupportCardsText: "",
+    recruitersText: "",
+    heroImage: null,
+  });
+
   const [faqs, setFaqs] = useState([]);
   const [sections, setSections] = useState(defaultSections);
   const [currentHeroImage, setCurrentHeroImage] = useState("");
@@ -54,63 +53,63 @@ const ManageHome = () => {
   const [success, setSuccess] = useState("");
   const [error, setError] = useState("");
 
+  const populateData = (home) => {
+    setFormData({
+      heroBadge: home.heroBadge || "",
+      heroHeading: home.heroHeading || "",
+      heroSubheading: home.heroSubheading || "",
+      primaryButtonText: home.primaryButtonText || "",
+      primaryButtonLink: home.primaryButtonLink || "",
+      secondaryButtonText: home.secondaryButtonText || "",
+      secondaryButtonLink: home.secondaryButtonLink || "",
+      popularCoursesTitle: home.popularCoursesTitle || "",
+      popularCoursesSubtitle: home.popularCoursesSubtitle || "",
+      whyChooseTitle: home.whyChooseTitle || "",
+      whyChooseSubtitle: home.whyChooseSubtitle || "",
+      trainingTitle: home.trainingTitle || "",
+      trainingSubtitle: home.trainingSubtitle || "",
+      placementTitle: home.placementTitle || "",
+      placementSubtitle: home.placementSubtitle || "",
+      recruiterTitle: home.recruiterTitle || "",
+      recruiterSubtitle: home.recruiterSubtitle || "",
+      ctaTitle: home.ctaTitle || "",
+      ctaSubtitle: home.ctaSubtitle || "",
+      ctaButtonText: home.ctaButtonText || "",
+      ctaButtonLink: home.ctaButtonLink || "",
+      faqTitle: home.faqTitle || "Frequently Asked Questions",
+      faqSubtitle: home.faqSubtitle || "Find answers to common questions.",
+      heroImage: null,
+
+      whyChooseCardsText: Array.isArray(home.whyChooseCards)
+        ? home.whyChooseCards.map((i) => `${i.title} | ${i.text}`).join("\n")
+        : "",
+      trainingStepsText: Array.isArray(home.trainingSteps)
+        ? home.trainingSteps.map((i) => `${i.number} | ${i.title} | ${i.text}`).join("\n")
+        : "",
+      placementSupportCardsText: Array.isArray(home.placementSupportCards)
+        ? home.placementSupportCards.map((i) => `${i.title} | ${i.text}`).join("\n")
+        : "",
+      recruitersText: Array.isArray(home.recruiters) ? home.recruiters.join(", ") : "",
+    });
+
+    setFaqs(Array.isArray(home.faqs) ? home.faqs : []);
+    if (Array.isArray(home.sections) && home.sections.length > 0) {
+      setSections([...home.sections].sort((a, b) => a.order - b.order));
+    } else {
+      setSections(defaultSections);
+    }
+    setCurrentHeroImage(home.heroImage?.url || "");
+  };
+
   const fetchHomeContent = async () => {
     try {
       setPageLoading(true);
       const data = await getHomeContentApi();
-      const home = data.homeContent || {};
-
-      setFormData({
-        heroBadge: home.heroBadge || "",
-        heroHeading: home.heroHeading || "",
-        heroSubheading: home.heroSubheading || "",
-        primaryButtonText: home.primaryButtonText || "",
-        primaryButtonLink: home.primaryButtonLink || "",
-        secondaryButtonText: home.secondaryButtonText || "",
-        secondaryButtonLink: home.secondaryButtonLink || "",
-        popularCoursesTitle: home.popularCoursesTitle || "",
-        popularCoursesSubtitle: home.popularCoursesSubtitle || "",
-        whyChooseTitle: home.whyChooseTitle || "",
-        whyChooseSubtitle: home.whyChooseSubtitle || "",
-        trainingTitle: home.trainingTitle || "",
-        trainingSubtitle: home.trainingSubtitle || "",
-        placementTitle: home.placementTitle || "",
-        placementSubtitle: home.placementSubtitle || "",
-        recruiterTitle: home.recruiterTitle || "",
-        recruiterSubtitle: home.recruiterSubtitle || "",
-        ctaTitle: home.ctaTitle || "",
-        ctaSubtitle: home.ctaSubtitle || "",
-        ctaButtonText: home.ctaButtonText || "",
-        ctaButtonLink: home.ctaButtonLink || "",
-        faqTitle: home.faqTitle || "Frequently Asked Questions",
-        faqSubtitle: home.faqSubtitle || "Find answers to common questions about our programs.",
-        heroImage: null,
-
-        whyChooseCardsText: Array.isArray(home.whyChooseCards)
-          ? home.whyChooseCards.map((item) => `${item.title} | ${item.text}`).join("\n")
-          : "",
-
-        trainingStepsText: Array.isArray(home.trainingSteps)
-          ? home.trainingSteps.map((item) => `${item.number} | ${item.title} | ${item.text}`).join("\n")
-          : "",
-
-        placementSupportCardsText: Array.isArray(home.placementSupportCards)
-          ? home.placementSupportCards.map((item) => `${item.title} | ${item.text}`).join("\n")
-          : "",
-
-        recruitersText: Array.isArray(home.recruiters) ? home.recruiters.join(", ") : "",
-      });
-
-      setFaqs(Array.isArray(home.faqs) ? home.faqs : []);
-      if (Array.isArray(home.sections) && home.sections.length > 0) {
-        setSections(home.sections.sort((a, b) => a.order - b.order));
-      } else {
-        setSections(defaultSections);
+      if (data?.homeContent) {
+        populateData(data.homeContent);
       }
-
-      setCurrentHeroImage(home.heroImage?.url || "");
     } catch (err) {
-      setError(err.response?.data?.message || "Failed to fetch home content");
+      setError(err.response?.data?.message || "Failed to load content");
     } finally {
       setPageLoading(false);
     }
@@ -129,7 +128,6 @@ const ManageHome = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Section Order & Active Status Handlers
   const toggleSection = (index) => {
     setSections((prev) =>
       prev.map((sec, i) => (i === index ? { ...sec, enabled: !sec.enabled } : sec))
@@ -144,12 +142,9 @@ const ManageHome = () => {
     updated[index] = updated[targetIndex];
     updated[targetIndex] = temp;
 
-    // Update order key
-    const reordered = updated.map((sec, idx) => ({ ...sec, order: idx }));
-    setSections(reordered);
+    setSections(updated.map((sec, idx) => ({ ...sec, order: idx })));
   };
 
-  // FAQ Handlers
   const handleFaqChange = (index, field, value) => {
     setFaqs((prev) =>
       prev.map((faq, i) => (i === index ? { ...faq, [field]: value } : faq))
@@ -164,24 +159,6 @@ const ManageHome = () => {
     setFaqs((prev) => prev.filter((_, i) => i !== index));
   };
 
-  const buildPayload = () => {
-    const payload = new FormData();
-
-    Object.entries(formData).forEach(([key, value]) => {
-      if (key === "heroImage") {
-        if (value) payload.append("heroImage", value);
-      } else {
-        payload.append(key, value ?? "");
-      }
-    });
-
-    // Serialize dynamic arrays to stringified JSON for backend parsing
-    payload.append("sections", JSON.stringify(sections));
-    payload.append("faqs", JSON.stringify(faqs));
-
-    return payload;
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -189,11 +166,26 @@ const ManageHome = () => {
       setError("");
       setSuccess("");
 
-      const payload = buildPayload();
-      await updateHomeContentApi(payload);
+      const payload = new FormData();
+      Object.entries(formData).forEach(([key, value]) => {
+        if (key === "heroImage") {
+          if (value) payload.append("heroImage", value);
+        } else {
+          payload.append(key, value ?? "");
+        }
+      });
 
-      setSuccess("Home content updated successfully");
-      await fetchHomeContent();
+      payload.append("sections", JSON.stringify(sections));
+      payload.append("faqs", JSON.stringify(faqs));
+
+      const response = await updateHomeContentApi(payload);
+
+      if (response?.homeContent) {
+        populateData(response.homeContent);
+      }
+
+      setSuccess("Home content saved successfully!");
+      setTimeout(() => setSuccess(""), 4000);
     } catch (err) {
       setError(err.response?.data?.message || "Failed to update home content");
     } finally {
@@ -203,50 +195,46 @@ const ManageHome = () => {
 
   if (pageLoading) {
     return (
-      <div className="bg-white border border-borderSoft rounded-card shadow-card p-10 text-center text-textGray">
-        Loading home content...
+      <div className="bg-white border border-borderSoft rounded-card p-10 text-center text-textGray">
+        Loading Home Page Settings...
       </div>
     );
   }
 
   return (
-    <div className="max-w-5xl mx-auto pb-12">
-      <div className="mb-8">
+    <div className="max-w-5xl mx-auto pb-12 space-y-8">
+      <div>
         <h2 className="text-3xl font-extrabold text-dark">Manage Home Page</h2>
-        <p className="text-textGray mt-2">
-          Update homepage content, reorder sections, enable/disable modules, and manage FAQs.
-        </p>
+        <p className="text-textGray mt-1">Configure layout, titles, sections, and FAQs.</p>
       </div>
 
       {success && (
-        <div className="bg-green-50 border border-green-200 text-green-700 rounded-button px-4 py-3 text-sm font-semibold mb-6">
+        <div className="bg-green-50 border border-green-200 text-green-700 rounded-button px-4 py-3 font-bold text-sm">
           {success}
         </div>
       )}
 
       {error && (
-        <div className="bg-red-50 border border-red-200 text-red-600 rounded-button px-4 py-3 text-sm font-semibold mb-6">
+        <div className="bg-red-50 border border-red-200 text-red-600 rounded-button px-4 py-3 font-bold text-sm">
           {error}
         </div>
       )}
 
       <form onSubmit={handleSubmit} className="space-y-8">
-        {/* Section Management Block */}
-        <div className="bg-white border border-borderSoft rounded-card shadow-card p-7">
-          <h3 className="text-xl font-extrabold text-dark mb-2">Section Layout & Display</h3>
-          <p className="text-sm text-textGray mb-6">
-            Enable, disable, or reorder the visibility of sections on the live homepage.
-          </p>
+        {/* Section Reordering & Toggles */}
+        <div className="bg-white border border-borderSoft rounded-card p-7 shadow-sm">
+          <h3 className="text-xl font-extrabold text-dark mb-1">Homepage Section Layout</h3>
+          <p className="text-sm text-textGray mb-6">Reorder or toggle visibility of sections live on your site.</p>
 
           <div className="space-y-3">
-            {sections.map((section, idx) => (
+            {sections.map((sec, idx) => (
               <div
-                key={section.key}
-                className="flex items-center justify-between p-4 border border-borderSoft rounded-button bg-gray-50 hover:bg-white transition-colors"
+                key={sec.key}
+                className="flex items-center justify-between p-4 border border-borderSoft rounded-button bg-gray-50"
               >
                 <div className="flex items-center space-x-4">
-                  <span className="font-bold text-gray-400 w-6">#{idx + 1}</span>
-                  <span className="font-semibold text-dark">{section.title}</span>
+                  <span className="font-bold text-gray-400">#{idx + 1}</span>
+                  <span className="font-semibold text-dark">{sec.title}</span>
                 </div>
 
                 <div className="flex items-center space-x-3">
@@ -254,12 +242,12 @@ const ManageHome = () => {
                     type="button"
                     onClick={() => toggleSection(idx)}
                     className={`px-3 py-1 text-xs font-bold rounded-full transition-colors ${
-                      section.enabled
-                        ? "bg-green-100 text-green-700 hover:bg-green-200"
-                        : "bg-gray-200 text-gray-600 hover:bg-gray-300"
+                      sec.enabled
+                        ? "bg-green-100 text-green-700"
+                        : "bg-gray-200 text-gray-600"
                     }`}
                   >
-                    {section.enabled ? "Active" : "Hidden"}
+                    {sec.enabled ? "Active" : "Hidden"}
                   </button>
 
                   <div className="flex space-x-1">
@@ -267,7 +255,7 @@ const ManageHome = () => {
                       type="button"
                       disabled={idx === 0}
                       onClick={() => moveSection(idx, -1)}
-                      className="px-2 py-1 text-sm border border-borderSoft rounded bg-white hover:bg-gray-100 disabled:opacity-40"
+                      className="px-2 py-1 text-sm border border-borderSoft rounded bg-white disabled:opacity-40"
                     >
                       ↑
                     </button>
@@ -275,7 +263,7 @@ const ManageHome = () => {
                       type="button"
                       disabled={idx === sections.length - 1}
                       onClick={() => moveSection(idx, 1)}
-                      className="px-2 py-1 text-sm border border-borderSoft rounded bg-white hover:bg-gray-100 disabled:opacity-40"
+                      className="px-2 py-1 text-sm border border-borderSoft rounded bg-white disabled:opacity-40"
                     >
                       ↓
                     </button>
@@ -286,9 +274,9 @@ const ManageHome = () => {
           </div>
         </div>
 
-        {/* Hero Section */}
-        <div className="bg-white border border-borderSoft rounded-card shadow-card p-7">
-          <h3 className="text-xl font-extrabold text-dark mb-6">Hero Section</h3>
+        {/* Hero Section Form Fields */}
+        <div className="bg-white border border-borderSoft rounded-card p-7 shadow-sm space-y-5">
+          <h3 className="text-xl font-extrabold text-dark">Hero Section</h3>
           <div className="grid md:grid-cols-2 gap-5">
             <input
               name="heroBadge"
@@ -315,7 +303,7 @@ const ManageHome = () => {
               name="primaryButtonLink"
               value={formData.primaryButtonLink}
               onChange={handleChange}
-              placeholder="Primary Button Link e.g. /courses"
+              placeholder="Primary Button Link"
               className="border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
             />
             <input
@@ -329,7 +317,7 @@ const ManageHome = () => {
               name="secondaryButtonLink"
               value={formData.secondaryButtonLink}
               onChange={handleChange}
-              placeholder="Secondary Button Link e.g. /contact"
+              placeholder="Secondary Button Link"
               className="border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
             />
             <input
@@ -346,25 +334,25 @@ const ManageHome = () => {
             value={formData.heroSubheading}
             onChange={handleChange}
             placeholder="Hero Subheading"
-            rows="4"
-            className="w-full border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary resize-none mt-5"
+            rows="3"
+            className="w-full border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary resize-none"
           />
 
           {currentHeroImage && (
-            <div className="mt-5">
-              <p className="font-bold text-dark mb-3">Current Hero Image</p>
+            <div>
+              <p className="font-bold text-dark mb-2">Current Hero Image</p>
               <img
                 src={currentHeroImage}
                 alt="Hero"
-                className="w-full max-w-xl h-[260px] object-cover rounded-card border border-borderSoft"
+                className="w-full max-w-md h-48 object-cover rounded-card border border-borderSoft"
               />
             </div>
           )}
         </div>
 
-        {/* Dynamic Titles & Text Lists */}
-        <div className="bg-white border border-borderSoft rounded-card shadow-card p-7">
-          <h3 className="text-xl font-extrabold text-dark mb-6">Homepage Section Text</h3>
+        {/* Section Titles & Cards */}
+        <div className="bg-white border border-borderSoft rounded-card p-7 shadow-sm space-y-5">
+          <h3 className="text-xl font-extrabold text-dark">Section Titles & Cards</h3>
           <div className="grid md:grid-cols-2 gap-5">
             <input
               name="popularCoursesTitle"
@@ -396,13 +384,12 @@ const ManageHome = () => {
             />
 
             <div className="md:col-span-2">
-              <label className="font-bold text-dark">Why Choose Us Cards</label>
-              <p className="text-sm text-textGray mt-1 mb-2">Format: Title | Description. Add one card per line.</p>
+              <label className="font-bold text-dark block mb-1">Why Choose Us Cards (Title | Text per line)</label>
               <textarea
                 name="whyChooseCardsText"
                 value={formData.whyChooseCardsText}
                 onChange={handleChange}
-                rows="5"
+                rows="4"
                 className="w-full border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary resize-none"
               />
             </div>
@@ -423,13 +410,12 @@ const ManageHome = () => {
             />
 
             <div className="md:col-span-2">
-              <label className="font-bold text-dark">Training Process Steps</label>
-              <p className="text-sm text-textGray mt-1 mb-2">Format: Number | Title | Description. Add one step per line.</p>
+              <label className="font-bold text-dark block mb-1">Training Steps (Number | Title | Text per line)</label>
               <textarea
                 name="trainingStepsText"
                 value={formData.trainingStepsText}
                 onChange={handleChange}
-                rows="5"
+                rows="4"
                 className="w-full border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary resize-none"
               />
             </div>
@@ -450,8 +436,7 @@ const ManageHome = () => {
             />
 
             <div className="md:col-span-2">
-              <label className="font-bold text-dark">Placement Support Cards</label>
-              <p className="text-sm text-textGray mt-1 mb-2">Format: Title | Description. Add one card per line.</p>
+              <label className="font-bold text-dark block mb-1">Placement Cards (Title | Text per line)</label>
               <textarea
                 name="placementSupportCardsText"
                 value={formData.placementSupportCardsText}
@@ -477,8 +462,7 @@ const ManageHome = () => {
             />
 
             <div className="md:col-span-2">
-              <label className="font-bold text-dark">Recruiters / Hiring Partners</label>
-              <p className="text-sm text-textGray mt-1 mb-2">Add company names comma separated.</p>
+              <label className="font-bold text-dark block mb-1">Recruiters (Comma separated list)</label>
               <textarea
                 name="recruitersText"
                 value={formData.recruitersText}
@@ -491,22 +475,22 @@ const ManageHome = () => {
         </div>
 
         {/* FAQs Management Block */}
-        <div className="bg-white border border-borderSoft rounded-card shadow-card p-7">
-          <div className="flex items-center justify-between mb-6">
+        <div className="bg-white border border-borderSoft rounded-card p-7 shadow-sm space-y-5">
+          <div className="flex items-center justify-between">
             <div>
               <h3 className="text-xl font-extrabold text-dark">FAQs Management</h3>
-              <p className="text-sm text-textGray mt-1">Add, update, or remove questions displayed on the home page.</p>
+              <p className="text-sm text-textGray">Add and manage questions displayed on the home page.</p>
             </div>
             <button
               type="button"
               onClick={addFaq}
-              className="px-4 py-2 bg-primary text-white rounded-button text-sm font-bold hover:bg-primary/90 transition-colors"
+              className="px-4 py-2 bg-primary text-white font-bold rounded-button text-sm hover:opacity-90"
             >
               + Add FAQ
             </button>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-5 mb-6">
+          <div className="grid md:grid-cols-2 gap-5">
             <input
               name="faqTitle"
               value={formData.faqTitle}
@@ -525,41 +509,39 @@ const ManageHome = () => {
 
           <div className="space-y-4">
             {faqs.map((faq, index) => (
-              <div key={index} className="p-4 border border-borderSoft rounded-button bg-gray-50 relative">
+              <div key={index} className="p-4 border border-borderSoft rounded-button bg-gray-50 relative space-y-3">
                 <button
                   type="button"
                   onClick={() => removeFaq(index)}
-                  className="absolute top-3 right-3 text-red-500 hover:text-red-700 font-bold text-sm"
+                  className="absolute top-3 right-3 text-red-500 hover:text-red-700 font-bold text-xs"
                 >
                   ✕ Remove
                 </button>
-                <div className="space-y-3">
-                  <input
-                    type="text"
-                    value={faq.question}
-                    onChange={(e) => handleFaqChange(index, "question", e.target.value)}
-                    placeholder={`Question #${index + 1}`}
-                    className="w-full border border-borderSoft rounded-button px-3 py-2 text-sm bg-white outline-none focus:border-primary"
-                  />
-                  <textarea
-                    value={faq.answer}
-                    onChange={(e) => handleFaqChange(index, "answer", e.target.value)}
-                    placeholder={`Answer #${index + 1}`}
-                    rows="2"
-                    className="w-full border border-borderSoft rounded-button px-3 py-2 text-sm bg-white outline-none focus:border-primary resize-none"
-                  />
-                </div>
+                <input
+                  type="text"
+                  value={faq.question}
+                  onChange={(e) => handleFaqChange(index, "question", e.target.value)}
+                  placeholder={`Question #${index + 1}`}
+                  className="w-full border border-borderSoft rounded-button px-3 py-2 text-sm bg-white outline-none focus:border-primary"
+                />
+                <textarea
+                  value={faq.answer}
+                  onChange={(e) => handleFaqChange(index, "answer", e.target.value)}
+                  placeholder={`Answer #${index + 1}`}
+                  rows="2"
+                  className="w-full border border-borderSoft rounded-button px-3 py-2 text-sm bg-white outline-none focus:border-primary resize-none"
+                />
               </div>
             ))}
             {faqs.length === 0 && (
-              <p className="text-textGray text-sm italic text-center py-4">No FAQs added yet. Click "+ Add FAQ" above.</p>
+              <p className="text-textGray text-sm italic text-center py-4">No FAQs added yet.</p>
             )}
           </div>
         </div>
 
         {/* CTA Section */}
-        <div className="bg-white border border-borderSoft rounded-card shadow-card p-7">
-          <h3 className="text-xl font-extrabold text-dark mb-6">CTA Section</h3>
+        <div className="bg-white border border-borderSoft rounded-card p-7 shadow-sm space-y-5">
+          <h3 className="text-xl font-extrabold text-dark">CTA Section</h3>
           <div className="grid md:grid-cols-2 gap-5">
             <input
               name="ctaTitle"
@@ -595,9 +577,9 @@ const ManageHome = () => {
         <button
           type="submit"
           disabled={loading}
-          className="w-full py-4 bg-primary text-white font-bold rounded-button shadow-md hover:bg-primary/90 transition-all disabled:opacity-50"
+          className="w-full py-4 bg-primary text-white font-bold rounded-button shadow hover:opacity-90 transition-all disabled:opacity-50"
         >
-          {loading ? "Saving Changes..." : "Save Home Content"}
+          {loading ? "Saving Home Content..." : "Save Home Content"}
         </button>
       </form>
     </div>

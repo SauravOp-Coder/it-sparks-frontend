@@ -106,7 +106,7 @@ const Home = () => {
                   {content.faqTitle || "Frequently Asked Questions"}
                 </h2>
                 <p className="text-textGray mt-2">
-                  {content.faqSubtitle || "Find answers to common questions about our courses and training programs."}
+                  {content.faqSubtitle || "Find answers to common questions about our programs."}
                 </p>
               </div>
 
