@@ -1,3 +1,4 @@
+// frontend/src/api/homeApi.js
 import API from "./axiosConfig";
 
 export const getHomeContentApi = async () => {
@@ -6,6 +7,10 @@ export const getHomeContentApi = async () => {
 };
 
 export const updateHomeContentApi = async (formData) => {
-  const response = await API.put("/home", formData);
+  const response = await API.put("/home", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
   return response.data;
 };
