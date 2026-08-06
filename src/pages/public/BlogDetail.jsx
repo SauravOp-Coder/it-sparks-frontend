@@ -1,7 +1,6 @@
 import { Link, useParams } from "react-router-dom";
 import { ArrowLeft, CalendarDays } from "lucide-react";
 import BlogCard from "../../components/blogs/BlogCard";
-import SEO from "../../components/common/SEO";
 import { useEffect, useState } from "react";
 import { getBlogsApi, getSingleBlogApi } from "../../api/blogApi";
 
@@ -71,13 +70,6 @@ const BlogDetail = () => {
 
   return (
     <main>
-      <SEO
-        title={blog.title}
-        description={blog.shortDescription || "Read this informative blog from IT Sparks Technologies about IT training, career growth, and practical learning."}
-        keywords={`${blog.title}, IT Sparks, career guidance, practical training`}
-        canonical={`/blog/${id}`}
-        ogImage={blog.image?.url || undefined}
-      />
       <section className="bg-gradient-to-br from-white via-lightBg to-white py-20">
         <div className="container-custom max-w-4xl">
           <Link

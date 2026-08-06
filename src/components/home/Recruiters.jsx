@@ -40,28 +40,25 @@ const Recruiters = () => {
   return (
     <section className="section-padding bg-white">
       <div className="container-custom">
-        <div className="mx-auto max-w-3xl text-center">
-          <span className="text-sm font-bold uppercase tracking-[0.2em] text-primary">
+        <div className="text-center max-w-3xl mx-auto">
+          <span className="text-primary font-bold uppercase tracking-wide text-sm">
             Recruiters
           </span>
 
-          <h2 className="mt-3 text-3xl font-extrabold leading-tight text-dark md:text-4xl">
+          <h2 className="text-3xl md:text-4xl font-extrabold text-dark mt-3">
             {title}
           </h2>
 
-          <p className="mt-4 text-base leading-8 text-textGray">{subtitle}</p>
+          <p className="text-textGray leading-7 mt-4">{subtitle}</p>
         </div>
 
-        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-5 mt-12">
           {recruiters.map((item, index) => (
             <div
               key={`${item}-${index}`}
-              className="rounded-card bg-lightBg p-6 text-center shadow-card transition duration-300 hover:-translate-y-1 hover:shadow-lg"
+              className="bg-lightBg border border-borderSoft rounded-card p-6 text-center font-extrabold text-dark card-hover"
             >
-              <div className="mb-3 inline-flex rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-primary">
-                Hiring Partner
-              </div>
-              <h3 className="text-lg font-extrabold text-dark">{item}</h3>
+              {item}
             </div>
           ))}
         </div>

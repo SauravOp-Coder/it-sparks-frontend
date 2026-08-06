@@ -2,7 +2,6 @@ import { Camera, Image, Sparkles } from "lucide-react";
 import { useEffect, useState } from "react";
 import { getGalleryApi } from "../../api/galleryApi";
 import PageBanner from "../../components/common/PageBanner";
-import SEO from "../../components/common/SEO";
 
 const Gallery = () => {
   const [galleryItems, setGalleryItems] = useState([]);
@@ -26,12 +25,6 @@ const Gallery = () => {
 
   return (
     <main>
-      <SEO
-        title="Training Gallery"
-        description="Explore IT Sparks Technologies training sessions, workshops, and practical learning moments through our gallery."
-        keywords="training gallery, IT workshops, practical learning, student projects"
-        canonical="/gallery"
-      />
       <PageBanner
   page="gallery"
   fallbackTitle="Gallery"

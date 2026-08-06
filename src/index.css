@@ -52,13 +52,7 @@ select {
 }
 
 .section-padding {
-  padding: 88px 0;
-}
-
-@media (max-width: 768px) {
-  .section-padding {
-    padding: 72px 0;
-  }
+  padding: 96px 0;
 }
 
 .primary-btn {

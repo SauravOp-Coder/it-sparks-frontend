@@ -2,19 +2,15 @@ import { useNavigate } from "react-router-dom";
 import { NavLink } from "react-router-dom";
 import {
   BookOpen,
-  LayoutDashboard,
-  MessageSquare,
-  Trophy,
   Home,
-  BookOpenCheck,
-  Newspaper,
-  Star,
-  BriefcaseBusiness,
-  Images,
-  MessageSquareText,
-  Settings,
-  LogOut,
   Image,
+  LayoutDashboard,
+  LogOut,
+  MessageSquare,
+  Newspaper,
+  Settings,
+  Star,
+  Trophy,
 } from "lucide-react";
 import logo from "../../assets/logo/it-sparks-logo.png";
 
@@ -55,7 +51,7 @@ const menuItems = [
     icon: Image,
   },
   {
-    title: "Manage Banners",
+    title: "Banners",
     path: "/admin/banners",
     icon: Image,
   },

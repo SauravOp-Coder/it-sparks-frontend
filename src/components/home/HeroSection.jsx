@@ -67,17 +67,17 @@ const HeroSection = () => {
             </div>
 
             <div className="grid grid-cols-3 gap-4 mt-10 max-w-xl">
-              <div className="bg-white rounded-card p-5 shadow-card">
+              <div className="bg-white border border-borderSoft rounded-card p-5 shadow-card">
                 <h3 className="text-2xl font-extrabold text-dark">20+</h3>
                 <p className="text-sm text-textGray mt-1">Courses</p>
               </div>
 
-              <div className="bg-white rounded-card p-5 shadow-card">
+              <div className="bg-white border border-borderSoft rounded-card p-5 shadow-card">
                 <h3 className="text-2xl font-extrabold text-dark">500+</h3>
                 <p className="text-sm text-textGray mt-1">Students</p>
               </div>
 
-              <div className="bg-white rounded-card p-5 shadow-card">
+              <div className="bg-white border border-borderSoft rounded-card p-5 shadow-card">
                 <h3 className="text-2xl font-extrabold text-dark">100%</h3>
                 <p className="text-sm text-textGray mt-1">Practical</p>
               </div>

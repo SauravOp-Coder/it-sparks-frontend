@@ -34,6 +34,10 @@ const CourseCard = ({ course }) => {
             Popular
           </span>
         )}
+
+        <span className="absolute bottom-4 left-4 bg-white/95 backdrop-blur text-primary text-xs font-extrabold px-4 py-2 rounded-full">
+          {course.category}
+        </span>
       </div>
 
       <div className="p-6">

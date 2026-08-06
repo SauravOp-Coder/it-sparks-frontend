@@ -9,30 +9,24 @@ import { getHomeContentApi } from "../../api/homeApi";
 
 const defaultFeatures = [
   {
-    title: "Practical Industry Training",
-    text: "Learn with live projects, internship experience, and hands-on implementation.",
+    title: "Practical Learning",
+    text: "Learn concepts with hands-on assignments, projects, and real examples.",
   },
   {
-    title: "Expert Mentorship",
-    text: "Get guidance from experienced trainers and career mentors.",
+    title: "Expert Trainers",
+    text: "Get guidance from trainers with practical industry knowledge.",
   },
   {
-    title: "Placement-Focused Learning",
-    text: "Build resumes, improve GitHub profiles, and prepare for interviews.",
+    title: "Career Support",
+    text: "Resume guidance, interview preparation, and placement-focused learning.",
   },
   {
-    title: "AI-Powered Curriculum",
-    text: "Gain modern skills in AI, analytics, cloud, and development.",
+    title: "Job-ready Skills",
+    text: "Build strong technical skills that help you become career-ready.",
   },
 ];
 
 const icons = [BookOpenCheck, GraduationCap, BriefcaseBusiness, CheckCircle2];
-
-const getTextLines = (text = "") =>
-  text
-    .split(/\n/)
-    .map((line) => line.trim())
-    .filter(Boolean);
 
 const WhyChooseUs = () => {
   const [home, setHome] = useState(null);
@@ -58,55 +52,41 @@ const WhyChooseUs = () => {
 
   const subtitle =
     home?.whyChooseSubtitle ||
-    "We focus on practical learning, real-world projects, internship experience, expert mentorship, and placement support.";
+    "We focus on practical learning, real-world projects, career guidance, and continuous support for students.";
 
   return (
     <section className="section-padding bg-lightBg">
       <div className="container-custom">
-        <div className="mx-auto max-w-3xl text-center">
-          <span className="text-sm font-bold uppercase tracking-[0.2em] text-primary">
+        <div className="text-center max-w-3xl mx-auto">
+          <span className="text-primary font-bold uppercase tracking-wide text-sm">
             Why Choose Us
           </span>
 
-          <h2 className="mt-3 text-3xl font-extrabold leading-tight text-dark md:text-4xl">
+          <h2 className="text-3xl md:text-4xl font-extrabold text-dark mt-3">
             {title}
           </h2>
 
-          <p className="mt-4 text-base leading-8 text-textGray">{subtitle}</p>
+          <p className="text-textGray leading-7 mt-4">{subtitle}</p>
         </div>
 
-        <div className="mt-12 grid gap-8 md:grid-cols-2 xl:grid-cols-4">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mt-12">
           {features.map((item, index) => {
             const Icon = icons[index % icons.length];
-            const lines = getTextLines(item.text);
 
             return (
               <div
                 key={`${item.title}-${index}`}
-                className="group h-full rounded-card bg-white p-7 shadow-card transition duration-300 hover:-translate-y-1 hover:shadow-xl"
+                className="bg-white border border-borderSoft rounded-card p-7 shadow-card card-hover"
               >
-                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+                <div className="h-14 w-14 rounded-2xl bg-primary/10 text-primary flex items-center justify-center">
                   <Icon size={28} />
                 </div>
 
-                <h3 className="mt-5 text-xl font-extrabold text-dark">
+                <h3 className="text-xl font-extrabold text-dark mt-5">
                   {item.title}
                 </h3>
 
-                <div className="mt-4 space-y-3">
-                  {lines.length > 0 ? (
-                    lines.map((line, lineIndex) => (
-                      <div key={`${item.title}-${lineIndex}`} className="flex gap-2">
-                        <span className="mt-2 h-2.5 w-2.5 shrink-0 rounded-full bg-primary" />
-                        <p className="text-sm leading-7 text-textGray">
-                          {line.replace(/^[-•*]\s*/, "")}
-                        </p>
-                      </div>
-                    ))
-                  ) : (
-                    <p className="text-sm leading-7 text-textGray">{item.text}</p>
-                  )}
-                </div>
+                <p className="text-textGray leading-7 mt-3">{item.text}</p>
               </div>
             );
           })}

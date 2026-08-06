@@ -24,12 +24,6 @@ const defaultSteps = [
   },
 ];
 
-const getTextLines = (text = "") =>
-  text
-    .split(/\n/)
-    .map((line) => line.trim())
-    .filter(Boolean);
-
 const TrainingProcess = () => {
   const [home, setHome] = useState(null);
 
@@ -58,52 +52,35 @@ const TrainingProcess = () => {
   return (
     <section className="section-padding bg-white">
       <div className="container-custom">
-        <div className="mx-auto max-w-3xl text-center">
-          <span className="text-sm font-bold uppercase tracking-[0.2em] text-primary">
+        <div className="text-center max-w-3xl mx-auto">
+          <span className="text-primary font-bold uppercase tracking-wide text-sm">
             Training Process
           </span>
 
-          <h2 className="mt-3 text-3xl font-extrabold leading-tight text-dark md:text-4xl">
+          <h2 className="text-3xl md:text-4xl font-extrabold text-dark mt-3">
             {title}
           </h2>
 
-          <p className="mt-4 text-base leading-8 text-textGray">{subtitle}</p>
+          <p className="text-textGray leading-7 mt-4">{subtitle}</p>
         </div>
 
-        <div className="mt-12 grid gap-8 md:grid-cols-2 xl:grid-cols-4">
-          {steps.map((step, index) => {
-            const lines = getTextLines(step.text);
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mt-12">
+          {steps.map((step, index) => (
+            <div
+              key={`${step.title}-${index}`}
+              className="relative bg-lightBg border border-borderSoft rounded-card p-7 card-hover"
+            >
+              <span className="text-5xl font-extrabold text-primary/15">
+                {step.number}
+              </span>
 
-            return (
-              <div
-                key={`${step.title}-${index}`}
-                className="relative rounded-card bg-lightBg p-7 shadow-card transition duration-300 hover:-translate-y-1 hover:shadow-lg"
-              >
-                <span className="text-5xl font-extrabold text-primary/15">
-                  {step.number}
-                </span>
+              <h3 className="text-xl font-extrabold text-dark mt-4">
+                {step.title}
+              </h3>
 
-                <h3 className="mt-4 text-xl font-extrabold text-dark">
-                  {step.title}
-                </h3>
-
-                <div className="mt-4 space-y-2">
-                  {lines.length > 0 ? (
-                    lines.map((line, lineIndex) => (
-                      <div key={`${step.title}-${lineIndex}`} className="flex gap-2">
-                        <span className="mt-2 h-2 w-2 shrink-0 rounded-full bg-primary" />
-                        <p className="text-sm leading-7 text-textGray">
-                          {line.replace(/^[-•*]\s*/, "")}
-                        </p>
-                      </div>
-                    ))
-                  ) : (
-                    <p className="text-sm leading-7 text-textGray">{step.text}</p>
-                  )}
-                </div>
-              </div>
-            );
-          })}
+              <p className="text-textGray leading-7 mt-3">{step.text}</p>
+            </div>
+          ))}
         </div>
       </div>
     </section>
