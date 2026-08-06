@@ -13,35 +13,20 @@ const defaultSections = [
   { key: "cta", title: "Call To Action", enabled: true, order: 8 },
 ];
 
+const encodeBase64 = (data) => {
+  return btoa(unescape(encodeURIComponent(JSON.stringify(data))));
+};
+
 const ManageHome = () => {
   const [formData, setFormData] = useState({
-    heroBadge: "",
-    heroHeading: "",
-    heroSubheading: "",
-    primaryButtonText: "",
-    primaryButtonLink: "",
-    secondaryButtonText: "",
-    secondaryButtonLink: "",
-    popularCoursesTitle: "",
-    popularCoursesSubtitle: "",
-    whyChooseTitle: "",
-    whyChooseSubtitle: "",
-    trainingTitle: "",
-    trainingSubtitle: "",
-    placementTitle: "",
-    placementSubtitle: "",
-    recruiterTitle: "",
-    recruiterSubtitle: "",
-    ctaTitle: "",
-    ctaSubtitle: "",
-    ctaButtonText: "",
-    ctaButtonLink: "",
-    faqTitle: "",
-    faqSubtitle: "",
-    whyChooseCardsText: "",
-    trainingStepsText: "",
-    placementSupportCardsText: "",
-    recruitersText: "",
+    heroBadge: "", heroHeading: "", heroSubheading: "", primaryButtonText: "",
+    primaryButtonLink: "", secondaryButtonText: "", secondaryButtonLink: "",
+    popularCoursesTitle: "", popularCoursesSubtitle: "", whyChooseTitle: "",
+    whyChooseSubtitle: "", trainingTitle: "", trainingSubtitle: "",
+    placementTitle: "", placementSubtitle: "", recruiterTitle: "",
+    recruiterSubtitle: "", ctaTitle: "", ctaSubtitle: "", ctaButtonText: "",
+    ctaButtonLink: "", faqTitle: "", faqSubtitle: "", whyChooseCardsText: "",
+    trainingStepsText: "", placementSupportCardsText: "", recruitersText: "",
     heroImage: null,
   });
 
@@ -79,7 +64,6 @@ const ManageHome = () => {
       faqTitle: home.faqTitle || "Frequently Asked Questions",
       faqSubtitle: home.faqSubtitle || "Find answers to common questions.",
       heroImage: null,
-
       whyChooseCardsText: Array.isArray(home.whyChooseCards)
         ? home.whyChooseCards.map((i) => `${i.title} | ${i.text}`).join("\n")
         : "",
@@ -141,7 +125,6 @@ const ManageHome = () => {
     const temp = updated[index];
     updated[index] = updated[targetIndex];
     updated[targetIndex] = temp;
-
     setSections(updated.map((sec, idx) => ({ ...sec, order: idx })));
   };
 
@@ -175,8 +158,9 @@ const ManageHome = () => {
         }
       });
 
-      payload.append("sections", JSON.stringify(sections));
-      payload.append("faqs", JSON.stringify(faqs));
+      // FORCE BASE64 ENCODING TO PREVENT FORMDATA / PARSER CORRECTION
+      payload.append("sections", encodeBase64(sections));
+      payload.append("faqs", encodeBase64(faqs));
 
       const response = await updateHomeContentApi(payload);
 
@@ -184,7 +168,7 @@ const ManageHome = () => {
         populateData(response.homeContent);
       }
 
-      setSuccess("Home content saved successfully!");
+      setSuccess("Home content saved and updated live!");
       setTimeout(() => setSuccess(""), 4000);
     } catch (err) {
       setError(err.response?.data?.message || "Failed to update home content");
@@ -221,7 +205,7 @@ const ManageHome = () => {
       )}
 
       <form onSubmit={handleSubmit} className="space-y-8">
-        {/* Section Reordering & Toggles */}
+        {/* Section Layout */}
         <div className="bg-white border border-borderSoft rounded-card p-7 shadow-sm">
           <h3 className="text-xl font-extrabold text-dark mb-1">Homepage Section Layout</h3>
           <p className="text-sm text-textGray mb-6">Reorder or toggle visibility of sections live on your site.</p>
@@ -242,9 +226,7 @@ const ManageHome = () => {
                     type="button"
                     onClick={() => toggleSection(idx)}
                     className={`px-3 py-1 text-xs font-bold rounded-full transition-colors ${
-                      sec.enabled
-                        ? "bg-green-100 text-green-700"
-                        : "bg-gray-200 text-gray-600"
+                      sec.enabled ? "bg-green-100 text-green-700" : "bg-gray-200 text-gray-600"
                     }`}
                   >
                     {sec.enabled ? "Active" : "Hidden"}
