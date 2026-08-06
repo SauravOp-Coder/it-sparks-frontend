@@ -13,6 +13,19 @@ import {
   Trophy,
 } from "lucide-react";
 import logo from "../../assets/logo/it-sparks-logo.png";
+import {
+  LayoutDashboard,
+  Home,
+  BookOpenCheck,
+  Newspaper,
+  Star,
+  BriefcaseBusiness,
+  Images,
+  MessageSquareText,
+  Settings,
+  LogOut,
+  Image,
+} from "lucide-react";
 
 const menuItems = [
   {
@@ -51,7 +64,7 @@ const menuItems = [
     icon: Image,
   },
   {
-    title: "Banners",
+    title: "Manage Banners",
     path: "/admin/banners",
     icon: Image,
   },
