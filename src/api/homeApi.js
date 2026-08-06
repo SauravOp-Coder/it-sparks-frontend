@@ -6,11 +6,7 @@ export const getHomeContentApi = async () => {
 };
 
 export const updateHomeContentApi = async (formData) => {
-  const response = await API.put("/home", formData, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  });
+  const response = await API.put("/home", formData);
 
   return response.data;
 };
