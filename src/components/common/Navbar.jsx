@@ -1,20 +1,25 @@
 import { Link, NavLink } from "react-router-dom";
-import { ChevronDown, Menu, X } from "lucide-react";
+import { ChevronDown, Menu, PhoneCall, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import logo from "../../assets/logo/it-sparks-logo.png";
 import { getCoursesApi } from "../../api/courseApi";
+import { getSettingsApi } from "../../api/settingApi";
 
 const Navbar = () => {
   const [openMenu, setOpenMenu] = useState(false);
-  const [openMobileCourses, setOpenMobileCourses] = useState(false);
   const [courses, setCourses] = useState([]);
+  const [settings, setSettings] = useState(null);
 
   const fetchData = async () => {
     try {
       const courseData = await getCoursesApi();
+      const settingData = await getSettingsApi();
+
       setCourses((courseData.courses || []).slice(0, 6));
-    } catch {
+      setSettings(settingData.settings);
+    } catch (error) {
       setCourses([]);
+      setSettings(null);
     }
   };
 
@@ -37,6 +42,7 @@ const Navbar = () => {
               alt="IT Sparks Technologies"
               className="h-[56px] w-auto object-contain"
             />
+
             <div className="hidden sm:block leading-tight">
               <p className="text-[18px] font-black tracking-tight text-dark">
                 IT Sparks
@@ -47,7 +53,6 @@ const Navbar = () => {
             </div>
           </Link>
 
-          {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center gap-8">
             <NavLink to="/" className={navLinkClass}>
               Home
@@ -57,16 +62,15 @@ const Navbar = () => {
               About
             </NavLink>
 
-            {/* Courses Mega-Dropdown */}
             <div className="relative group">
               <NavLink
                 to="/courses"
-                className="text-[15px] font-bold text-softDark hover:text-primary transition flex items-center gap-1 py-6"
+                className="text-[15px] font-bold text-softDark hover:text-primary transition flex items-center gap-1"
               >
-                Courses <ChevronDown size={16} className="transition-transform group-hover:rotate-180" />
+                Courses <ChevronDown size={16} />
               </NavLink>
 
-              <div className="absolute left-1/2 -translate-x-1/2 top-full opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+              <div className="absolute left-1/2 -translate-x-1/2 top-full pt-6 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
                 <div className="w-[520px] bg-white border border-borderSoft rounded-card shadow-soft p-4">
                   <div className="grid grid-cols-2 gap-2">
                     {courses.length > 0 ? (
@@ -74,10 +78,10 @@ const Navbar = () => {
                         <Link
                           key={course._id}
                           to={`/courses/${course._id}`}
-                          className="p-3 rounded-[14px] hover:bg-lightBg transition block"
+                          className="p-4 rounded-[18px] hover:bg-lightBg transition"
                         >
                           <p className="font-extrabold text-dark text-sm">
-                            {course.dropdownName || course.title}
+                            {course.title}
                           </p>
                           <p className="text-xs text-textGray mt-1 line-clamp-2">
                             {course.description}
@@ -87,9 +91,11 @@ const Navbar = () => {
                     ) : (
                       <Link
                         to="/courses"
-                        className="col-span-2 p-4 rounded-[14px] hover:bg-lightBg transition"
+                        className="col-span-2 p-4 rounded-[18px] hover:bg-lightBg transition"
                       >
-                        <p className="font-extrabold text-dark">Explore Courses</p>
+                        <p className="font-extrabold text-dark">
+                          Explore Courses
+                        </p>
                         <p className="text-sm text-textGray mt-1">
                           View all available practical IT courses.
                         </p>
@@ -99,7 +105,7 @@ const Navbar = () => {
 
                   <Link
                     to="/courses"
-                    className="mt-4 w-full primary-btn text-sm py-3 text-center block"
+                    className="mt-4 w-full primary-btn text-sm py-3"
                   >
                     View All Courses
                   </Link>
@@ -110,18 +116,23 @@ const Navbar = () => {
             <NavLink to="/placements" className={navLinkClass}>
               Placements
             </NavLink>
+
             <NavLink to="/gallery" className={navLinkClass}>
               Gallery
             </NavLink>
+
             <NavLink to="/blog" className={navLinkClass}>
               Blog
             </NavLink>
+
             <NavLink to="/contact" className={navLinkClass}>
               Contact
             </NavLink>
           </div>
 
           <div className="hidden lg:flex items-center gap-4">
+            
+
             <Link to="/contact" className="primary-btn py-3">
               Book Free Demo
             </Link>
@@ -129,73 +140,38 @@ const Navbar = () => {
 
           <button
             onClick={() => setOpenMenu(!openMenu)}
-            aria-label="Toggle navigation menu"
-            className="lg:hidden h-11 w-11 rounded-button border border-borderSoft flex items-center justify-center text-dark"
+            className="lg:hidden h-11 w-11 rounded-button border border-borderSoft flex items-center justify-center"
           >
             {openMenu ? <X size={22} /> : <Menu size={22} />}
           </button>
         </nav>
 
-        {/* Mobile Navigation Drawer */}
         {openMenu && (
-          <div className="lg:hidden border-t border-borderSoft py-5 space-y-3">
-            <NavLink to="/" onClick={() => setOpenMenu(false)} className={navLinkClass}>
-              Home
-            </NavLink>
-            <NavLink to="/about" onClick={() => setOpenMenu(false)} className={navLinkClass}>
-              About
-            </NavLink>
+          <div className="lg:hidden border-t border-borderSoft py-5">
+            <div className="grid gap-4">
+              {[
+                ["/", "Home"],
+                ["/about", "About"],
+                ["/courses", "Courses"],
+                ["/placements", "Placements"],
+                ["/gallery", "Gallery"],
+                ["/blog", "Blog"],
+                ["/contact", "Contact"],
+              ].map(([to, label]) => (
+                <NavLink
+                  key={to}
+                  to={to}
+                  onClick={() => setOpenMenu(false)}
+                  className={navLinkClass}
+                >
+                  {label}
+                </NavLink>
+              ))}
 
-            {/* Mobile Course Dropdown */}
-            <div>
-              <button
-                onClick={() => setOpenMobileCourses(!openMobileCourses)}
-                className="w-full flex items-center justify-between text-[15px] font-bold text-softDark py-1"
-              >
-                <span>Courses</span>
-                <ChevronDown size={16} className={`transition-transform ${openMobileCourses ? "rotate-180" : ""}`} />
-              </button>
-              {openMobileCourses && (
-                <div className="pl-4 py-2 space-y-2 border-l-2 border-primary/20 my-1">
-                  {courses.map((course) => (
-                    <Link
-                      key={course._id}
-                      to={`/courses/${course._id}`}
-                      onClick={() => setOpenMenu(false)}
-                      className="block text-sm font-semibold text-textGray hover:text-primary"
-                    >
-                      {course.dropdownName || course.title}
-                    </Link>
-                  ))}
-                  <Link
-                    to="/courses"
-                    onClick={() => setOpenMenu(false)}
-                    className="block text-sm font-bold text-primary pt-1"
-                  >
-                    View All Courses →
-                  </Link>
-                </div>
-              )}
-            </div>
-
-            <NavLink to="/placements" onClick={() => setOpenMenu(false)} className={navLinkClass}>
-              Placements
-            </NavLink>
-            <NavLink to="/gallery" onClick={() => setOpenMenu(false)} className={navLinkClass}>
-              Gallery
-            </NavLink>
-            <NavLink to="/blog" onClick={() => setOpenMenu(false)} className={navLinkClass}>
-              Blog
-            </NavLink>
-            <NavLink to="/contact" onClick={() => setOpenMenu(false)} className={navLinkClass}>
-              Contact
-            </NavLink>
-
-            <div className="pt-2">
               <Link
                 to="/contact"
                 onClick={() => setOpenMenu(false)}
-                className="primary-btn w-full text-center block"
+                className="primary-btn w-full"
               >
                 Book Free Demo
               </Link>
