@@ -136,7 +136,7 @@ const HomeContentBuilder = () => {
  
   return (
   <section className="py-12 bg-white w-full">
-    <div className="container mx-auto px-4 max-w-5xl">
+    <div className="container mx-auto px-6 max-w-5xl">
       
       {/* ========================= */}
       {/* Dynamic Home Sections */}
