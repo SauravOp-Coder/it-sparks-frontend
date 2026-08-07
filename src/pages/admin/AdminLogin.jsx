@@ -30,9 +30,9 @@ const AdminLogin = () => {
       setError("");
 
       const data = await loginAdminApi(loginData);
-
-      localStorage.setItem("adminToken", data.token);
-      localStorage.setItem("adminInfo", JSON.stringify(data.admin));
+      
+localStorage.setItem("token", data.token);
+localStorage.setItem("adminInfo", JSON.stringify(data.admin));
 
       navigate("/admin/dashboard");
     } catch (error) {
