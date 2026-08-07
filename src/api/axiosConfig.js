@@ -3,8 +3,9 @@ import axios from "axios";
 const API = axios.create({
   baseURL:
     import.meta.env.VITE_API_BASE_URL ||
+    import.meta.env.VITE_API_URL ||
     "https://it-sparks-backend.onrender.com/api",
-  withCredentials: true,
+  withCredentials: false,
 });
 
 API.interceptors.request.use((config) => {
