@@ -1,11 +1,13 @@
 import API from "./axiosConfig.js";
 
-export const getHomeContent = async () => {
-  const response = await API.get("/home"); // Hits /api/home
+// Export named function expected by HomeContentBuilder.jsx
+export const getHomeContentApi = async () => {
+  const response = await API.get("/home");
   return response.data;
 };
 
-export const updateHomeContent = async (formData) => {
-  const response = await API.put("/home", formData); // Hits /api/home
+// Export update function
+export const updateHomeContentApi = async (data) => {
+  const response = await API.put("/home", data);
   return response.data;
 };
