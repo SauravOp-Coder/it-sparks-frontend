@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   createCourseApi,
   deleteCourseApi,
@@ -44,6 +44,14 @@ const ManageCourses = () => {
 
   const [formData, setFormData] = useState(emptyForm);
 
+  const imageInputRef = useRef(null);
+  const brochureInputRef = useRef(null);
+
+  const resetFileInputs = () => {
+    if (imageInputRef.current) imageInputRef.current.value = "";
+    if (brochureInputRef.current) brochureInputRef.current.value = "";
+  };
+
   const addDetailSection = () => {
     setFormData((prev) => ({
       ...prev,
@@ -72,8 +80,8 @@ const ManageCourses = () => {
       setPageLoading(true);
       const data = await getAdminCoursesApi();
       setCourses(data.courses || []);
-    } catch (error) {
-      setError(error.response?.data?.message || "Failed to fetch courses");
+    } catch (err) {
+      setError(err.response?.data?.message || "Failed to fetch courses");
     } finally {
       setPageLoading(false);
     }
@@ -89,7 +97,7 @@ const ManageCourses = () => {
     if (type === "file") {
       setFormData((prev) => ({
         ...prev,
-        [name]: files[0],
+        [name]: files[0] || null,
       }));
       return;
     }
@@ -103,6 +111,7 @@ const ManageCourses = () => {
   const resetForm = () => {
     setFormData(emptyForm);
     setEditingCourseId(null);
+    resetFileInputs();
   };
 
   const openAddForm = () => {
@@ -182,13 +191,8 @@ const ManageCourses = () => {
 
     payload.append("detailSections", JSON.stringify(sectionsForBackend));
 
-    if (formData.image) {
-      payload.append("image", formData.image);
-    }
-
-    if (formData.brochure) {
-      payload.append("brochure", formData.brochure);
-    }
+    if (formData.image) payload.append("image", formData.image);
+    if (formData.brochure) payload.append("brochure", formData.brochure);
 
     return payload;
   };
@@ -211,9 +215,9 @@ const ManageCourses = () => {
       resetForm();
       setShowForm(false);
       fetchCourses();
-    } catch (error) {
+    } catch (err) {
       setError(
-        error.response?.data?.message ||
+        err.response?.data?.message ||
           (editingCourseId ? "Failed to update course" : "Failed to create course")
       );
     } finally {
@@ -222,17 +226,14 @@ const ManageCourses = () => {
   };
 
   const handleDelete = async (id) => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this course?"
-    );
-
+    const confirmDelete = window.confirm("Are you sure you want to delete this course?");
     if (!confirmDelete) return;
 
     try {
       await deleteCourseApi(id);
       fetchCourses();
-    } catch (error) {
-      alert(error.response?.data?.message || "Failed to delete course");
+    } catch (err) {
+      alert(err.response?.data?.message || "Failed to delete course");
     }
   };
 
@@ -246,7 +247,7 @@ const ManageCourses = () => {
           </p>
         </div>
 
-        <button onClick={openAddForm} className="primary-btn">
+        <button onClick={openAddForm} className="primary-btn flex items-center justify-center">
           <Plus size={18} className="mr-2" />
           Add Course
         </button>
@@ -273,6 +274,7 @@ const ManageCourses = () => {
               value={formData.title}
               onChange={handleChange}
               placeholder="Course Title"
+              required
               className="border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
             />
 
@@ -319,6 +321,7 @@ const ManageCourses = () => {
             <div className="flex flex-col gap-1">
               <label className="text-xs font-bold text-textGray px-1">Course Banner Image</label>
               <input
+                ref={imageInputRef}
                 name="image"
                 type="file"
                 accept="image/*"
@@ -330,6 +333,7 @@ const ManageCourses = () => {
             <div className="flex flex-col gap-1">
               <label className="text-xs font-bold text-textGray px-1">Course Brochure (PDF)</label>
               <input
+                ref={brochureInputRef}
                 name="brochure"
                 type="file"
                 accept=".pdf"
@@ -361,7 +365,7 @@ const ManageCourses = () => {
             name="syllabusText"
             value={formData.syllabusText}
             onChange={handleChange}
-            placeholder="Syllabus comma separated e.g. HTML,CSS,JavaScript,React"
+            placeholder="Syllabus comma separated e.g. HTML, CSS, JavaScript"
             rows="3"
             className="w-full border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary resize-none mt-5"
           />
@@ -370,12 +374,12 @@ const ManageCourses = () => {
             name="careerOptions"
             value={formData.careerOptions}
             onChange={handleChange}
-            placeholder="Career options comma separated e.g. Frontend Developer,Backend Developer"
+            placeholder="Career options comma separated e.g. Frontend Developer, Backend Developer"
             rows="3"
             className="w-full border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary resize-none mt-5"
           />
 
-          {/* Dynamic Detail Sections Rendering UI */}
+          {/* Dynamic Detail Sections */}
           <div className="mt-6 border-t border-borderSoft pt-5">
             <div className="flex justify-between items-center mb-4">
               <h4 className="font-bold text-dark text-lg">Detail Sections</h4>
@@ -390,10 +394,11 @@ const ManageCourses = () => {
                   type="button" 
                   onClick={() => removeDetailSection(index)} 
                   className="absolute top-4 right-4 text-red-500 hover:text-red-700"
+                  aria-label="Delete Section"
                 >
                   <Trash2 size={16} />
                 </button>
-                <div className="grid md:grid-cols-2 gap-4 mb-3">
+                <div className="grid md:grid-cols-3 gap-4 mb-3 pr-8">
                   <input
                     value={section.title}
                     onChange={(e) => updateDetailSection(index, "title", e.target.value)}
@@ -407,6 +412,15 @@ const ManageCourses = () => {
                   >
                     <option value="paragraph">Paragraph</option>
                     <option value="list">List</option>
+                  </select>
+                  <select
+                    value={section.textCase}
+                    onChange={(e) => updateDetailSection(index, "textCase", e.target.value)}
+                    className="border border-borderSoft rounded-button px-3 py-2 text-sm outline-none bg-white"
+                  >
+                    <option value="normal">Normal Case</option>
+                    <option value="uppercase">Uppercase</option>
+                    <option value="lowercase">Lowercase</option>
                   </select>
                 </div>
                 <textarea
@@ -430,7 +444,7 @@ const ManageCourses = () => {
           </div>
 
           <div className="flex flex-wrap gap-6 mt-5">
-            <label className="flex items-center gap-2 font-semibold text-dark">
+            <label className="flex items-center gap-2 font-semibold text-dark cursor-pointer">
               <input
                 type="checkbox"
                 name="isPopular"
@@ -440,7 +454,7 @@ const ManageCourses = () => {
               Popular Course
             </label>
 
-            <label className="flex items-center gap-2 font-semibold text-dark">
+            <label className="flex items-center gap-2 font-semibold text-dark cursor-pointer">
               <input
                 type="checkbox"
                 name="isVisible"
@@ -545,6 +559,7 @@ const ManageCourses = () => {
                       <div className="flex justify-end gap-3">
                         <button
                           onClick={() => openEditForm(course)}
+                          aria-label="Edit Course"
                           className="h-10 w-10 rounded-button border border-borderSoft flex items-center justify-center hover:text-primary transition"
                         >
                           <Edit size={18} />
@@ -552,6 +567,7 @@ const ManageCourses = () => {
 
                         <button
                           onClick={() => handleDelete(course._id)}
+                          aria-label="Delete Course"
                           className="h-10 w-10 rounded-button border border-borderSoft flex items-center justify-center hover:text-red-500 transition"
                         >
                           <Trash2 size={18} />
