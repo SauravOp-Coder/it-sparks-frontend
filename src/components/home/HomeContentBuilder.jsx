@@ -135,182 +135,117 @@ const HomeContentBuilder = () => {
   };
  
   return (
-  <section>
-    <div className="container">
-
-      {/* =====================================================
-          Dynamic Home Sections
-      ====================================================== */}
-
+  <section className="py-12 bg-white w-full">
+    <div className="container mx-auto px-4 max-w-5xl">
+      
+      {/* ========================= */}
+      {/* Dynamic Home Sections */}
+      {/* ========================= */}
       {sections.length > 0 ? (
-
-        <div className="space-y-12">
-
+        <div className="space-y-8 text-gray-700 leading-relaxed">
           {sections.map((section, index) => (
-
             <div
               key={section._id || index}
               className={
                 section.layout === "split"
-                  ? "grid md:grid-cols-2 gap-10 items-start"
-                  : ""
+                  ? "grid md:grid-cols-2 gap-8 items-center"
+                  : "w-full"
               }
             >
               {renderSection(section, index)}
             </div>
-
           ))}
-
         </div>
-
       ) : (
-
-        <div className="rounded-3xl border-2 border-dashed border-gray-300 py-20 text-center">
-
-          <h3 className="text-2xl font-bold text-gray-600">
+        <div className="w-full max-w-xl mx-auto rounded-2xl border-2 border-dashed border-gray-300 py-12 px-6 text-center">
+          <h3 className="text-xl font-bold text-gray-600">
             No Home Content Found
           </h3>
-
-          <p className="mt-3 text-textGray">
+          <p className="mt-2 text-sm text-textGray">
             Please add sections from the Admin Panel.
           </p>
-
         </div>
-
       )}
 
-
-      {/* =====================================================
-          FAQ Section
-      ====================================================== */}
-
+      {/* ========================= */}
+      {/* FAQs */}
+      {/* ========================= */}
       {faqs.length > 0 && (
-
-        <section className="mt-20">
-
-          <h2 className="text-4xl font-black text-center text-dark">
+        <div className="mt-16 w-full">
+          <h2 className="text-3xl font-extrabold text-center text-dark tracking-tight mb-8">
             Frequently Asked Questions
           </h2>
 
-
-          <div className="mt-10 space-y-5">
-
+          <div className="space-y-3 max-w-4xl mx-auto">
             {faqs.map((faq, index) => {
-
-              const isOpen = openFaqs[index];
+              const open = openFaqs[index];
 
               return (
-
                 <div
                   key={index}
-                  className="rounded-2xl border border-gray-200 overflow-hidden"
+                  className="rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden transition-all"
                 >
-
                   <button
+                    type="button"
+                    aria-expanded={Boolean(open)}
                     onClick={() =>
                       setOpenFaqs((prev) => ({
                         ...prev,
                         [index]: !prev[index],
                       }))
                     }
-                    className="flex w-full items-center justify-between p-6 text-left"
+                    className="flex w-full items-center justify-between p-5 text-left transition hover:bg-gray-50/50"
                   >
-
-                    <span className="font-bold text-lg text-dark">
+                    <span className="font-bold text-base md:text-lg text-dark pr-4">
                       {faq.question}
                     </span>
-
-
-                    {isOpen ? (
-                      <ChevronUp className="text-primary" />
+                    {open ? (
+                      <ChevronUp className="text-primary shrink-0 w-5 h-5" />
                     ) : (
-                      <ChevronDown className="text-primary" />
+                      <ChevronDown className="text-primary shrink-0 w-5 h-5" />
                     )}
-
                   </button>
 
-
-                  {isOpen && (
-
-                    <div className="px-6 pb-6">
-
-                      <p className="leading-8 whitespace-pre-line text-textGray">
+                  {open && (
+                    <div className="px-5 pb-5 pt-1 text-gray-600 border-t border-gray-100">
+                      <p className="leading-relaxed text-sm md:text-base whitespace-pre-line">
                         {faq.answer}
                       </p>
-
                     </div>
-
                   )}
-
                 </div>
-
               );
-
             })}
-
           </div>
-
-        </section>
-
+        </div>
       )}
 
-
-
-      {/* =====================================================
-          Call To Action Section
-      ====================================================== */}
-
+      {/* ========================= */}
+      {/* CTA Section */}
+      {/* ========================= */}
       {home?.ctaTitle && (
-
-        <section className="mt-24">
-
-          <div className="rounded-3xl bg-primary p-10 text-center text-white">
-
-
-            <h2 className="text-4xl font-black">
+        <div className="mt-20 w-full">
+          <div className="rounded-3xl bg-primary p-8 md:p-12 text-center text-white shadow-lg max-w-4xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight">
               {home.ctaTitle}
             </h2>
 
-
             {home.ctaSubtitle && (
-
-              <p className="mt-5 max-w-3xl mx-auto text-lg opacity-90">
+              <p className="mt-3 max-w-2xl mx-auto text-base md:text-lg opacity-90 leading-relaxed">
                 {home.ctaSubtitle}
               </p>
-
             )}
-
-
 
             {home.ctaButtonText && (
-
               <a
                 href={home.ctaButtonLink || "/contact"}
-                className="
-                  inline-block 
-                  mt-8 
-                  rounded-xl 
-                  bg-white 
-                  px-8 
-                  py-4 
-                  font-bold 
-                  text-primary 
-                  transition 
-                  hover:scale-105
-                "
+                className="inline-block mt-6 rounded-xl bg-white px-7 py-3.5 text-base font-bold text-primary transition hover:scale-105 shadow-sm"
               >
-
                 {home.ctaButtonText}
-
               </a>
-
             )}
-
-
           </div>
-
-        </section>
-
+        </div>
       )}
 
     </div>
