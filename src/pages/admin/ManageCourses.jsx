@@ -9,6 +9,7 @@ import { Edit, Plus, Trash2 } from "lucide-react";
 
 const emptyForm = {
   title: "",
+  dropdownName: "",
   category: "",
   description: "",
   duration: "",
@@ -115,6 +116,7 @@ const ManageCourses = () => {
 
     setFormData({
       title: course.title || "",
+      dropdownName: course.dropdownName || "",
       category: course.category || "",
       duration: course.duration || "",
       mode: course.mode || "",
@@ -153,6 +155,7 @@ const ManageCourses = () => {
     const payload = new FormData();
 
     payload.append("title", formData.title);
+    payload.append("dropdownName", formData.dropdownName);
     payload.append("category", formData.category);
     payload.append("description", formData.description);
     payload.append("duration", formData.duration);
@@ -270,6 +273,14 @@ const ManageCourses = () => {
               value={formData.title}
               onChange={handleChange}
               placeholder="Course Title"
+              className="border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
+            />
+
+            <input
+              name="dropdownName"
+              value={formData.dropdownName}
+              onChange={handleChange}
+              placeholder="Dropdown Name"
               className="border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
             />
 

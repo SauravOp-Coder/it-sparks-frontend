@@ -81,7 +81,7 @@ const Navbar = () => {
                           className="p-4 rounded-[18px] hover:bg-lightBg transition"
                         >
                           <p className="font-extrabold text-dark text-sm">
-                            {course.title}
+                            {course.dropdownName || course.title}
                           </p>
                           <p className="text-xs text-textGray mt-1 line-clamp-2">
                             {course.description}
