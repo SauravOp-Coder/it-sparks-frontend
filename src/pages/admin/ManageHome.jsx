@@ -1,476 +1,506 @@
 import { useEffect, useState } from "react";
-import { getHomeContentApi, updateHomeContentApi } from "../../api/homeApi";
+import {
+  getHomeContentApi,
+  updateHomeContentApi,
+} from "../../api/homeApi";
 import { Plus, Trash2 } from "lucide-react";
 
-const emptyForm = {
-  heroBadge: "",
-  heroHeading: "",
-  heroSubheading: "",
-  primaryButtonText: "",
-  primaryButtonLink: "",
-  secondaryButtonText: "",
-  secondaryButtonLink: "",
-  popularCoursesTitle: "",
-  popularCoursesSubtitle: "",
-  whyChooseTitle: "",
-  whyChooseSubtitle: "",
-  trainingTitle: "",
-  trainingSubtitle: "",
-  placementTitle: "",
-  placementSubtitle: "",
-  recruiterTitle: "",
-  recruiterSubtitle: "",
-  ctaTitle: "",
-  ctaSubtitle: "",
-  ctaButtonText: "",
-  ctaButtonLink: "",
-  whyChooseCardsText: "",
-  trainingStepsText: "",
-  placementSupportCardsText: "",
-  recruitersText: "",
-  heroImage: null,
-  homeSections: [],
-  faqs: [],
-};
-
-const createEmptySection = () => ({
+const createSection = () => ({
   type: "paragraph",
   title: "",
   content: "",
   itemsText: "",
-  textCase: "normal",
   layout: "full",
+  textCase: "normal",
 });
 
-const createEmptyFaq = () => ({
+const createFaq = () => ({
   question: "",
   answer: "",
 });
 
 const ManageHome = () => {
-  const [formData, setFormData] = useState(emptyForm);
-  const [currentHeroImage, setCurrentHeroImage] = useState("");
-  const [pageLoading, setPageLoading] = useState(true);
   const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState("");
+  const [pageLoading, setPageLoading] = useState(true);
+
+  const [message, setMessage] = useState("");
   const [error, setError] = useState("");
 
-  const addHomeSection = () => {
+  const [formData, setFormData] = useState({
+    homeSections: [],
+    faqs: [],
+    ctaTitle: "",
+    ctaSubtitle: "",
+    ctaButtonText: "",
+    ctaButtonLink: "",
+  });
+
+  useEffect(() => {
+    fetchHome();
+  }, []);
+
+  const fetchHome = async () => {
+    try {
+      setPageLoading(true);
+
+      const data = await getHomeContentApi();
+      const home = data.homeContent || {};
+
+      setFormData({
+        homeSections: Array.isArray(home.homeSections)
+          ? home.homeSections.map((section) => ({
+              type: section.type || "paragraph",
+              title: section.title || "",
+              content: section.content || "",
+              layout: section.layout || "full",
+              textCase: section.textCase || "normal",
+              itemsText: Array.isArray(section.items)
+                ? section.items.join("\n")
+                : "",
+            }))
+          : [],
+
+        faqs: Array.isArray(home.faqs)
+          ? home.faqs.map((faq) => ({
+              question: faq.question || "",
+              answer: faq.answer || "",
+            }))
+          : [],
+
+        ctaTitle: home.ctaTitle || "",
+        ctaSubtitle: home.ctaSubtitle || "",
+        ctaButtonText: home.ctaButtonText || "",
+        ctaButtonLink: home.ctaButtonLink || "",
+      });
+    } catch (err) {
+      setError("Failed to load home content.");
+    } finally {
+      setPageLoading(false);
+    }
+  };
+
+  const handleCTAChange = (e) => {
     setFormData((prev) => ({
       ...prev,
-      homeSections: [...(prev.homeSections || []), createEmptySection()],
+      [e.target.name]: e.target.value,
     }));
   };
 
-  const removeHomeSection = (index) => {
+    /* ==========================================================
+      HOME SECTIONS
+  ========================================================== */
+
+  const addSection = () => {
     setFormData((prev) => ({
       ...prev,
-      homeSections: (prev.homeSections || []).filter((_, i) => i !== index),
+      homeSections: [...prev.homeSections, createSection()],
     }));
   };
 
-  const updateHomeSection = (index, field, value) => {
+  const removeSection = (index) => {
     setFormData((prev) => ({
       ...prev,
-      homeSections: (prev.homeSections || []).map((section, i) =>
-        i === index ? { ...section, [field]: value } : section
+      homeSections: prev.homeSections.filter((_, i) => i !== index),
+    }));
+  };
+
+  const updateSection = (index, field, value) => {
+    setFormData((prev) => ({
+      ...prev,
+      homeSections: prev.homeSections.map((section, i) =>
+        i === index
+          ? {
+              ...section,
+              [field]: value,
+            }
+          : section
       ),
     }));
   };
 
+  /* ==========================================================
+      FAQS
+  ========================================================== */
+
   const addFaq = () => {
     setFormData((prev) => ({
       ...prev,
-      faqs: [...(prev.faqs || []), createEmptyFaq()],
+      faqs: [...prev.faqs, createFaq()],
     }));
   };
 
   const removeFaq = (index) => {
     setFormData((prev) => ({
       ...prev,
-      faqs: (prev.faqs || []).filter((_, i) => i !== index),
+      faqs: prev.faqs.filter((_, i) => i !== index),
     }));
   };
 
   const updateFaq = (index, field, value) => {
     setFormData((prev) => ({
       ...prev,
-      faqs: (prev.faqs || []).map((faq, i) =>
-        i === index ? { ...faq, [field]: value } : faq
+      faqs: prev.faqs.map((faq, i) =>
+        i === index
+          ? {
+              ...faq,
+              [field]: value,
+            }
+          : faq
       ),
     }));
   };
 
-const fetchHomeContent = async () => {
-  try {
-    setPageLoading(true);
-    const data = await getHomeContentApi();
-    const home = data.homeContent || {};
+  /* ==========================================================
+      BUILD PAYLOAD
+  ========================================================== */
 
-    setFormData({
-      heroBadge: home.heroBadge || "",
-      heroHeading: home.heroHeading || "",
-      heroSubheading: home.heroSubheading || "",
-      primaryButtonText: home.primaryButtonText || "",
-      primaryButtonLink: home.primaryButtonLink || "",
-      secondaryButtonText: home.secondaryButtonText || "",
-      secondaryButtonLink: home.secondaryButtonLink || "",
-      popularCoursesTitle: home.popularCoursesTitle || "",
-      popularCoursesSubtitle: home.popularCoursesSubtitle || "",
-      whyChooseTitle: home.whyChooseTitle || "",
-      whyChooseSubtitle: home.whyChooseSubtitle || "",
-      trainingTitle: home.trainingTitle || "",
-      trainingSubtitle: home.trainingSubtitle || "",
-      placementTitle: home.placementTitle || "",
-      placementSubtitle: home.placementSubtitle || "",
-      recruiterTitle: home.recruiterTitle || "",
-      recruiterSubtitle: home.recruiterSubtitle || "",
-      ctaTitle: home.ctaTitle || "",
-      ctaSubtitle: home.ctaSubtitle || "",
-      ctaButtonText: home.ctaButtonText || "",
-      ctaButtonLink: home.ctaButtonLink || "",
-      heroImage: null,
-      homeSections: Array.isArray(home.homeSections)
-        ? home.homeSections.map((section) => ({
-            type: section.type || "paragraph",
-            title: section.title || "",
-            content: section.content || "",
-            itemsText: Array.isArray(section.items)
-              ? section.items.join("\n")
-              : "",
-            textCase: section.textCase || "normal",
-            layout: section.layout || "full",
-          }))
-        : [],
-      faqs: Array.isArray(home.faqs)
-        ? home.faqs.map((faq) => ({
-            question: faq.question || "",
-            answer: faq.answer || "",
-          }))
-        : [],
+  const buildPayload = () => ({
+    homeSections: formData.homeSections.map((section, index) => ({
+      type: section.type,
+      title: section.title.trim(),
+      content: section.content.trim(),
+      layout: section.layout,
+      textCase: section.textCase,
+      order: index,
+      items:
+        section.type === "bulletList" ||
+        section.type === "numberedList"
+          ? section.itemsText
+              .split("\n")
+              .map((item) => item.trim())
+              .filter(Boolean)
+          : [],
+    })),
 
-      // New mapped fields added below
-      whyChooseCardsText: Array.isArray(home.whyChooseCards)
-        ? home.whyChooseCards
-            .map((item) => `${item.title} | ${item.text}`)
-            .join("\n")
-        : "",
+    faqs: formData.faqs.map((faq, index) => ({
+      question: faq.question.trim(),
+      answer: faq.answer.trim(),
+      order: index,
+    })),
 
-      trainingStepsText: Array.isArray(home.trainingSteps)
-        ? home.trainingSteps
-            .map((item) => `${item.number} | ${item.title} | ${item.text}`)
-            .join("\n")
-        : "",
+    ctaTitle: formData.ctaTitle.trim(),
+    ctaSubtitle: formData.ctaSubtitle.trim(),
+    ctaButtonText: formData.ctaButtonText.trim(),
+    ctaButtonLink: formData.ctaButtonLink.trim(),
+  });
 
-      placementSupportCardsText: Array.isArray(home.placementSupportCards)
-        ? home.placementSupportCards
-            .map((item) => `${item.title} | ${item.text}`)
-            .join("\n")
-        : "",
-
-      recruitersText: Array.isArray(home.recruiters)
-        ? home.recruiters.join(", ")
-        : "",
-    });
-
-    setCurrentHeroImage(home.heroImage?.url || "");
-  } catch (error) {
-    setError(error.response?.data?.message || "Failed to fetch home content");
-  } finally {
-    setPageLoading(false);
-  }
-};
-
-  useEffect(() => {
-    fetchHomeContent();
-  }, []);
-
-  const handleChange = (e) => {
-    const { name, value, type, files } = e.target;
-
-    if (type === "file") {
-      setFormData((prev) => ({
-        ...prev,
-        [name]: files[0],
-      }));
-      return;
-    }
-
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-  const buildPayload = () => {
-    const payload = new FormData();
-
-    Object.entries(formData).forEach(([key, value]) => {
-      if (key === "heroImage") {
-        if (value) payload.append("heroImage", value);
-      } else if (key === "homeSections") {
-        payload.append(
-          "homeSections",
-          JSON.stringify(
-            (value || []).map((section) => ({
-              type: section.type,
-              title: section.title,
-              content: section.content,
-              textCase: section.textCase,
-              layout: section.layout,
-              items: section.itemsText
-                ? section.itemsText
-                    .split("\n")
-                    .map((item) => item.trim())
-                    .filter(Boolean)
-                : [],
-            }))
-          )
-        );
-      } else if (key === "faqs") {
-        payload.append(
-          "faqs",
-          JSON.stringify((value || []).map((faq) => ({
-            question: faq.question,
-            answer: faq.answer,
-          })))
-        );
-      } else {
-        payload.append(key, value ?? "");
-      }
-    });
-
-    return payload;
-  };
+  /* ==========================================================
+      SAVE
+  ========================================================== */
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  try {
-    setLoading(true);
-    setError("");
+    try {
+      setLoading(true);
+      setError("");
+      setMessage("");
 
-    const payload = buildPayload();
+      await updateHomeContentApi(buildPayload());
 
-    await updateHomeContentApi(payload);
+      setMessage("Home page updated successfully.");
 
-    alert("Home content updated successfully");
-    await fetchHomeContent();
-  } catch (error) {
-    setError(error.response?.data?.message || "Failed to update home content");
-  } finally {
-    setLoading(false);
-  }
-};
+      await fetchHome();
+    } catch (err) {
+      setError(
+        err.response?.data?.message ||
+          "Unable to save home page."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
   if (pageLoading) {
     return (
-      <div className="bg-white border border-borderSoft rounded-card shadow-card p-10 text-center text-textGray">
-        Loading home content...
+      <div className="p-8 text-center">
+        Loading Home Content...
       </div>
     );
   }
 
   return (
-    <div>
-      <div className="mb-8">
-        <h2 className="text-3xl font-extrabold text-dark">Manage Home Page</h2>
-        <p className="text-textGray mt-2">
-          Update hero section, homepage titles, CTA content, and hero image.
-        </p>
+  <div className="max-w-7xl mx-auto">
+
+    <div className="mb-8">
+      <h1 className="text-3xl font-black text-dark">
+        Manage Home Page
+      </h1>
+
+      <p className="text-textGray mt-2">
+        Manage homepage sections, FAQs and CTA section.
+      </p>
+    </div>
+
+    {message && (
+      <div className="mb-6 rounded-lg border border-green-200 bg-green-50 px-5 py-4 text-green-700">
+        {message}
+      </div>
+    )}
+
+    {error && (
+      <div className="mb-6 rounded-lg border border-red-200 bg-red-50 px-5 py-4 text-red-600">
+        {error}
+      </div>
+    )}
+
+    <form onSubmit={handleSubmit} className="space-y-10">
+
+      {/* ================================================= */}
+      {/* HOME SECTIONS */}
+      {/* ================================================= */}
+
+      <div className="rounded-2xl border bg-white p-6 shadow-sm">
+
+        <div className="flex items-center justify-between mb-6">
+
+          <div>
+            <h2 className="text-2xl font-bold">
+              Home Sections
+            </h2>
+
+            <p className="text-sm text-textGray mt-1">
+              Create dynamic content sections shown below the course cards.
+            </p>
+
+          </div>
+
+          <button
+            type="button"
+            onClick={addSection}
+            className="primary-btn flex items-center gap-2"
+          >
+            <Plus size={18} />
+            Add Section
+          </button>
+
+        </div>
+
+        {formData.homeSections.length === 0 && (
+          <div className="rounded-xl border-2 border-dashed py-10 text-center text-textGray">
+            No sections added yet.
+          </div>
+        )}
+
+        {formData.homeSections.map((section, index) => (
+
+          <div
+            key={index}
+            className="relative mb-8 rounded-xl border bg-gray-50 p-6"
+          >
+
+            <button
+              type="button"
+              onClick={() => removeSection(index)}
+              className="absolute right-5 top-5 text-red-500 hover:text-red-700"
+            >
+              <Trash2 size={18} />
+            </button>
+
+            <div className="grid md:grid-cols-3 gap-4">
+
+              <select
+                value={section.type}
+                onChange={(e) =>
+                  updateSection(index, "type", e.target.value)
+                }
+                className="border rounded-lg p-3"
+              >
+                <option value="heading">Heading</option>
+                <option value="paragraph">Paragraph</option>
+                <option value="bulletList">Bullet List</option>
+                <option value="numberedList">Numbered List</option>
+                <option value="highlight">Highlight</option>
+              </select>
+
+              <select
+                value={section.layout}
+                onChange={(e) =>
+                  updateSection(index, "layout", e.target.value)
+                }
+                className="border rounded-lg p-3"
+              >
+                <option value="full">Full Width</option>
+                <option value="split">Split Layout</option>
+              </select>
+
+              <select
+                value={section.textCase}
+                onChange={(e) =>
+                  updateSection(index, "textCase", e.target.value)
+                }
+                className="border rounded-lg p-3"
+              >
+                <option value="normal">Normal</option>
+                <option value="uppercase">Uppercase</option>
+                <option value="lowercase">Lowercase</option>
+                <option value="capitalize">Capitalize</option>
+              </select>
+
+            </div>
+
+            <input
+              className="mt-4 w-full border rounded-lg p-3"
+              placeholder="Section Title"
+              value={section.title}
+              onChange={(e) =>
+                updateSection(index, "title", e.target.value)
+              }
+            />
+
+            <textarea
+              rows={5}
+              className="mt-4 w-full border rounded-lg p-3"
+              placeholder="Section Content"
+              value={section.content}
+              onChange={(e) =>
+                updateSection(index, "content", e.target.value)
+              }
+            />
+
+            {(section.type === "bulletList" ||
+              section.type === "numberedList") && (
+
+              <textarea
+                rows={6}
+                className="mt-4 w-full border rounded-lg p-3"
+                placeholder="One item per line"
+                value={section.itemsText}
+                onChange={(e) =>
+                  updateSection(index, "itemsText", e.target.value)
+                }
+              />
+
+            )}
+
+          </div>
+
+        ))}
+
       </div>
 
-      {success && (
-        <div className="bg-green-50 border border-green-100 text-green-700 rounded-button px-4 py-3 text-sm font-semibold mb-6">
-          {success}
+      {/* ================================================= */}
+      {/* FAQ */}
+      {/* ================================================= */}
+
+      <div className="rounded-2xl border bg-white p-6 shadow-sm">
+
+        <div className="flex justify-between items-center mb-6">
+
+          <h2 className="text-2xl font-bold">
+            FAQs
+          </h2>
+
+          <button
+            type="button"
+            onClick={addFaq}
+            className="primary-btn flex items-center gap-2"
+          >
+            <Plus size={18} />
+            Add FAQ
+          </button>
+
         </div>
-      )}
 
-      {error && (
-        <div className="bg-red-50 border border-red-100 text-red-600 rounded-button px-4 py-3 text-sm font-semibold mb-6">
-          {error}
-        </div>
-      )}
+        {formData.faqs.map((faq, index) => (
 
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white border border-borderSoft rounded-card shadow-card p-7"
-      >
+          <div
+            key={index}
+            className="relative mb-6 rounded-xl border bg-gray-50 p-5"
+          >
 
-
-        <h3 className="text-xl font-extrabold text-dark mt-10 mb-6">
-          Homepage Section Content
-        </h3>
-        <p className="mb-6 rounded-button border border-primary/20 bg-primary/5 px-4 py-3 text-sm leading-7 text-textGray">
-        add sections and FAQs to the homepage. For sections, you can choose the type (heading, paragraph, bullet list, numbered list, or highlight) and provide the content. For bullet and numbered lists, add one item per line in the provided textarea.
-        </p>
-
-        <div className="mt-6 border-t border-borderSoft pt-5">
-          <div className="flex items-center justify-between mb-4">
-            <h4 className="text-lg font-bold text-dark">Custom Home Sections</h4>
-            <button type="button" onClick={addHomeSection} className="secondary-btn flex items-center gap-1 py-1.5 px-3 text-sm">
-              <Plus size={16} /> Add Section
+            <button
+              type="button"
+              onClick={() => removeFaq(index)}
+              className="absolute top-5 right-5 text-red-500"
+            >
+              <Trash2 size={18} />
             </button>
+
+            <input
+              className="w-full border rounded-lg p-3"
+              placeholder="Question"
+              value={faq.question}
+              onChange={(e) =>
+                updateFaq(index, "question", e.target.value)
+              }
+            />
+
+            <textarea
+              rows={4}
+              className="mt-4 w-full border rounded-lg p-3"
+              placeholder="Answer"
+              value={faq.answer}
+              onChange={(e) =>
+                updateFaq(index, "answer", e.target.value)
+              }
+            />
+
           </div>
 
-          {(formData.homeSections || []).map((section, index) => (
-            <div key={index} className="relative mb-4 rounded-card border border-borderSoft bg-lightBg/50 p-4">
-              <button
-                type="button"
-                onClick={() => removeHomeSection(index)}
-                className="absolute right-4 top-4 text-red-500 hover:text-red-700"
-              >
-                <Trash2 size={16} />
-              </button>
+        ))}
 
-              <div className="grid gap-4 md:grid-cols-3">
-                <input
-                  value={section.title}
-                  onChange={(e) => updateHomeSection(index, "title", e.target.value)}
-                  placeholder="Section Title"
-                  className="rounded-button border border-borderSoft bg-white px-3 py-2 text-sm outline-none"
-                />
-                <select
-                  value={section.type}
-                  onChange={(e) => updateHomeSection(index, "type", e.target.value)}
-                  className="rounded-button border border-borderSoft bg-white px-3 py-2 text-sm outline-none"
-                >
-                  <option value="heading">Heading</option>
-                  <option value="paragraph">Paragraph</option>
-                  <option value="bulletList">Bullet List</option>
-                  <option value="numberedList">Numbered List</option>
-                  <option value="highlight">Highlight</option>
-                </select>
-                <select
-                  value={section.layout || "full"}
-                  onChange={(e) => updateHomeSection(index, "layout", e.target.value)}
-                  className="rounded-button border border-borderSoft bg-white px-3 py-2 text-sm outline-none"
-                >
-                  <option value="full">Full width</option>
-                  <option value="split">Two columns</option>
-                </select>
-              </div>
+      </div>
 
-              <textarea
-                value={section.content}
-                onChange={(e) => updateHomeSection(index, "content", e.target.value)}
-                placeholder="Section Content"
-                rows="3"
-                className="mt-3 w-full resize-none rounded-button border border-borderSoft bg-white px-3 py-2 text-sm outline-none"
-              />
+      {/* ================================================= */}
+      {/* CTA */}
+      {/* ================================================= */}
 
-              {(section.type === "bulletList" || section.type === "numberedList") && (
-                <textarea
-                  value={section.itemsText || ""}
-                  onChange={(e) => updateHomeSection(index, "itemsText", e.target.value)}
-                  placeholder="Add one list item per line"
-                  rows="4"
-                  className="mt-3 w-full resize-none rounded-button border border-borderSoft bg-white px-3 py-2 text-sm outline-none"
-                />
-              )}
-            </div>
-          ))}
-        </div>
+      <div className="rounded-2xl border bg-white p-6 shadow-sm">
 
-        <div className="mt-8 border-t border-borderSoft pt-5">
-          <div className="flex items-center justify-between mb-4">
-            <h4 className="text-lg font-bold text-dark">FAQ Section</h4>
-            <button type="button" onClick={addFaq} className="secondary-btn flex items-center gap-1 py-1.5 px-3 text-sm">
-              <Plus size={16} /> Add FAQ
-            </button>
-          </div>
-
-          {(formData.faqs || []).map((faq, index) => (
-            <div key={index} className="relative mb-4 rounded-card border border-borderSoft bg-lightBg/50 p-4">
-              <button
-                type="button"
-                onClick={() => removeFaq(index)}
-                className="absolute right-4 top-4 text-red-500 hover:text-red-700"
-              >
-                <Trash2 size={16} />
-              </button>
-
-              <input
-                value={faq.question}
-                onChange={(e) => updateFaq(index, "question", e.target.value)}
-                placeholder="Question"
-                className="w-full rounded-button border border-borderSoft bg-white px-3 py-2 text-sm outline-none"
-              />
-
-              <textarea
-                value={faq.answer}
-                onChange={(e) => updateFaq(index, "answer", e.target.value)}
-                placeholder="Answer"
-                rows="3"
-                className="mt-3 w-full resize-none rounded-button border border-borderSoft bg-white px-3 py-2 text-sm outline-none"
-              />
-            </div>
-          ))}
-        </div>
-
-        <div className="grid md:grid-cols-2 gap-5">
-          <div className="md:col-span-2">
-  <label className="font-bold text-dark">
-    Recruiters / Hiring Partners
-  </label>
-  <p className="text-sm text-textGray mt-1 mb-2">
-    Enter company names separated by commas to show them on the homepage.
-  </p>
-  <textarea
-    name="recruitersText"
-    value={formData.recruitersText}
-    onChange={handleChange}
-    rows="4"
-    placeholder="TCS, Infosys, Wipro, Capgemini, Accenture, Cognizant"
-    className="w-full border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary resize-none"
-  />
-</div>
-        </div>
-
-        <h3 className="text-xl font-extrabold text-dark mt-10 mb-6">
+        <h2 className="text-2xl font-bold mb-6">
           CTA Section
-        </h3>
+        </h2>
 
         <div className="grid md:grid-cols-2 gap-5">
+
           <input
             name="ctaTitle"
             value={formData.ctaTitle}
-            onChange={handleChange}
+            onChange={handleCTAChange}
             placeholder="CTA Title"
-            className="border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
+            className="border rounded-lg p-3"
           />
 
           <input
             name="ctaSubtitle"
             value={formData.ctaSubtitle}
-            onChange={handleChange}
+            onChange={handleCTAChange}
             placeholder="CTA Subtitle"
-            className="border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
+            className="border rounded-lg p-3"
           />
 
           <input
             name="ctaButtonText"
             value={formData.ctaButtonText}
-            onChange={handleChange}
-            placeholder="CTA Button Text"
-            className="border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
+            onChange={handleCTAChange}
+            placeholder="Button Text"
+            className="border rounded-lg p-3"
           />
 
           <input
             name="ctaButtonLink"
             value={formData.ctaButtonLink}
-            onChange={handleChange}
-            placeholder="CTA Button Link"
-            className="border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
+            onChange={handleCTAChange}
+            placeholder="/contact"
+            className="border rounded-lg p-3"
           />
+
         </div>
 
-        <button type="submit" disabled={loading} className="primary-btn mt-8">
-          {loading ? "Saving..." : "Save Home Content"}
-        </button>
-      </form>
-    </div>
-  );
-};
+      </div>
+
+      <button
+        type="submit"
+        disabled={loading}
+        className="primary-btn"
+      >
+        {loading ? "Saving..." : "Save Home Page"}
+      </button>
+
+    </form>
+
+  </div>
+);
 
 export default ManageHome;

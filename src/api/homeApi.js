@@ -1,11 +1,23 @@
-import API from "./axiosConfig.js";
+import API from "./axiosConfig";
 
+/**
+ * ----------------------------------------
+ * Get Home Page Content (Public)
+ * GET /api/home
+ * ----------------------------------------
+ */
 export const getHomeContentApi = async () => {
-  const response = await API.get("/home");
-  return response.data;
+  const { data } = await API.get("/home");
+  return data;
 };
 
-export const updateHomeContentApi = async (data) => {
-  const response = await API.put("/home", data);
-  return response.data;
+/**
+ * ----------------------------------------
+ * Update Home Page Content (Admin)
+ * PUT /api/home
+ * ----------------------------------------
+ */
+export const updateHomeContentApi = async (payload) => {
+  const { data } = await API.put("/home", payload);
+  return data;
 };
