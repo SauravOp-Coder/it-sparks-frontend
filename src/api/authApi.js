@@ -1,11 +1,6 @@
-import API from "./axiosConfig";
+import API from "./axiosConfig.js";
 
-export const loginAdminApi = async (loginData) => {
-  const response = await API.post("/auth/login", loginData);
-  return response.data;
-};
-
-export const getAdminProfileApi = async () => {
-  const response = await API.get("/auth/profile");
+export const loginUser = async (credentials) => {
+  const response = await API.post("/auth/login", credentials); // Hits /api/auth/login
   return response.data;
 };

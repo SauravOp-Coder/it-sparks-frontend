@@ -1,25 +1,11 @@
-import axios from "axios";
+import API from "./axiosConfig.js";
 
-const API = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || "https://your-backend.onrender.com/api",
-  withCredentials: true,
-});
-
-// Attach token automatically for admin routes
-API.interceptors.request.use((req) => {
-  const token = localStorage.getItem("token"); // or wherever your admin token is stored
-  if (token) {
-    req.headers.Authorization = `Bearer ${token}`;
-  }
-  return req;
-});
-
-export const getHomeContentApi = async () => {
-  const res = await API.get("/home");
-  return res.data;
+export const getHomeContent = async () => {
+  const response = await API.get("/home"); // Hits /api/home
+  return response.data;
 };
 
-export const updateHomeContentApi = async (data) => {
-  const res = await API.put("/home", data);
-  return res.data;
+export const updateHomeContent = async (formData) => {
+  const response = await API.put("/home", formData); // Hits /api/home
+  return response.data;
 };
