@@ -133,123 +133,178 @@ const HomeContentBuilder = () => {
         return null;
     }
   };
- return (
-  <section className="py-16 bg-white w-full">
-    <div className="container mx-auto px-4 max-w-7xl flex flex-col items-center">
-      
-      {/* ========================= */}
-      {/* Dynamic Home Sections */}
-      {/* ========================= */}
-      {sections.length > 0 ? (
-        <div className="w-full space-y-12">
-          {sections.map((section, index) => (
-            <div
-              key={section._id || index}
-              className={
-                section.layout === "split"
-                  ? "grid md:grid-cols-2 gap-10 items-center justify-items-center"
-                  : "flex flex-col items-center justify-center"
-              }
-            >
-              {renderSection(section, index)}
-            </div>
-          ))}
-        </div>
-      ) : (
-        <div className="w-full max-w-2xl mx-auto rounded-3xl border-2 border-dashed border-gray-300 py-20 px-6 text-center flex flex-col items-center justify-center">
-          <h3 className="text-2xl font-bold text-gray-600">
-            No Home Content Found
-          </h3>
-          <p className="mt-3 text-textGray max-w-md">
-            Please add sections from the Admin Panel.
-          </p>
-        </div>
-      )}
+   return (
+    <section className="py-16 bg-white">
 
-      {/* ========================= */}
-      {/* FAQs */}
-      {/* ========================= */}
-      {faqs.length > 0 && (
-        <div className="mt-20 w-full max-w-4xl mx-auto flex flex-col items-center">
-          <h2 className="text-3xl md:text-4xl font-black text-center text-dark">
-            Frequently Asked Questions
-          </h2>
+      <div className="container">
 
-          <div className="mt-10 w-full space-y-4">
-            {faqs.map((faq, index) => {
-              const open = openFaqs[index];
+        {/* ========================= */}
+        {/* Dynamic Home Sections */}
+        {/* ========================= */}
 
-              return (
-                <div
-                  key={index}
-                  className="rounded-2xl border border-gray-200 overflow-hidden bg-white shadow-sm transition-all"
-                >
-                  <button
-                    type="button"
-                    aria-expanded={Boolean(open)}
-                    onClick={() =>
-                      setOpenFaqs((prev) => ({
-                        ...prev,
-                        [index]: !prev[index],
-                      }))
-                    }
-                    className="flex w-full items-center justify-between p-6 text-left focus:outline-none"
-                  >
-                    <span className="font-bold text-lg text-dark pr-4">
-                      {faq.question}
-                    </span>
-                    {open ? (
-                      <ChevronUp className="text-primary shrink-0" />
-                    ) : (
-                      <ChevronDown className="text-primary shrink-0" />
-                    )}
-                  </button>
+        {sections.length > 0 ? (
 
-                  {open && (
-                    <div className="px-6 pb-6 pt-2">
-                      <p className="leading-relaxed whitespace-pre-line text-textGray">
-                        {faq.answer}
-                      </p>
-                    </div>
-                  )}
-                </div>
-              );
-            })}
+          <div className="space-y-12">
+
+            {sections.map((section, index) => (
+
+              <div
+                key={section._id || index}
+                className={
+                  section.layout === "split"
+                    ? "grid md:grid-cols-2 gap-10 items-start"
+                    : ""
+                }
+              >
+                {renderSection(section, index)}
+              </div>
+
+            ))}
+
           </div>
-        </div>
-      )}
 
-      {/* ========================= */}
-      {/* CTA Section */}
-      {/* ========================= */}
-      {home?.ctaTitle && (
-        <div className="mt-24 w-full max-w-5xl mx-auto">
-          <div className="rounded-3xl bg-primary p-10 md:p-14 text-center text-white flex flex-col items-center justify-center shadow-lg">
-            <h2 className="text-3xl md:text-4xl font-black max-w-2xl leading-tight">
-              {home.ctaTitle}
+        ) : (
+
+          <div className="rounded-3xl border-2 border-dashed border-gray-300 py-20 text-center">
+
+            <h3 className="text-2xl font-bold text-gray-600">
+              No Home Content Found
+            </h3>
+
+            <p className="mt-3 text-textGray">
+              Please add sections from the Admin Panel.
+            </p>
+
+          </div>
+
+        )}
+
+        {/* ========================= */}
+        {/* FAQs */}
+        {/* ========================= */}
+
+        {faqs.length > 0 && (
+
+          <div className="mt-20">
+
+            <h2 className="text-4xl font-black text-center text-dark">
+
+              Frequently Asked Questions
+
             </h2>
 
-            {home.ctaSubtitle && (
-              <p className="mt-4 max-w-2xl mx-auto text-base md:text-lg opacity-90 leading-relaxed">
-                {home.ctaSubtitle}
-              </p>
-            )}
+            <div className="mt-10 space-y-5">
 
-            {home.ctaButtonText && (
-              <a
-                href={home.ctaButtonLink || "/contact"}
-                className="inline-block mt-8 rounded-xl bg-white px-8 py-4 font-bold text-primary transition-transform transform hover:scale-105 active:scale-95 shadow-md"
-              >
-                {home.ctaButtonText}
-              </a>
-            )}
+              {faqs.map((faq, index) => {
+
+                const open = openFaqs[index];
+
+                return (
+
+                  <div
+                    key={index}
+                    className="rounded-2xl border border-gray-200 overflow-hidden"
+                  >
+
+                    <button
+                      onClick={() =>
+                        setOpenFaqs((prev) => ({
+                          ...prev,
+                          [index]: !prev[index],
+                        }))
+                      }
+                      className="flex w-full items-center justify-between p-6 text-left"
+                    >
+
+                      <span className="font-bold text-lg text-dark">
+
+                        {faq.question}
+
+                      </span>
+
+                      {open ? (
+                        <ChevronUp className="text-primary" />
+                      ) : (
+                        <ChevronDown className="text-primary" />
+                      )}
+
+                    </button>
+
+                    {open && (
+
+                      <div className="px-6 pb-6">
+
+                        <p className="leading-8 whitespace-pre-line text-textGray">
+
+                          {faq.answer}
+
+                        </p>
+
+                      </div>
+
+                    )}
+
+                  </div>
+
+                );
+
+              })}
+
+            </div>
+
           </div>
-        </div>
-      )}
 
-    </div>
-  </section>
-);
+        )}
+
+        {/* ========================= */}
+        {/* CTA */}
+        {/* ========================= */}
+
+        {home?.ctaTitle && (
+
+          <div className="mt-24">
+
+            <div className="rounded-3xl bg-primary p-10 text-center text-white">
+
+              <h2 className="text-4xl font-black">
+
+                {home.ctaTitle}
+
+              </h2>
+
+              {home.ctaSubtitle && (
+
+                <p className="mt-5 max-w-3xl mx-auto text-lg opacity-90">
+
+                  {home.ctaSubtitle}
+
+                </p>
+
+              )}
+
+              {home.ctaButtonText && (
+
+                <a
+                  href={home.ctaButtonLink || "/contact"}
+                  className="inline-block mt-8 rounded-xl bg-white px-8 py-4 font-bold text-primary transition hover:scale-105"
+                >
+
+                  {home.ctaButtonText}
+
+                </a>
+
+              )}
+
+            </div>
+
+          </div>
+
+        )}
+
+      </div>
+
+    </section>
+  );
 };
 
 
