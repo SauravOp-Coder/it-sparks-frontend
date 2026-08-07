@@ -7,7 +7,6 @@ const API = axios.create({
   withCredentials: true,
 });
 
-// Automatically send bearer token for admin routes
 API.interceptors.request.use((config) => {
   const token = localStorage.getItem("token");
   if (token) {
