@@ -502,5 +502,5 @@ const ManageHome = () => {
 
   </div>
 );
-
+};
 export default ManageHome;

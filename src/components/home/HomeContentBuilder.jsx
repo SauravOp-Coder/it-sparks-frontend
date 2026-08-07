@@ -1,113 +1,33 @@
 import { useEffect, useState } from "react";
-import { ChevronDown, ChevronUp, CircleCheckBig } from "lucide-react";
+import {
+  ChevronDown,
+  ChevronUp,
+  CircleCheckBig,
+} from "lucide-react";
 import { getHomeContentApi } from "../../api/homeApi";
-
-const defaultContentSections = [
-  {
-    type: "heading",
-    title: "Best IT Training Institute in Pune – IT Sparks Technologies",
-    layout: "full",
-    content: "",
-  },
-  {
-    type: "paragraph",
-    title: "Practical IT Training that Builds Careers",
-    layout: "full",
-    content:
-      "Searching for the best IT training institute in Pune that goes beyond traditional classroom learning? Welcome to IT Sparks Technologies, where learning begins with real industry execution. Unlike traditional IT classes in Pune, we help students build AI-powered applications, enterprise solutions, cloud infrastructure, analytics dashboards, and data engineering projects used in real business environments.",
-  },
-  {
-    type: "highlight",
-    title: "Transform Your Career with Real Industry Live Projects",
-    layout: "full",
-    content:
-      "Our students work on live industry projects in Artificial Intelligence, Data Analytics, Data Science, Cloud Computing, DevOps, and ETL Development. This practical learning approach helps learners move confidently from theory to real-world implementation.",
-  },
-  {
-    type: "bulletList",
-    title: "Why IT Sparks Technologies is the Best IT Institute in Pune",
-    layout: "split",
-    items: [
-      "Real Industry Live Projects",
-      "AI-Driven Learning Environment",
-      "Product-Based Practical Training",
-      "Industry Expert Trainers",
-      "10+ Industry-Level Projects",
-      "Internship Experience",
-      "Resume & GitHub Optimization",
-      "Interview Simulation Program (ISP)",
-      "Placement Assistance",
-      "Personal Mentorship",
-    ],
-  },
-  {
-    type: "bulletList",
-    title: "Our Career-Oriented IT Courses in Pune",
-    layout: "split",
-    items: [
-      "Full Stack AI (Generative AI & Agentic AI)",
-      "Data Analytics with AI",
-      "Data Science with AI",
-      "AWS Cloud Computing & DevOps",
-      "ETL Developer Professional Program",
-    ],
-  },
-  {
-    type: "paragraph",
-    title: "Learn from Industry Expert Trainers",
-    layout: "full",
-    content:
-      "Technology changes rapidly, so learning from trainers who actively work on real projects is essential. Our teachers bring practical industry knowledge, modern development workflows, deployment strategies, and AI implementation experience directly into every session.",
-  },
-  {
-    type: "bulletList",
-    title: "100% Placement Assistance & Career Support",
-    layout: "full",
-    items: [
-      "Professional Resume Building",
-      "GitHub & Portfolio Development",
-      "Mock Technical Interviews",
-      "HR Interview Preparation",
-      "Interview Simulation Program (ISP)",
-      "Internship Experience",
-      "Career Guidance",
-      "Job Opportunity Assistance",
-    ],
-  },
-  {
-    type: "paragraph",
-    title: "Affordable IT Course Fees in Pune",
-    layout: "full",
-    content:
-      "We believe ambitious students deserve quality education at a fair price. Our courses combine practical exposure, live projects, mentorship, and placement support so learners can focus on real value rather than just the price tag.",
-  },
-];
 
 const HomeContentBuilder = () => {
   const [home, setHome] = useState(null);
   const [openFaqs, setOpenFaqs] = useState({});
 
   useEffect(() => {
-    const fetchHome = async () => {
+    const loadHome = async () => {
       try {
         const data = await getHomeContentApi();
-        setHome(data.homeContent);
+        setHome(data.homeContent || {});
       } catch (error) {
-        setHome(null);
+        console.error(error);
       }
     };
 
-    fetchHome();
+    loadHome();
   }, []);
 
-  const sections =
-    Array.isArray(home?.homeSections) && home.homeSections.length > 0
-      ? home.homeSections
-      : defaultContentSections;
-  const faqs = Array.isArray(home?.faqs) ? home.faqs : [];
+  const sections = home?.homeSections || [];
+  const faqs = home?.faqs || [];
 
   const renderSection = (section, index) => {
-    const textCaseClass =
+    const textClass =
       section.textCase === "uppercase"
         ? "uppercase"
         : section.textCase === "lowercase"
@@ -116,144 +36,276 @@ const HomeContentBuilder = () => {
         ? "capitalize"
         : "";
 
-    const isSplit = section.layout === "split";
-    const shellClass = "py-6 md:py-8";
-
-    if (section.type === "heading") {
-      return (
-        <div key={section._id || index} className={`mt-8 first:mt-0 ${isSplit ? "md:col-span-2" : ""}`}>
-          <div className="rounded-[24px] bg-primary/5 px-6 py-8 md:px-8 md:py-10">
-            <h2 className={`text-3xl font-black leading-tight text-dark ${textCaseClass}`}>
-              {section.title || section.content}
+    switch (section.type) {
+            case "heading":
+        return (
+          <div
+            key={index}
+            className="rounded-3xl bg-primary/5 p-8"
+          >
+            <h2
+              className={`text-3xl md:text-4xl font-black text-dark ${textClass}`}
+            >
+              {section.title}
             </h2>
           </div>
-        </div>
-      );
-    }
+        );
 
-    if (section.type === "paragraph") {
-      return (
-        <div key={section._id || index} className={`mt-8 first:mt-0 ${isSplit ? "md:col-span-2" : ""}`}>
-          <div className={shellClass}>
+      case "paragraph":
+        return (
+          <div key={index}>
             {section.title && (
-              <h3 className={`text-2xl font-extrabold text-dark ${textCaseClass}`}>
+              <h2
+                className={`text-3xl font-black text-dark mb-4 ${textClass}`}
+              >
                 {section.title}
-              </h3>
+              </h2>
             )}
-            <p className={`mt-3 whitespace-pre-line text-base leading-8 text-textGray ${textCaseClass}`}>
+
+            <p
+              className={`leading-8 text-textGray whitespace-pre-line ${textClass}`}
+            >
               {section.content}
             </p>
           </div>
-        </div>
-      );
-    }
+        );
 
-    if (section.type === "bulletList") {
-      return (
-        <div key={section._id || index} className={`mt-8 first:mt-0 ${isSplit ? "md:col-span-2" : ""}`}>
-          <div className={shellClass}>
-            {section.title && (
-              <h3 className={`text-2xl font-extrabold text-dark ${textCaseClass}`}>
-                {section.title}
-              </h3>
-            )}
-            <ul className="mt-4 grid gap-3 md:grid-cols-2">
-              {(section.items || []).map((item, itemIndex) => (
-                <li key={`${section._id || index}-${itemIndex}`} className="flex gap-3 text-base leading-7 text-textGray">
-                  <CircleCheckBig size={20} className="mt-1 shrink-0 text-primary" />
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
+      case "highlight":
+        return (
+          <div
+            key={index}
+            className="rounded-3xl bg-primary text-white p-8"
+          >
+            <h2 className="text-3xl font-black">
+              {section.title}
+            </h2>
+
+            <p className="mt-4 whitespace-pre-line leading-8">
+              {section.content}
+            </p>
           </div>
-        </div>
-      );
-    }
+        );
+              case "bulletList":
+        return (
+          <div key={index}>
+            <h2 className="text-3xl font-black mb-5">
+              {section.title}
+            </h2>
 
-    if (section.type === "numberedList") {
-      return (
-        <div key={section._id || index} className={`mt-8 first:mt-0 ${isSplit ? "md:col-span-2" : ""}`}>
-          <div className={shellClass}>
-            {section.title && (
-              <h3 className={`text-2xl font-extrabold text-dark ${textCaseClass}`}>
-                {section.title}
-              </h3>
-            )}
-            <ol className="mt-4 list-decimal space-y-3 pl-6 text-base leading-7 text-textGray">
-              {(section.items || []).map((item, itemIndex) => (
-                <li key={`${section._id || index}-${itemIndex}`}>{item}</li>
+            <div className="grid md:grid-cols-2 gap-4">
+              {section.items.map((item, i) => (
+                <div
+                  key={i}
+                  className="flex items-start gap-3"
+                >
+                  <CircleCheckBig
+                    className="text-primary mt-1"
+                    size={20}
+                  />
+
+                  <span className="leading-7">
+                    {item}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+
+      case "numberedList":
+        return (
+          <div key={index}>
+            <h2 className="text-3xl font-black mb-5">
+              {section.title}
+            </h2>
+
+            <ol className="list-decimal pl-6 space-y-3">
+              {section.items.map((item, i) => (
+                <li key={i}>
+                  {item}
+                </li>
               ))}
             </ol>
           </div>
-        </div>
-      );
-    }
+        );
 
-    if (section.type === "highlight") {
-      return (
-        <div key={section._id || index} className={`mt-8 first:mt-0 ${isSplit ? "md:col-span-2" : ""}`}>
-          <div className="rounded-[24px] bg-primary/5 px-6 py-6 md:px-8 md:py-8">
-            {section.title && (
-              <h3 className={`text-2xl font-extrabold text-primary ${textCaseClass}`}>
-                {section.title}
-              </h3>
-            )}
-            <p className={`mt-3 whitespace-pre-line text-base leading-8 text-dark ${textCaseClass}`}>
-              {section.content}
-            </p>
-          </div>
-        </div>
-      );
+      default:
+        return null;
     }
-
-    return null;
   };
+   return (
+    <section className="py-16 bg-white">
 
-  return (
-    <section className="w-full bg-white py-10 md:py-16">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        
+      <div className="container">
+
+        {/* ========================= */}
+        {/* Dynamic Home Sections */}
+        {/* ========================= */}
+
         {sections.length > 0 ? (
-          <div className={sections.some((section) => section.layout === "split") ? "grid gap-8 md:grid-cols-2" : "space-y-8"}>
-            {sections.map((section, index) => renderSection(section, index))}
+
+          <div className="space-y-12">
+
+            {sections.map((section, index) => (
+
+              <div
+                key={section._id || index}
+                className={
+                  section.layout === "split"
+                    ? "grid md:grid-cols-2 gap-10 items-start"
+                    : ""
+                }
+              >
+                {renderSection(section, index)}
+              </div>
+
+            ))}
+
           </div>
+
         ) : (
-          <div className="rounded-[24px] bg-lightBg p-8 text-center text-textGray">
-            Add custom home sections from the admin panel to display your PDF-style content here.
+
+          <div className="rounded-3xl border-2 border-dashed border-gray-300 py-20 text-center">
+
+            <h3 className="text-2xl font-bold text-gray-600">
+              No Home Content Found
+            </h3>
+
+            <p className="mt-3 text-textGray">
+              Please add sections from the Admin Panel.
+            </p>
+
           </div>
+
         )}
+
+        {/* ========================= */}
+        {/* FAQs */}
+        {/* ========================= */}
 
         {faqs.length > 0 && (
-          <div className="mt-14 pt-8">
-            <h2 className="text-3xl font-black text-dark">Frequently Asked Questions</h2>
-            <div className="mt-6 space-y-4">
+
+          <div className="mt-20">
+
+            <h2 className="text-4xl font-black text-center text-dark">
+
+              Frequently Asked Questions
+
+            </h2>
+
+            <div className="mt-10 space-y-5">
+
               {faqs.map((faq, index) => {
-                const isOpen = Boolean(openFaqs[index]);
+
+                const open = openFaqs[index];
 
                 return (
-                  <div key={`${faq.question}-${index}`} className="rounded-[20px] bg-lightBg/70 px-5 py-5">
+
+                  <div
+                    key={index}
+                    className="rounded-2xl border border-gray-200 overflow-hidden"
+                  >
+
                     <button
-                      type="button"
-                      onClick={() => setOpenFaqs((prev) => ({ ...prev, [index]: !prev[index] }))}
-                      className="flex w-full items-center justify-between gap-4 text-left"
+                      onClick={() =>
+                        setOpenFaqs((prev) => ({
+                          ...prev,
+                          [index]: !prev[index],
+                        }))
+                      }
+                      className="flex w-full items-center justify-between p-6 text-left"
                     >
-                      <span className="text-lg font-extrabold text-dark">{faq.question}</span>
-                      {isOpen ? <ChevronUp className="text-primary" /> : <ChevronDown className="text-primary" />}
+
+                      <span className="font-bold text-lg text-dark">
+
+                        {faq.question}
+
+                      </span>
+
+                      {open ? (
+                        <ChevronUp className="text-primary" />
+                      ) : (
+                        <ChevronDown className="text-primary" />
+                      )}
+
                     </button>
-                    {isOpen && (
-                      <p className="mt-4 whitespace-pre-line text-base leading-8 text-textGray">
-                        {faq.answer}
-                      </p>
+
+                    {open && (
+
+                      <div className="px-6 pb-6">
+
+                        <p className="leading-8 whitespace-pre-line text-textGray">
+
+                          {faq.answer}
+
+                        </p>
+
+                      </div>
+
                     )}
+
                   </div>
+
                 );
+
               })}
+
             </div>
+
           </div>
+
         )}
+
+        {/* ========================= */}
+        {/* CTA */}
+        {/* ========================= */}
+
+        {home?.ctaTitle && (
+
+          <div className="mt-24">
+
+            <div className="rounded-3xl bg-primary p-10 text-center text-white">
+
+              <h2 className="text-4xl font-black">
+
+                {home.ctaTitle}
+
+              </h2>
+
+              {home.ctaSubtitle && (
+
+                <p className="mt-5 max-w-3xl mx-auto text-lg opacity-90">
+
+                  {home.ctaSubtitle}
+
+                </p>
+
+              )}
+
+              {home.ctaButtonText && (
+
+                <a
+                  href={home.ctaButtonLink || "/contact"}
+                  className="inline-block mt-8 rounded-xl bg-white px-8 py-4 font-bold text-primary transition hover:scale-105"
+                >
+
+                  {home.ctaButtonText}
+
+                </a>
+
+              )}
+
+            </div>
+
+          </div>
+
+        )}
+
       </div>
+
     </section>
   );
 };
+
 
 export default HomeContentBuilder;
