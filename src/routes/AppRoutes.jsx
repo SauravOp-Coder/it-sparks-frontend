@@ -36,6 +36,7 @@ import ManageBanners from "../pages/admin/ManageBanners";
       <ScrollToTop />
 
       <Routes>
+          <Route element={<ScrollToTop />} />
 
         <Route element={<PublicLayout />}>
 

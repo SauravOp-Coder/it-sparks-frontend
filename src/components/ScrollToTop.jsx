@@ -7,10 +7,16 @@ const ScrollToTop = () => {
 
   useEffect(() => {
 
+    // Force reset scroll
     window.scrollTo({
       top: 0,
-      behavior: "smooth",
+      left: 0,
+      behavior: "instant",
     });
+
+    // Backup for browsers
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
 
   }, [pathname]);
 
