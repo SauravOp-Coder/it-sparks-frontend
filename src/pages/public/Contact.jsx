@@ -113,7 +113,7 @@ const handleSubmit = async (e) => {
                 <PhoneCall className="text-primary shrink-0" size={28} />
                 <div>
                   <h3 className="font-extrabold text-dark">Phone</h3>
-                  <p className="text-textGray mt-1">+91 99999 99999</p>
+                  <p className="text-textGray mt-1">+91 Mob 75175 14455</p>
                 </div>
               </div>
 
@@ -121,7 +121,7 @@ const handleSubmit = async (e) => {
                 <MessageCircle className="text-primary shrink-0" size={28} />
                 <div>
                   <h3 className="font-extrabold text-dark">WhatsApp</h3>
-                  <p className="text-textGray mt-1">+91 99999 99999</p>
+                  <p className="text-textGray mt-1">+91 75175 14144</p>
                 </div>
               </div>
 
@@ -130,7 +130,7 @@ const handleSubmit = async (e) => {
                 <div>
                   <h3 className="font-extrabold text-dark">Email</h3>
                   <p className="text-textGray mt-1">
-                    info@itsparkstechnologies.com
+                    contact@itsparkstech.com
                   </p>
                 </div>
               </div>
@@ -140,20 +140,12 @@ const handleSubmit = async (e) => {
                 <div>
                   <h3 className="font-extrabold text-dark">Address</h3>
                   <p className="text-textGray mt-1">
-                    Pune, Maharashtra, India
+                    IT Sparks Technologies | Gen AI & Agentic AI, Data Science, DevOps, Cloud Computing, AWS, ETL, Data Analyst Course in Pune, First Floor, Shop No. S-20, Audumbar Complex, A Wing, Narhe, Pune, Maharashtra 411041
                   </p>
                 </div>
               </div>
 
-              <div className="bg-lightBg border border-borderSoft rounded-card p-6 flex gap-4">
-                <Clock className="text-primary shrink-0" size={28} />
-                <div>
-                  <h3 className="font-extrabold text-dark">Working Hours</h3>
-                  <p className="text-textGray mt-1">
-                    Monday to Saturday, 10:00 AM to 7:00 PM
-                  </p>
-                </div>
-              </div>
+              
             </div>
 
             <div className="bg-white border border-borderSoft rounded-card shadow-soft p-7">
