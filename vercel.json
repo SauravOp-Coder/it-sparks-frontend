@@ -4,5 +4,18 @@
       "source": "/(.*)",
       "destination": "/index.html"
     }
+  ],
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "itsparkstech.com"
+        }
+      ],
+      "destination": "https://www.itsparkstech.com/:path*",
+      "permanent": true
+    }
   ]
 }
