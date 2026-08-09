@@ -259,7 +259,7 @@ useEffect(() => {
         </div>
       </section>
 
-      <Recruiters />
+      
 
       <section className="py-16 bg-dark text-white">
         <div className="container-custom">
