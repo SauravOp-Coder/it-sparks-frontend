@@ -3,7 +3,6 @@ import ReviewSection from "../../components/common/ReviewSection";
 import Recruiters from "../../components/home/Recruiters";
 import { useEffect, useState } from "react";
 import { getPlacementsApi } from "../../api/placementApi";
-import { getHomeContentApi } from "../../api/homeApi";
 import {
   ArrowRight,
   BadgeCheck,
@@ -45,57 +44,39 @@ const support = [
 
 const Placements = () => {
   const [placements, setPlacements] = useState([]);
-  const [loading, setLoading] = useState(true);
+const [loading, setLoading] = useState(true);
 
-  // =====================================================
-  // RECRUITERS
-  // =====================================================
-  const [recruiters, setRecruiters] = useState([]);
+const fetchPlacements = async () => {
+  try {
+    setLoading(true);
+    const data = await getPlacementsApi();
+    setPlacements(data.placements || []);
+  } catch (error) {
+    setPlacements([]);
+  } finally {
+    setLoading(false);
+  }
+};
 
-  const fetchPlacements = async () => {
-    try {
-      setLoading(true);
-      const data = await getPlacementsApi();
-      setPlacements(data.placements || []);
-    } catch (error) {
-      setPlacements([]);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // =====================================================
-  // FETCH RECRUITERS FROM HOME CONTENT
-  // =====================================================
-  const fetchRecruiters = async () => {
-    try {
-      const data = await getHomeContentApi();
-
-      setRecruiters(
-        Array.isArray(data.recruiters)
-          ? data.recruiters
-          : []
-      );
-    } catch (error) {
-      setRecruiters([]);
-    }
-  };
-
-  useEffect(() => {
-    fetchPlacements();
-    fetchRecruiters();
-  }, []);
-
+useEffect(() => {
+  fetchPlacements();
+}, []);
   return (
     <main>
-      <PageBanner
+      <SEO
         title="Placement Support"
-        subtitle="Career preparation and placement support for IT students"
+        description="Get placement-focused career guidance, interview preparation, resume support, and project guidance from IT Sparks Technologies."
+        keywords="placement support, interview preparation, job guidance, career support, IT placement"
+        canonical="/placements"
       />
-
-      <section className="section-padding bg-lightBg">
+      <PageBanner
+  page="placements"
+  fallbackTitle="Placement Support"
+  fallbackSubtitle="We help students with resume building, interview preparation, career guidance, and placement-focused training."
+/>
+      <section className="bg-gradient-to-br from-white via-lightBg to-white py-20">
         <div className="container-custom">
-          <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-12 items-center">
+          <div className="grid lg:grid-cols-[1.05fr_0.95fr] gap-14 items-center">
             <div>
               <span className="text-primary font-bold uppercase tracking-wide text-sm">
                 Placement Support
@@ -126,29 +107,15 @@ const Placements = () => {
             <div className="bg-dark rounded-[28px] p-7 shadow-soft">
               <div className="grid grid-cols-2 gap-4">
                 <div className="bg-white rounded-card p-6">
-                  <BriefcaseBusiness
-                    className="text-primary mb-4"
-                    size={34}
-                  />
-                  <h3 className="text-3xl font-extrabold text-dark">
-                    100%
-                  </h3>
-                  <p className="text-textGray mt-1">
-                    Career Guidance
-                  </p>
+                  <BriefcaseBusiness className="text-primary mb-4" size={34} />
+                  <h3 className="text-3xl font-extrabold text-dark">100%</h3>
+                  <p className="text-textGray mt-1">Career Guidance</p>
                 </div>
 
                 <div className="bg-white rounded-card p-6">
-                  <BadgeCheck
-                    className="text-primary mb-4"
-                    size={34}
-                  />
-                  <h3 className="text-3xl font-extrabold text-dark">
-                    Live
-                  </h3>
-                  <p className="text-textGray mt-1">
-                    Project Practice
-                  </p>
+                  <BadgeCheck className="text-primary mb-4" size={34} />
+                  <h3 className="text-3xl font-extrabold text-dark">Live</h3>
+                  <p className="text-textGray mt-1">Project Practice</p>
                 </div>
 
                 <div className="col-span-2 bg-primary text-white rounded-card p-6">
@@ -167,103 +134,87 @@ const Placements = () => {
       </section>
 
       <section className="section-padding bg-white">
-        <div className="container-custom">
-          <div className="text-center max-w-3xl mx-auto">
-            <span className="text-primary font-bold uppercase tracking-wide text-sm">
-              Student Placements
-            </span>
+  <div className="container-custom">
+    <div className="text-center max-w-3xl mx-auto">
+      <span className="text-primary font-bold uppercase tracking-wide text-sm">
+        Placement Records
+      </span>
 
-            <h2 className="text-3xl md:text-4xl font-extrabold text-dark mt-3">
-              Student placement highlights
-            </h2>
+      <h2 className="text-3xl md:text-4xl font-extrabold text-dark mt-3">
+        Student placement highlights
+      </h2>
 
-            <p className="text-textGray leading-7 mt-4">
-              Placement records and student success stories are managed from the admin panel.
-            </p>
-          </div>
+      <p className="text-textGray leading-7 mt-4">
+        Placement records and student success stories are managed from the admin panel.
+      </p>
+    </div>
 
-          {loading ? (
-            <div className="text-center text-textGray mt-12">
-              Loading placements...
-            </div>
-          ) : placements.length === 0 ? (
-            <div className="text-center text-textGray mt-12">
-              Placement records will be updated soon.
-            </div>
-          ) : (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
-              {placements.map((item) => (
-                <div
-                  key={item._id}
-                  className="bg-white border border-borderSoft rounded-card shadow-card p-6 card-hover"
-                >
-                  <div className="flex items-center gap-4">
-                    {item.image?.url ? (
-                      <img
-                        src={item.image.url}
-                        alt={item.studentName}
-                        className="h-16 w-16 rounded-full object-cover border border-borderSoft"
-                      />
-                    ) : (
-                      <div className="h-16 w-16 rounded-full bg-primary/10 text-primary flex items-center justify-center font-extrabold text-xl">
-                        {item.studentName?.charAt(0)}
-                      </div>
-                    )}
-
-                    <div>
-                      <h3 className="text-xl font-extrabold text-dark">
-                        {item.studentName}
-                      </h3>
-                      <p className="text-primary font-semibold text-sm">
-                        {item.course}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="mt-6 space-y-3 text-sm">
-                    <p className="flex justify-between gap-3">
-                      <span className="text-textGray">
-                        Company
-                      </span>
-                      <span className="font-bold text-dark">
-                        {item.company}
-                      </span>
-                    </p>
-
-                    <p className="flex justify-between gap-3">
-                      <span className="text-textGray">
-                        Role
-                      </span>
-                      <span className="font-bold text-dark">
-                        {item.role}
-                      </span>
-                    </p>
-
-                    <p className="flex justify-between gap-3">
-                      <span className="text-textGray">
-                        Package
-                      </span>
-                      <span className="font-bold text-primary">
-                        {item.package}
-                      </span>
-                    </p>
-
-                    <p className="flex justify-between gap-3">
-                      <span className="text-textGray">
-                        Year
-                      </span>
-                      <span className="font-bold text-dark">
-                        {item.year}
-                      </span>
-                    </p>
-                  </div>
+    {loading ? (
+      <div className="text-center text-textGray mt-12">
+        Loading placements...
+      </div>
+    ) : placements.length === 0 ? (
+      <div className="text-center text-textGray mt-12">
+        Placement records will be updated soon.
+      </div>
+    ) : (
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
+        {placements.map((item) => (
+          <div
+            key={item._id}
+            className="bg-white border border-borderSoft rounded-card shadow-card p-6 card-hover"
+          >
+            <div className="flex items-center gap-4">
+              {item.image?.url ? (
+                <img
+                  src={item.image.url}
+                  alt={item.studentName}
+                  className="h-16 w-16 rounded-full object-cover border border-borderSoft"
+                />
+              ) : (
+                <div className="h-16 w-16 rounded-full bg-primary/10 text-primary flex items-center justify-center font-extrabold text-xl">
+                  {item.studentName?.charAt(0)}
                 </div>
-              ))}
-            </div>
-          )}
-        </div>
-      </section>
+              )}
 
+              <div>
+                <h3 className="text-xl font-extrabold text-dark">
+                  {item.studentName}
+                </h3>
+                <p className="text-primary font-semibold text-sm">
+                  {item.course}
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-6 space-y-3 text-sm">
+              <p className="flex justify-between gap-3">
+                <span className="text-textGray">Company</span>
+                <span className="font-bold text-dark">{item.company}</span>
+              </p>
+
+              <p className="flex justify-between gap-3">
+                <span className="text-textGray">Role</span>
+                <span className="font-bold text-dark">{item.role}</span>
+              </p>
+
+              <p className="flex justify-between gap-3">
+                <span className="text-textGray">Package</span>
+                <span className="font-bold text-primary">{item.package}</span>
+              </p>
+
+              <p className="flex justify-between gap-3">
+                <span className="text-textGray">Year</span>
+                <span className="font-bold text-dark">{item.year}</span>
+              </p>
+            </div>
+          </div>
+        ))}
+      </div>
+    )}
+  </div>
+</section>
+      
       <section className="section-padding bg-white">
         <div className="container-custom">
           <div className="text-center max-w-3xl mx-auto">
@@ -308,11 +259,7 @@ const Placements = () => {
         </div>
       </section>
 
-      {/* ================================================= */}
-      {/* RECRUITERS - NOW FROM MANAGE PLACEMENTS */}
-      {/* ================================================= */}
-
-      <Recruiters recruiters={recruiters} />
+      <Recruiters />
 
       <section className="py-16 bg-dark text-white">
         <div className="container-custom">
@@ -321,7 +268,6 @@ const Placements = () => {
               <h2 className="text-3xl font-extrabold">
                 Start your career preparation with the right course
               </h2>
-
               <p className="text-white/70 leading-7 mt-3">
                 Talk to our team and choose a practical training path based on
                 your career goal.
