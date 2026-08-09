@@ -159,10 +159,15 @@ const Footer = () => {
               )}
 
               {settings?.address && (
-                <p className="flex gap-3">
-                  <MapPin size={20} className="text-primary shrink-0" />
+                <a
+                  href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(settings.address)}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex gap-3 items-start hover:text-primary transition"
+                >
+                  <MapPin size={20} className="text-primary shrink-0 mt-1" />
                   <span>{settings.address}</span>
-                </p>
+                </a>
               )}
             </div>
           </div>
