@@ -9,7 +9,7 @@ const DEFAULT_DESCRIPTION =
   "IT Sparks Technologies provides practical IT training, AI courses, software development programs, and placement support for students and professionals.";
 const DEFAULT_KEYWORDS =
   "IT training, software courses, AI training, data science, cloud computing, placement support, practical learning";
-const DEFAULT_BASE_URL = "https://itsparkstechnologies.com";
+const DEFAULT_BASE_URL = "https://www.itsparkstech.com";
 const DEFAULT_IMAGE = "/og-image.jpg";
 
 const buildAbsoluteUrl = (value, baseUrl, fallbackPath = "/") => {
