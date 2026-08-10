@@ -59,7 +59,7 @@ const ThankYou = () => {
                 <Phone className="text-primary" size={32} />
               </div>
               <h3 className="font-extrabold text-dark mb-2">Call Us</h3>
-              <p className="text-textGray">+91 99999 99999</p>
+              <p className="text-textGray">+91 75175 14455 </p>
             </div>
 
             <div className="bg-white border border-borderSoft rounded-card shadow-soft p-6 hover:shadow-card transition">
@@ -67,7 +67,7 @@ const ThankYou = () => {
                 <Mail className="text-primary" size={32} />
               </div>
               <h3 className="font-extrabold text-dark mb-2">Email Us</h3>
-              <p className="text-textGray">info@itsparkstechnologies.com</p>
+              <p className="text-textGray">contact@itsparkstech.com</p>
             </div>
           </div>
 
