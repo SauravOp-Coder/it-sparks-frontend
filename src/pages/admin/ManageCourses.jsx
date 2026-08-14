@@ -273,16 +273,17 @@ const ManageCourses = () => {
               name="title"
               value={formData.title}
               onChange={handleChange}
-              placeholder="Course Title"
+              placeholder="Course Title (Main Detail Page)"
               required
               className="border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
             />
 
+            {/* Added input field UI for dropdownName */}
             <input
               name="dropdownName"
               value={formData.dropdownName}
               onChange={handleChange}
-              placeholder="Dropdown Name"
+              placeholder="Dropdown Name (Optional - for Navbar menu)"
               className="border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
             />
 
@@ -528,6 +529,11 @@ const ManageCourses = () => {
 
                         <div>
                           <p className="font-extrabold text-dark">{course.title}</p>
+                          {course.dropdownName && (
+                            <p className="text-xs text-primary font-semibold">
+                              Dropdown: {course.dropdownName}
+                            </p>
+                          )}
                           <p className="text-sm text-textGray mt-1 max-w-[420px]">
                             {course.description}
                           </p>
