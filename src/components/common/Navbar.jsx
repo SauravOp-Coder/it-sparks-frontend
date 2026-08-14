@@ -62,56 +62,57 @@ const Navbar = () => {
               About
             </NavLink>
 
-            <div className="relative group">
-              <NavLink
-                to="/courses"
-                className="text-[15px] font-bold text-softDark hover:text-primary transition flex items-center gap-1"
-              >
-                Courses <ChevronDown size={16} />
-              </NavLink>
+       <div className="relative group">
+  <NavLink
+    to="/courses"
+    className="text-[15px] font-bold text-softDark hover:text-primary transition flex items-center gap-1"
+  >
+    Courses <ChevronDown size={16} />
+  </NavLink>
 
-              <div className="absolute left-1/2 -translate-x-1/2 top-full pt-6 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
-                <div className="w-[520px] bg-white border border-borderSoft rounded-card shadow-soft p-4">
-                  <div className="grid grid-cols-2 gap-2">
-                    {courses.length > 0 ? (
-                      courses.map((course) => (
-                        <Link
-                          key={course._id}
-                          to={`/courses/${course._id}`}
-                          className="p-4 rounded-[18px] hover:bg-lightBg transition"
-                        >
-                          <p className="font-extrabold text-dark text-sm">
-                            {course.dropdownTitle || course.navTitle || course.title}
-                          </p>
-                          <p className="text-xs text-textGray mt-1 line-clamp-2">
-                            {course.dropdownDescription || course.navDescription || course.description}
-                          </p>
-                        </Link>
-                      ))
-                    ) : (
-                      <Link
-                        to="/courses"
-                        className="col-span-2 p-4 rounded-[18px] hover:bg-lightBg transition"
-                      >
-                        <p className="font-extrabold text-dark">
-                          Explore Courses
-                        </p>
-                        <p className="text-sm text-textGray mt-1">
-                          View all available practical IT courses.
-                        </p>
-                      </Link>
-                    )}
-                  </div>
+  <div className="absolute left-1/2 -translate-x-1/2 top-full pt-6 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+    <div className="w-[520px] bg-white border border-borderSoft rounded-card shadow-soft p-4">
+      <div className="grid grid-cols-2 gap-2">
+        {courses.length > 0 ? (
+          courses.map((course) => (
+            <Link
+              key={course._id}
+              to={`/courses/${course._id}`}
+              className="p-4 rounded-[18px] hover:bg-lightBg transition"
+            >
+              <p className="font-extrabold text-dark text-sm">
+                {/* FIXED HERE: replaced dropdownTitle with dropdownName */}
+                {course.dropdownName || course.title}
+              </p>
+              <p className="text-xs text-textGray mt-1 line-clamp-2">
+                {course.description}
+              </p>
+            </Link>
+          ))
+        ) : (
+          <Link
+            to="/courses"
+            className="col-span-2 p-4 rounded-[18px] hover:bg-lightBg transition"
+          >
+            <p className="font-extrabold text-dark">
+              Explore Courses
+            </p>
+            <p className="text-sm text-textGray mt-1">
+              View all available practical IT courses.
+            </p>
+          </Link>
+        )}
+      </div>
 
-                  <Link
-                    to="/courses"
-                    className="mt-4 w-full primary-btn text-sm py-3"
-                  >
-                    View All Courses
-                  </Link>
-                </div>
-              </div>
-            </div>
+      <Link
+        to="/courses"
+        className="mt-4 w-full primary-btn text-sm py-3 flex items-center justify-center"
+      >
+        View All Courses
+      </Link>
+    </div>
+  </div>
+</div>
 
             <NavLink to="/placements" className={navLinkClass}>
               Placements
