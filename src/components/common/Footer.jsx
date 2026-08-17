@@ -119,26 +119,7 @@ const Footer = () => {
             </div>
           </div>
 
-          <div>
-            <h3 className="font-extrabold text-lg mb-5">Popular Courses</h3>
-            <div className="grid gap-3 text-white/70">
-              <Link to="/courses" className="hover:text-primary transition">
-                Full Stack Development
-              </Link>
-              <Link to="/courses" className="hover:text-primary transition">
-                Python Programming
-              </Link>
-              <Link to="/courses" className="hover:text-primary transition">
-                Data Science
-              </Link>
-              <Link to="/courses" className="hover:text-primary transition">
-                Software Testing
-              </Link>
-              <Link to="/courses" className="hover:text-primary transition">
-                UI/UX Design
-              </Link>
-            </div>
-          </div>
+        
 
           <div>
             <h3 className="font-extrabold text-lg mb-5">Contact Info</h3>
