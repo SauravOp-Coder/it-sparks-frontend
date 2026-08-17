@@ -25,21 +25,23 @@ const Footer = () => {
   return (
     <footer className="bg-dark text-white">
       <div className="container-custom py-14">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-10 gap-y-12 items-start">
 
-          {/* Company */}
-          <div className="flex flex-col">
+        {/* MAIN FOOTER */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[1.15fr_0.75fr_1.5fr] gap-12 lg:gap-16 items-start">
+
+          {/* COMPANY */}
+          <div>
             <Link
               to="/"
-              className="inline-flex items-center gap-3 w-fit"
+              className="inline-flex items-center gap-3"
             >
               <img
                 src={logo}
                 alt="IT Sparks Technologies"
-                className="h-14 w-auto bg-white rounded-button p-2"
+                className="h-14 w-auto bg-white rounded-button p-2 shrink-0"
               />
 
-              <span className="font-extrabold text-xl leading-tight">
+              <span className="font-extrabold text-xl leading-7">
                 IT Sparks Technologies
               </span>
             </Link>
@@ -49,7 +51,7 @@ const Footer = () => {
               real-world projects, career guidance, and placement support.
             </p>
 
-            <div className="flex flex-wrap gap-3 mt-6">
+            <div className="flex gap-3 mt-6">
               {socialLinks.facebook && (
                 <a
                   href={socialLinks.facebook}
@@ -96,8 +98,8 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Quick Links */}
-          <div className="flex flex-col">
+          {/* QUICK LINKS */}
+          <div>
             <h3 className="font-extrabold text-lg mb-5">
               Quick Links
             </h3>
@@ -136,21 +138,22 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Contact Info */}
-          <div className="flex flex-col">
+          {/* CONTACT INFO */}
+          <div>
             <h3 className="font-extrabold text-lg mb-5">
               Contact Info
             </h3>
 
             <div className="space-y-4 text-white/70">
+
               {settings?.phone && (
                 <p className="flex gap-3 items-start">
                   <Phone
                     size={20}
-                    className="text-primary shrink-0 mt-0.5"
+                    className="text-primary shrink-0 mt-1"
                   />
 
-                  <span className="leading-6 break-words">
+                  <span className="leading-6">
                     {settings.phone}
                   </span>
                 </p>
@@ -160,10 +163,10 @@ const Footer = () => {
                 <p className="flex gap-3 items-start">
                   <Mail
                     size={20}
-                    className="text-primary shrink-0 mt-0.5"
+                    className="text-primary shrink-0 mt-1"
                   />
 
-                  <span className="leading-6 break-all">
+                  <span className="leading-6 break-words">
                     {settings.email}
                   </span>
                 </p>
@@ -181,25 +184,25 @@ const Footer = () => {
                     className="text-primary shrink-0 mt-1"
                   />
 
-                  <span className="leading-6">
+                  <span className="leading-6 max-w-xl">
                     {settings.address}
                   </span>
                 </a>
               )}
+
             </div>
           </div>
-
-          {/* Empty fourth column intentionally preserved */}
-          <div></div>
         </div>
 
+        {/* BOTTOM BAR */}
         <div className="border-t border-white/10 mt-12 pt-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4 text-white/60 text-sm">
-          <p className="leading-6">
+
+          <p>
             © {new Date().getFullYear()} IT Sparks Technologies. All rights
             reserved.
           </p>
 
-          <div className="flex flex-wrap gap-x-5 gap-y-2">
+          <div className="flex gap-5">
             <Link to="/" className="hover:text-primary transition">
               Privacy Policy
             </Link>
@@ -208,6 +211,7 @@ const Footer = () => {
               Terms & Conditions
             </Link>
           </div>
+
         </div>
       </div>
     </footer>
