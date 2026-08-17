@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Mail, MapPin, Phone } from "lucide-react";
+import { Mail, MapPin, Phone, Instagram, Linkedin, Facebook, Youtube } from "lucide-react";
 import logo from "../../assets/logo/it-sparks-logo.png";
 import { useEffect, useState } from "react";
 import { getSettingsApi } from "../../api/settingApi";
@@ -57,9 +57,10 @@ const Footer = () => {
                   href={socialLinks.facebook}
                   target="_blank"
                   rel="noreferrer"
-                  className="h-10 w-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition text-sm font-extrabold"
+                  aria-label="Facebook"
+                  className="h-10 w-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition"
                 >
-                  Fb
+                  <Facebook size={18} className="text-white" />
                 </a>
               )}
 
@@ -68,9 +69,10 @@ const Footer = () => {
                   href={socialLinks.instagram}
                   target="_blank"
                   rel="noreferrer"
-                  className="h-10 w-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition text-sm font-extrabold"
+                  aria-label="Instagram"
+                  className="h-10 w-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition"
                 >
-                  Ig
+                  <Instagram size={18} className="text-white" />
                 </a>
               )}
 
@@ -79,9 +81,10 @@ const Footer = () => {
                   href={socialLinks.linkedin}
                   target="_blank"
                   rel="noreferrer"
-                  className="h-10 w-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition text-sm font-extrabold"
+                  aria-label="LinkedIn"
+                  className="h-10 w-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition"
                 >
-                  In
+                  <Linkedin size={18} className="text-white" />
                 </a>
               )}
 
@@ -90,9 +93,10 @@ const Footer = () => {
                   href={socialLinks.youtube}
                   target="_blank"
                   rel="noreferrer"
-                  className="h-10 w-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition text-sm font-extrabold"
+                  aria-label="YouTube"
+                  className="h-10 w-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition"
                 >
-                  Yt
+                  <Youtube size={18} className="text-white" />
                 </a>
               )}
             </div>
