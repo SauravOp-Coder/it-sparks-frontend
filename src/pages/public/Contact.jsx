@@ -113,7 +113,7 @@ const handleSubmit = async (e) => {
                 <PhoneCall className="text-primary shrink-0" size={28} />
                 <div>
                   <h3 className="font-extrabold text-dark">Phone</h3>
-                  <p className="text-textGray mt-1">+91 Mob 75175 14455</p>
+                  <p className="text-textGray mt-1">+91 75175 14455</p>
                 </div>
               </div>
 
