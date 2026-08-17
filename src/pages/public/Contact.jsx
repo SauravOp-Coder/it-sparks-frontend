@@ -140,7 +140,8 @@ const handleSubmit = async (e) => {
                 <div>
                   <h3 className="font-extrabold text-dark">Address</h3>
                   <p className="text-textGray mt-1">
-                    IT Sparks Technologies | Gen AI & Agentic AI, Data Science, DevOps, Cloud Computing, AWS, ETL, Data Analyst Course in Pune, First Floor, Shop No. S-20, Audumbar Complex, A Wing, Narhe, Pune, Maharashtra 411041
+                    IT Sparks Technologies |  
+                     First Floor, Shop No. S-20, Audumbar Complex, A Wing, Narhe, Pune, Maharashtra 411041
                   </p>
                 </div>
               </div>
