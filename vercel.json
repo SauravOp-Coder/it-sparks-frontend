@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/sitemap.xml",
-      "destination": "https://YOUR-RENDER-BACKEND-URL.onrender.com/sitemap.xml"
+      "destination": "https://it-sparks-backend.onrender.com/sitemap.xml"
     },
     {
       "source": "/(.*)",
