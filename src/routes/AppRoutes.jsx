@@ -2,7 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import ScrollToTop from "../components/ScrollToTop";
 import PublicLayout from "../layouts/PublicLayout";
 import AdminLayout from "../layouts/AdminLayout";
-import FaqSectiion from "../components/common/FaqSection";
+import FaqSection from "../components/common/FaqSection";
 
 import Home from "../pages/public/Home";
 import About from "../pages/public/About";
