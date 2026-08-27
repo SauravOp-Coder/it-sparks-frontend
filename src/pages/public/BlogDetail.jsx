@@ -22,7 +22,7 @@ const BlogDetail = () => {
 
       const allBlogs = await getBlogsApi();
       const related = (allBlogs.blogs || [])
-        .filter((item) => item._id !== id)
+        .filter((item) => item._id !== blogData.blog._id)
         .slice(0, 3);
 
       setRelatedBlogs(related);
@@ -72,10 +72,17 @@ const BlogDetail = () => {
   return (
     <main>
       <SEO
-        title={blog.title}
-        description={blog.shortDescription || "Read this informative blog from IT Sparks Technologies about IT training, career growth, and practical learning."}
-        keywords={`${blog.title}, IT Sparks, career guidance, practical training`}
-        canonical={`/blog/${id}`}
+        title={blog.metaTitle || blog.title}
+        description={
+          blog.metaDescription ||
+          blog.shortDescription ||
+          "Read this informative blog from IT Sparks Technologies about IT training, career growth, and practical learning."
+        }
+        keywords={
+          blog.metaKeywords ||
+          `${blog.title}, IT Sparks, career guidance, practical training`
+        }
+        canonical={`/blog/${blog.slug || id}`}
         ogImage={blog.image?.url || undefined}
       />
       <section className="bg-gradient-to-br from-white via-lightBg to-white py-20">

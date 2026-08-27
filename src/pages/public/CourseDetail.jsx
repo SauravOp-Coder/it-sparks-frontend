@@ -284,11 +284,18 @@ const downloadBrochure = async () => {
 
   return (
     <main>
-      <SEO
-        title={course.title}
-        description={course.description || "Explore this IT training course and learn practical skills with project-based education."}
-        keywords={`${course.title}, IT training, practical learning, career guidance`}
-        canonical={`/courses/${id}`}
+            <SEO
+        title={course.metaTitle || course.title}
+        description={
+          course.metaDescription ||
+          course.description ||
+          "Explore this IT training course and learn practical skills with project-based education."
+        }
+        keywords={
+          course.metaKeywords ||
+          `${course.title}, IT training, practical learning, career guidance`
+        }
+        canonical={`/courses/${course.slug || id}`}
         ogImage={course.image?.url || undefined}
       />
       <section className="bg-gradient-to-br from-dark via-softDark to-dark text-white py-20">

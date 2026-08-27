@@ -8,7 +8,7 @@ import {
 } from "lucide-react";
 
 const CourseCard = ({ course }) => {
-  const courseId = course._id || course.id;
+  const courseSlug = course.slug || course._id || course.id;
 
   return (
     <div className="group bg-white border border-borderSoft rounded-card shadow-card overflow-hidden card-hover">
@@ -70,7 +70,7 @@ const CourseCard = ({ course }) => {
 
         <div className="grid grid-cols-2 gap-3 mt-6">
           <Link
-            to={`/courses/${courseId}`}
+            to={`/courses/${courseSlug}`}
             className="secondary-btn text-sm px-3 py-3"
           >
             Details
@@ -82,7 +82,7 @@ const CourseCard = ({ course }) => {
         </div>
 
         <Link
-          to={`/courses/${courseId}`}
+          to={`/courses/${courseSlug}`}
           className="mt-5 inline-flex items-center text-primary font-extrabold hover:text-primaryDark transition"
         >
           View Syllabus

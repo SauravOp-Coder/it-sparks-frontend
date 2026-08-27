@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { ArrowRight, CalendarDays } from "lucide-react";
 
 const BlogCard = ({ blog }) => {
-  const blogId = blog._id || blog.id;
+  const blogSlug = blog.slug || blog._id || blog.id;
 
   const blogDate = blog.publishedDate
     ? new Date(blog.publishedDate).toLocaleDateString("en-IN", {
@@ -49,7 +49,7 @@ const BlogCard = ({ blog }) => {
         </p>
 
         <Link
-          to={`/blog/${blogId}`}
+          to={`/blog/${blogSlug}`}
           className="mt-6 inline-flex items-center text-primary font-bold hover:text-primaryDark transition"
         >
           Read More <ArrowRight size={17} className="ml-2" />

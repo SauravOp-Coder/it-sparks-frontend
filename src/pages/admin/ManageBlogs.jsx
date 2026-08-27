@@ -13,6 +13,9 @@ const emptyForm = {
   publishedDate: "",
   shortDescription: "",
   content: "",
+  metaTitle: "",
+  metaDescription: "",
+  metaKeywords: "",
   isVisible: true,
   image: null,
 };
@@ -66,6 +69,9 @@ const ManageBlogs = () => {
         : "",
       shortDescription: blog.shortDescription || "",
       content: blog.content || "",
+      metaTitle: blog.metaTitle || "",
+      metaDescription: blog.metaDescription || "",
+      metaKeywords: blog.metaKeywords || "",
       isVisible: Boolean(blog.isVisible),
       image: null,
     });
@@ -238,6 +244,53 @@ const ManageBlogs = () => {
             rows="8"
             className="w-full border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary resize-none mt-5"
           />
+
+          {/* SEO Fields */}
+          <div className="mt-6 border-t border-borderSoft pt-5">
+            <h4 className="font-bold text-dark text-lg mb-4">
+              SEO (Google Search) Settings
+            </h4>
+
+            <div className="flex flex-col gap-1 mb-4">
+              <label className="text-xs font-bold text-textGray px-1">
+                Meta Title ({formData.metaTitle.length}/60 recommended)
+              </label>
+              <input
+                name="metaTitle"
+                value={formData.metaTitle}
+                onChange={handleChange}
+                placeholder="e.g. Top 5 IT Skills to Learn in 2026 | IT Sparks Blog"
+                className="border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
+              />
+            </div>
+
+            <div className="flex flex-col gap-1 mb-4">
+              <label className="text-xs font-bold text-textGray px-1">
+                Meta Description ({formData.metaDescription.length}/160 recommended)
+              </label>
+              <textarea
+                name="metaDescription"
+                value={formData.metaDescription}
+                onChange={handleChange}
+                placeholder="A short summary that appears under the title in Google search results."
+                rows="3"
+                className="w-full border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary resize-none"
+              />
+            </div>
+
+            <div className="flex flex-col gap-1">
+              <label className="text-xs font-bold text-textGray px-1">
+                Meta Keywords (comma separated)
+              </label>
+              <input
+                name="metaKeywords"
+                value={formData.metaKeywords}
+                onChange={handleChange}
+                placeholder="e.g. IT skills 2026, career advice, tech training blog"
+                className="border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
+              />
+            </div>
+          </div>
 
           <label className="flex items-center gap-2 font-semibold text-dark mt-5">
             <input
