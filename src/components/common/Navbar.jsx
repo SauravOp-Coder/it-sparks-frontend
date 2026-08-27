@@ -77,7 +77,7 @@ const Navbar = () => {
           courses.map((course) => (
             <Link
               key={course._id}
-              to={`/courses/${course._id}`}
+              to={`/courses/${course.slug || course._id}`}
               className="p-4 rounded-[18px] hover:bg-lightBg transition"
             >
               <p className="font-extrabold text-dark text-sm">
