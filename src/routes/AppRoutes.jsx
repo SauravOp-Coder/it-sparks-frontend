@@ -2,6 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import ScrollToTop from "../components/ScrollToTop";
 import PublicLayout from "../layouts/PublicLayout";
 import AdminLayout from "../layouts/AdminLayout";
+import FaqSectiion from "../components/common/FaqSection";
 
 import Home from "../pages/public/Home";
 import About from "../pages/public/About";
@@ -13,6 +14,7 @@ import Blog from "../pages/public/Blog";
 import BlogDetail from "../pages/public/BlogDetail";
 import Contact from "../pages/public/Contact";
 import ThankYou from "../pages/public/ThankYou";
+
 
 import AdminProtectedRoute from "../components/admin/AdminProtectedRoute";
 import AdminLogin from "../pages/admin/AdminLogin";
