@@ -11,6 +11,7 @@ import {
 import { getCourseByIdApi } from "../../api/courseApi";
 import { createEnquiryApi } from "../../api/enquiryApi";
 import SEO from "../../components/common/SEO";
+import FaqSection from "../../components/common/FaqSection";
 
 const textCaseClass = {
   normal: "",
