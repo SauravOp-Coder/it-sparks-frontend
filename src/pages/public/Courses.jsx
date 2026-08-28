@@ -3,6 +3,7 @@ import CourseCard from "../../components/courses/CourseCard";
 import ReviewSection from "../../components/common/ReviewSection";
 import PageBanner from "../../components/common/PageBanner";
 import SEO from "../../components/common/SEO";
+import FaqSection from "../../components/common/FaqSection";
 import { getCoursesApi } from "../../api/courseApi";
 
 const Courses = () => {
@@ -76,6 +77,8 @@ const Courses = () => {
               ))}
             </div>
           )}
+
+          <FaqSection />
         </div>
       </section>
 
