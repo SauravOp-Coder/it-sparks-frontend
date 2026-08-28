@@ -78,7 +78,7 @@ const Courses = () => {
             </div>
           )}
 
-          <FaqSection />
+                   <FaqSection source="courseFaqs" />
         </div>
       </section>
 
