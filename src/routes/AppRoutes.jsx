@@ -15,7 +15,8 @@ import BlogDetail from "../pages/public/BlogDetail";
 import Contact from "../pages/public/Contact";
 import ThankYou from "../pages/public/ThankYou";
 
-
+import PrivacyPolicy from "../pages/public/PrivacyPolicy";
+import TermsAndConditions from "../pages/public/TermsAndConditions";
 import AdminProtectedRoute from "../components/admin/AdminProtectedRoute";
 import AdminLogin from "../pages/admin/AdminLogin";
 import AdminDashboard from "../pages/admin/AdminDashboard";
@@ -51,6 +52,8 @@ import ManageBanners from "../pages/admin/ManageBanners";
           <Route path="/blog" element={<Blog />} />
           <Route path="/blog/:id" element={<BlogDetail />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
           <Route path="/thank-you" element={<ThankYou />} />
 
         </Route>
