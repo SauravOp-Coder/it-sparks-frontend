@@ -26,6 +26,7 @@ const emptyForm = {
   image: null,
   brochure: null,
   detailSections: [],
+  faqs: [],
 };
 
 const createEmptySection = () => ({
@@ -34,6 +35,11 @@ const createEmptySection = () => ({
   content: "",
   itemsText: "",
   textCase: "normal",
+});
+
+const createEmptyFaq = () => ({
+  question: "",
+  answer: "",
 });
 
 const ManageCourses = () => {
@@ -74,6 +80,29 @@ const ManageCourses = () => {
       ...prev,
       detailSections: prev.detailSections.map((section, i) =>
         i === index ? { ...section, [field]: value } : section
+      ),
+    }));
+  };
+
+  const addFaq = () => {
+    setFormData((prev) => ({
+      ...prev,
+      faqs: [...prev.faqs, createEmptyFaq()],
+    }));
+  };
+
+  const removeFaq = (index) => {
+    setFormData((prev) => ({
+      ...prev,
+      faqs: prev.faqs.filter((_, i) => i !== index),
+    }));
+  };
+
+  const updateFaq = (index, field, value) => {
+    setFormData((prev) => ({
+      ...prev,
+      faqs: prev.faqs.map((faq, i) =>
+        i === index ? { ...faq, [field]: value } : faq
       ),
     }));
   };
@@ -159,6 +188,12 @@ const ManageCourses = () => {
             textCase: section.textCase || "normal",
           }))
         : [],
+      faqs: Array.isArray(course.faqs)
+        ? course.faqs.map((faq) => ({
+            question: faq.question || "",
+            answer: faq.answer || "",
+          }))
+        : [],
     });
 
     setShowForm(true);
@@ -199,6 +234,13 @@ const ManageCourses = () => {
     }));
 
     payload.append("detailSections", JSON.stringify(sectionsForBackend));
+
+    const faqsForBackend = formData.faqs.map((faq) => ({
+      question: faq.question,
+      answer: faq.answer,
+    }));
+
+    payload.append("faqs", JSON.stringify(faqsForBackend));
 
     if (formData.image) payload.append("image", formData.image);
     if (formData.brochure) payload.append("brochure", formData.brochure);
@@ -496,6 +538,51 @@ const ManageCourses = () => {
                     className="w-full border border-borderSoft rounded-button px-3 py-2 text-sm outline-none resize-none bg-white"
                   />
                 )}
+              </div>
+            ))}
+          </div>
+
+          {/* FAQs */}
+          <div className="mt-6 border-t border-borderSoft pt-5">
+            <div className="flex justify-between items-center mb-4">
+              <h4 className="font-bold text-dark text-lg">Course FAQs</h4>
+              <button
+                type="button"
+                onClick={addFaq}
+                className="secondary-btn flex items-center gap-1 py-1.5 px-3 text-sm"
+              >
+                <Plus size={16} /> Add FAQ
+              </button>
+            </div>
+
+            {formData.faqs.map((faq, index) => (
+              <div
+                key={index}
+                className="p-4 border border-borderSoft rounded-card mb-4 bg-lightBg/50 relative"
+              >
+                <button
+                  type="button"
+                  onClick={() => removeFaq(index)}
+                  className="absolute top-4 right-4 text-red-500 hover:text-red-700"
+                  aria-label="Delete FAQ"
+                >
+                  <Trash2 size={16} />
+                </button>
+
+                <input
+                  value={faq.question}
+                  onChange={(e) => updateFaq(index, "question", e.target.value)}
+                  placeholder="Question"
+                  className="w-full border border-borderSoft rounded-button px-3 py-2 text-sm outline-none bg-white mb-3 pr-8"
+                />
+
+                <textarea
+                  value={faq.answer}
+                  onChange={(e) => updateFaq(index, "answer", e.target.value)}
+                  placeholder="Answer"
+                  rows="2"
+                  className="w-full border border-borderSoft rounded-button px-3 py-2 text-sm outline-none resize-none bg-white"
+                />
               </div>
             ))}
           </div>
