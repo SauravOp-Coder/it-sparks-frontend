@@ -29,6 +29,7 @@ const ManageHome = () => {
   const [formData, setFormData] = useState({
     homeSections: [],
     faqs: [],
+    courseFaqs: [],
     ctaTitle: "",
     ctaSubtitle: "",
     ctaButtonText: "",
@@ -62,6 +63,13 @@ const ManageHome = () => {
 
         faqs: Array.isArray(home.faqs)
           ? home.faqs.map((faq) => ({
+              question: faq.question || "",
+              answer: faq.answer || "",
+            }))
+          : [],
+
+        courseFaqs: Array.isArray(home.courseFaqs)
+          ? home.courseFaqs.map((faq) => ({
               question: faq.question || "",
               answer: faq.answer || "",
             }))
@@ -119,7 +127,7 @@ const ManageHome = () => {
   };
 
   /* ==========================================================
-      FAQS
+      FAQS (Homepage)
   ========================================================== */
 
   const addFaq = () => {
@@ -140,6 +148,38 @@ const ManageHome = () => {
     setFormData((prev) => ({
       ...prev,
       faqs: prev.faqs.map((faq, i) =>
+        i === index
+          ? {
+              ...faq,
+              [field]: value,
+            }
+          : faq
+      ),
+    }));
+  };
+
+  /* ==========================================================
+      FAQS (Courses Page)
+  ========================================================== */
+
+  const addCourseFaq = () => {
+    setFormData((prev) => ({
+      ...prev,
+      courseFaqs: [...prev.courseFaqs, createFaq()],
+    }));
+  };
+
+  const removeCourseFaq = (index) => {
+    setFormData((prev) => ({
+      ...prev,
+      courseFaqs: prev.courseFaqs.filter((_, i) => i !== index),
+    }));
+  };
+
+  const updateCourseFaq = (index, field, value) => {
+    setFormData((prev) => ({
+      ...prev,
+      courseFaqs: prev.courseFaqs.map((faq, i) =>
         i === index
           ? {
               ...faq,
@@ -173,6 +213,12 @@ const ManageHome = () => {
     })),
 
     faqs: formData.faqs.map((faq, index) => ({
+      question: faq.question.trim(),
+      answer: faq.answer.trim(),
+      order: index,
+    })),
+
+    courseFaqs: formData.courseFaqs.map((faq, index) => ({
       question: faq.question.trim(),
       answer: faq.answer.trim(),
       order: index,
@@ -380,16 +426,21 @@ const ManageHome = () => {
       </div>
 
       {/* ================================================= */}
-      {/* FAQ */}
+      {/* FAQ (Homepage) */}
       {/* ================================================= */}
 
       <div className="rounded-2xl border bg-white p-6 shadow-sm">
 
         <div className="flex justify-between items-center mb-6">
 
-          <h2 className="text-2xl font-bold">
-            FAQs
-          </h2>
+          <div>
+            <h2 className="text-2xl font-bold">
+              FAQs (Homepage)
+            </h2>
+            <p className="text-sm text-textGray mt-1">
+              Shown on the homepage only.
+            </p>
+          </div>
 
           <button
             type="button"
@@ -433,6 +484,74 @@ const ManageHome = () => {
               value={faq.answer}
               onChange={(e) =>
                 updateFaq(index, "answer", e.target.value)
+              }
+            />
+
+          </div>
+
+        ))}
+
+      </div>
+
+      {/* ================================================= */}
+      {/* FAQ (Courses Page) */}
+      {/* ================================================= */}
+
+      <div className="rounded-2xl border bg-white p-6 shadow-sm">
+
+        <div className="flex justify-between items-center mb-6">
+
+          <div>
+            <h2 className="text-2xl font-bold">
+              FAQs (Courses Page)
+            </h2>
+            <p className="text-sm text-textGray mt-1">
+              Shown on the Courses listing page only, separate from the homepage FAQs.
+            </p>
+          </div>
+
+          <button
+            type="button"
+            onClick={addCourseFaq}
+            className="primary-btn flex items-center gap-2"
+          >
+            <Plus size={18} />
+            Add FAQ
+          </button>
+
+        </div>
+
+        {formData.courseFaqs.map((faq, index) => (
+
+          <div
+            key={index}
+            className="relative mb-6 rounded-xl border bg-gray-50 p-5"
+          >
+
+            <button
+              type="button"
+              onClick={() => removeCourseFaq(index)}
+              className="absolute top-5 right-5 text-red-500"
+            >
+              <Trash2 size={18} />
+            </button>
+
+            <input
+              className="w-full border rounded-lg p-3"
+              placeholder="Question"
+              value={faq.question}
+              onChange={(e) =>
+                updateCourseFaq(index, "question", e.target.value)
+              }
+            />
+
+            <textarea
+              rows={4}
+              className="mt-4 w-full border rounded-lg p-3"
+              placeholder="Answer"
+              value={faq.answer}
+              onChange={(e) =>
+                updateCourseFaq(index, "answer", e.target.value)
               }
             />
 
