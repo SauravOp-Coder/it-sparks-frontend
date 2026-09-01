@@ -9,11 +9,12 @@ const ReviewSection = lazy(() => import("../../components/common/ReviewSection")
 
 const Home = () => {
   useEffect(() => {
-    // Prefetch secondary route bundles in the background after home mounts
+    // Prefetch secondary page bundles after Home mounts
+    // Using exact filenames prevents circular import issues
     const prefetchRoutes = () => {
-      import("../Courses");
-      import("../About");
-      import("../Contact");
+      import("./Courses");
+      import("./About");
+      import("./Contact");
     };
 
     const timer = setTimeout(prefetchRoutes, 2000);
