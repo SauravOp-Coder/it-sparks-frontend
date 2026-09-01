@@ -1,14 +1,27 @@
+import React, { useEffect, Suspense, lazy } from "react";
 import SEO from "../../components/common/SEO";
-import ReviewSection from "../../components/common/ReviewSection";
-
 import HomeBannerSlider from "../../components/home/HomeBannerSlider";
-import PopularCourses from "../../components/home/PopularCourses";
-import HomeContentBuilder from "../../components/home/HomeContentBuilder";
+
+// Lazy load below-the-fold components
+const PopularCourses = lazy(() => import("../../components/home/PopularCourses"));
+const HomeContentBuilder = lazy(() => import("../../components/home/HomeContentBuilder"));
+const ReviewSection = lazy(() => import("../../components/common/ReviewSection"));
 
 const Home = () => {
+  useEffect(() => {
+    // Prefetch secondary route bundles in the background after home mounts
+    const prefetchRoutes = () => {
+      import("../Courses");
+      import("../About");
+      import("../Contact");
+    };
+
+    const timer = setTimeout(prefetchRoutes, 2000);
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <main>
-
       <SEO
         title="IT Sparks Technologies"
         description="IT Sparks Technologies provides practical IT training, live projects, internships, placement assistance, and career-focused courses."
@@ -16,18 +29,15 @@ const Home = () => {
         canonical="/"
       />
 
-      {/* Hero Banner */}
+      {/* Hero Banner loaded instantly */}
       <HomeBannerSlider />
 
-      {/* Popular Courses */}
-      <PopularCourses />
-
-      {/* Dynamic Home Content */}
-      <HomeContentBuilder />
-
-      {/* Student Reviews */}
-      <ReviewSection />
-
+      {/* Below-the-fold components loaded lazily */}
+      <Suspense fallback={<div className="min-h-[200px]" />}>
+        <PopularCourses />
+        <HomeContentBuilder />
+        <ReviewSection />
+      </Suspense>
     </main>
   );
 };

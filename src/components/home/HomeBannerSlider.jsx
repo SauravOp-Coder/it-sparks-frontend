@@ -47,8 +47,11 @@ const HomeBannerSlider = () => {
 
   if (loading) {
     return (
-      <section className="h-screen flex items-center justify-center bg-slate-100">
-        <p className="text-lg font-semibold">Loading...</p>
+      <section className="relative h-[100vh] min-h-[700px] flex items-center justify-center bg-slate-900 text-white">
+        <div className="animate-pulse text-center">
+          <div className="h-8 w-48 bg-slate-800 rounded mx-auto mb-4" />
+          <div className="h-12 w-96 bg-slate-800 rounded mx-auto" />
+        </div>
       </section>
     );
   }
@@ -69,14 +72,24 @@ const HomeBannerSlider = () => {
 
   return (
     <section className="relative h-[100vh] min-h-[700px] overflow-hidden">
-
-      {/* Background */}
+      {/* Background Image Optimized for LCP */}
       <div className="absolute inset-0">
         <img
           src={banner.image?.url}
           alt={banner.title}
+          fetchpriority="high"
+          decoding="async"
           className="h-full w-full object-cover"
         />
+
+        {/* Hidden Preloader for remaining slides */}
+        <div className="hidden">
+          {banners.map((item, idx) =>
+            idx !== activeIndex && item.image?.url ? (
+              <img key={idx} src={item.image.url} alt="" />
+            ) : null
+          )}
+        </div>
 
         {/* Overlay */}
         <div className="absolute inset-0 bg-gradient-to-r from-[#020817]/95 via-[#020817]/70 to-[#020817]/30" />
@@ -88,11 +101,9 @@ const HomeBannerSlider = () => {
 
       {/* Content */}
       <div className="container-custom relative z-20 h-full flex items-center">
-
         <div className="max-w-3xl">
-
           <span className="inline-flex items-center rounded-full bg-primary/20 backdrop-blur-md border border-primary/40 text-white px-5 py-2 text-sm font-semibold tracking-wide">
-             IT Sparks Technologies
+            IT Sparks Technologies
           </span>
 
           <h1 className="mt-8 text-white text-5xl md:text-7xl font-black leading-[1.15]">
@@ -104,7 +115,6 @@ const HomeBannerSlider = () => {
           </p>
 
           <div className="flex flex-wrap gap-5 mt-10">
-
             {banner.buttonText && (
               <Link
                 to={banner.buttonLink}
@@ -121,16 +131,16 @@ const HomeBannerSlider = () => {
             >
               Explore Courses
             </Link>
-
           </div>
         </div>
       </div>
 
-      {/* Left Arrow */}
+      {/* Left / Right Arrows & Indicators */}
       {banners.length > 1 && (
         <>
           <button
             onClick={prevSlide}
+            aria-label="Previous Slide"
             className="absolute left-8 top-1/2 -translate-y-1/2 z-30 w-14 h-14 rounded-full bg-white/10 backdrop-blur border border-white/30 text-white hover:bg-primary transition"
           >
             <ChevronLeft className="mx-auto" size={28} />
@@ -138,6 +148,7 @@ const HomeBannerSlider = () => {
 
           <button
             onClick={nextSlide}
+            aria-label="Next Slide"
             className="absolute right-8 top-1/2 -translate-y-1/2 z-30 w-14 h-14 rounded-full bg-white/10 backdrop-blur border border-white/30 text-white hover:bg-primary transition"
           >
             <ChevronRight className="mx-auto" size={28} />
@@ -149,6 +160,7 @@ const HomeBannerSlider = () => {
               <button
                 key={index}
                 onClick={() => setActiveIndex(index)}
+                aria-label={`Go to slide ${index + 1}`}
                 className={`transition-all duration-300 rounded-full ${
                   activeIndex === index
                     ? "w-10 h-3 bg-primary"
