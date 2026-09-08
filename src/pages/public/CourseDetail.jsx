@@ -12,6 +12,13 @@ import { getCourseByIdApi } from "../../api/courseApi";
 import { createEnquiryApi } from "../../api/enquiryApi";
 import SEO from "../../components/common/SEO";
 import FaqSection from "../../components/common/FaqSection";
+import {
+  nameRegex,
+  emailRegex,
+  mobileRegex,
+  sanitizeMobileInput,
+  sanitizeNameInput,
+} from "../../utils/validators";
 
 const textCaseClass = {
   normal: "",
@@ -30,6 +37,7 @@ const CourseDetail = () => {
   const [showBrochureForm, setShowBrochureForm] = useState(false);
   const [brochureLoading, setBrochureLoading] = useState(false);
   const [brochureError, setBrochureError] = useState("");
+  const [brochureFieldErrors, setBrochureFieldErrors] = useState({});
 
   const [enquiryData, setEnquiryData] = useState({
     name: "",
@@ -57,10 +65,40 @@ const CourseDetail = () => {
   const handleEnquiryChange = (e) => {
     const { name, value } = e.target;
 
+    let nextValue = value;
+    if (name === "mobile") nextValue = sanitizeMobileInput(value);
+    if (name === "name") nextValue = sanitizeNameInput(value);
+
     setEnquiryData((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: nextValue,
     }));
+
+    if (brochureFieldErrors[name]) {
+      setBrochureFieldErrors((prev) => ({ ...prev, [name]: "" }));
+    }
+  };
+
+  const validateBrochureForm = (data) => {
+    const errors = {};
+
+    if (!data.name.trim()) {
+      errors.name = "Name is required.";
+    } else if (!nameRegex.test(data.name.trim())) {
+      errors.name = "Enter a valid name (letters only, 2-50 characters).";
+    }
+
+    if (!data.mobile.trim()) {
+      errors.mobile = "Mobile number is required.";
+    } else if (!mobileRegex.test(data.mobile.trim())) {
+      errors.mobile = "Enter a valid 10-digit mobile number.";
+    }
+
+    if (data.email.trim() && !emailRegex.test(data.email.trim())) {
+      errors.email = "Enter a valid email address.";
+    }
+
+    return errors;
   };
 
  const getPdfFileName = () => {
@@ -107,14 +145,16 @@ const downloadBrochure = async () => {
   const handleBrochureSubmit = async (e) => {
     e.preventDefault();
 
-    if (!enquiryData.name || !enquiryData.mobile) {
-      setBrochureError("Name and mobile number are required");
+    const errors = validateBrochureForm(enquiryData);
+    if (Object.keys(errors).length > 0) {
+      setBrochureFieldErrors(errors);
       return;
     }
 
     try {
       setBrochureLoading(true);
       setBrochureError("");
+      setBrochureFieldErrors({});
 
       await createEnquiryApi({
         name: enquiryData.name,
@@ -485,30 +525,53 @@ const downloadBrochure = async () => {
               </div>
             )}
 
-            <form onSubmit={handleBrochureSubmit} className="grid gap-4 mt-6">
-              <input
-                name="name"
-                value={enquiryData.name}
-                onChange={handleEnquiryChange}
-                placeholder="Full Name"
-                className="border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
-              />
+            <form onSubmit={handleBrochureSubmit} noValidate className="grid gap-4 mt-6">
+              <div>
+                <input
+                  name="name"
+                  value={enquiryData.name}
+                  onChange={handleEnquiryChange}
+                  placeholder="Full Name"
+                  className={`w-full border rounded-button px-4 py-3 outline-none focus:border-primary ${
+                    brochureFieldErrors.name ? "border-red-400" : "border-borderSoft"
+                  }`}
+                />
+                {brochureFieldErrors.name && (
+                  <p className="text-red-500 text-xs mt-1 px-1">{brochureFieldErrors.name}</p>
+                )}
+              </div>
 
-              <input
-                name="mobile"
-                value={enquiryData.mobile}
-                onChange={handleEnquiryChange}
-                placeholder="Mobile Number"
-                className="border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
-              />
+              <div>
+                <input
+                  name="mobile"
+                  inputMode="numeric"
+                  maxLength={10}
+                  value={enquiryData.mobile}
+                  onChange={handleEnquiryChange}
+                  placeholder="Mobile Number"
+                  className={`w-full border rounded-button px-4 py-3 outline-none focus:border-primary ${
+                    brochureFieldErrors.mobile ? "border-red-400" : "border-borderSoft"
+                  }`}
+                />
+                {brochureFieldErrors.mobile && (
+                  <p className="text-red-500 text-xs mt-1 px-1">{brochureFieldErrors.mobile}</p>
+                )}
+              </div>
 
-              <input
-                name="email"
-                value={enquiryData.email}
-                onChange={handleEnquiryChange}
-                placeholder="Email Address"
-                className="border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
-              />
+              <div>
+                <input
+                  name="email"
+                  value={enquiryData.email}
+                  onChange={handleEnquiryChange}
+                  placeholder="Email Address"
+                  className={`w-full border rounded-button px-4 py-3 outline-none focus:border-primary ${
+                    brochureFieldErrors.email ? "border-red-400" : "border-borderSoft"
+                  }`}
+                />
+                {brochureFieldErrors.email && (
+                  <p className="text-red-500 text-xs mt-1 px-1">{brochureFieldErrors.email}</p>
+                )}
+              </div>
 
               <textarea
                 name="message"
