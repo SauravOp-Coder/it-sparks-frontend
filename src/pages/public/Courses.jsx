@@ -4,12 +4,15 @@ import ReviewSection from "../../components/common/ReviewSection";
 import PageBanner from "../../components/common/PageBanner";
 import SEO from "../../components/common/SEO";
 import FaqSection from "../../components/common/FaqSection";
+import FreeDemoPopup from "../../components/common/FreeDemoPopup";
 import { getCoursesApi } from "../../api/courseApi";
 
 const Courses = () => {
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  const [demoPopupOpen, setDemoPopupOpen] = useState(false);
 
   const fetchCourses = async () => {
     try {
@@ -35,6 +38,7 @@ const Courses = () => {
         keywords="IT courses, AI courses, data science training, cloud computing course, full stack development, software training"
         canonical="/courses"
       />
+
       <PageBanner
         page="courses"
         fallbackTitle="Explore Our Professional IT Courses"
@@ -44,8 +48,6 @@ const Courses = () => {
 
       <section className="section-padding bg-white">
         <div className="container-custom">
-         
-
           {loading ? (
             <div className="mt-14 bg-lightBg border border-borderSoft rounded-card p-10 text-center text-textGray font-semibold">
               Loading courses...
@@ -66,7 +68,7 @@ const Courses = () => {
             </div>
           )}
 
-                   <FaqSection source="courseFaqs" />
+          <FaqSection source="courseFaqs" />
         </div>
       </section>
 
@@ -88,14 +90,23 @@ const Courses = () => {
               </p>
             </div>
 
-            <a href="/contact" className="primary-btn">
+            <button
+              type="button"
+              onClick={() => setDemoPopupOpen(true)}
+              className="primary-btn"
+            >
               Get Course Guidance
-            </a>
+            </button>
           </div>
         </div>
       </section>
 
       <ReviewSection />
+
+      <FreeDemoPopup
+        isOpen={demoPopupOpen}
+        onClose={() => setDemoPopupOpen(false)}
+      />
     </main>
   );
 };
