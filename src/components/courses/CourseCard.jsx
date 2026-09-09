@@ -9,6 +9,7 @@ import {
   Signal,
 } from "lucide-react";
 import FreeDemoPopup from "../common/FreeDemoPopup";
+import { optimizeCloudinaryImage } from "../../utils/imageOptimizer";
 
 const CourseCard = ({ course }) => {
   const courseSlug = course.slug || course._id || course.id;
@@ -65,8 +66,12 @@ const CourseCard = ({ course }) => {
         <div className="relative h-[230px] overflow-hidden bg-gradient-to-br from-primary/10 via-lightBg to-white">
           {course.image?.url ? (
             <img
-              src={course.image.url}
+              src={optimizeCloudinaryImage(course.image.url, 600)}
               alt={course.title}
+              width="600"
+              height="400"
+              loading="lazy"
+              decoding="async"
               className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
             />
           ) : (
