@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getBannersByPageApi } from "../../api/bannerApi";
 import HeroSection from "./HeroSection";
+import { optimizeCloudinaryImage } from "../../utils/imageOptimizer";
 
 const HomeBannerSlider = () => {
   const [banners, setBanners] = useState([]);
@@ -75,32 +76,31 @@ const HomeBannerSlider = () => {
       {/* Background Image Optimized for LCP */}
       <div className="absolute inset-0">
         <img
-          src={banner.image?.url}
+          key={banner._id || banner.image?.url || activeIndex}
+          src={optimizeCloudinaryImage(banner.image?.url, 1600)}
+          srcSet={`
+            ${optimizeCloudinaryImage(banner.image?.url, 480)} 480w,
+            ${optimizeCloudinaryImage(banner.image?.url, 768)} 768w,
+            ${optimizeCloudinaryImage(banner.image?.url, 1200)} 1200w,
+            ${optimizeCloudinaryImage(banner.image?.url, 1600)} 1600w
+          `}
+          sizes="100vw"
           alt={banner.title}
-          fetchpriority="high"
+          width="1600"
+          height="900"
+          loading="eager"
+          fetchPriority="high"
           decoding="async"
           className="h-full w-full object-cover"
         />
 
-        {/* Hidden Preloader for remaining slides */}
-        <div className="hidden">
-          {banners.map((item, idx) =>
-            idx !== activeIndex && item.image?.url ? (
-              <img key={idx} src={item.image.url} alt="" />
-            ) : null
-          )}
-        </div>
-
         {/* Overlay */}
         <div className="absolute inset-0 bg-gradient-to-r from-[#020817]/95 via-[#020817]/70 to-[#020817]/30" />
-
       </div>
 
       {/* Content */}
       <div className="container-custom relative z-20 h-full flex items-center">
         <div className="max-w-3xl">
-         
-
           <h1 className="mt-8 text-white text-5xl md:text-7xl font-black leading-[1.15]">
             {banner.title}
           </h1>
