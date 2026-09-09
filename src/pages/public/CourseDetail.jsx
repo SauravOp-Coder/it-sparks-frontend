@@ -12,6 +12,7 @@ import { getCourseByIdApi } from "../../api/courseApi";
 import { createEnquiryApi } from "../../api/enquiryApi";
 import SEO from "../../components/common/SEO";
 import FaqSection from "../../components/common/FaqSection";
+import FreeDemoPopup from "../../components/common/FreeDemoPopup";
 import {
   nameRegex,
   emailRegex,
@@ -38,6 +39,8 @@ const CourseDetail = () => {
   const [brochureLoading, setBrochureLoading] = useState(false);
   const [brochureError, setBrochureError] = useState("");
   const [brochureFieldErrors, setBrochureFieldErrors] = useState({});
+
+  const [demoPopupOpen, setDemoPopupOpen] = useState(false);
 
   const [enquiryData, setEnquiryData] = useState({
     name: "",
@@ -380,9 +383,13 @@ const downloadBrochure = async () => {
               </div>
 
               <div className="flex flex-wrap gap-4 mt-8">
-                <Link to="/contact" className="primary-btn">
-                  Enquire Now
-                </Link>
+               <button
+  type="button"
+  onClick={() => setDemoPopupOpen(true)}
+  className="primary-btn"
+>
+  Enquire Now
+</button>
 
                 {course.brochure?.url && (
                   <button
@@ -482,9 +489,13 @@ const downloadBrochure = async () => {
 
               </div>
 
-              <Link to="/contact" className="primary-btn w-full mt-7">
-                Enquire Now
-              </Link>
+              <button
+  type="button"
+  onClick={() => setDemoPopupOpen(true)}
+  className="primary-btn"
+>
+  Enquire Now
+</button>
 
               {course.brochure?.url && (
                 <button
@@ -593,6 +604,11 @@ const downloadBrochure = async () => {
           </div>
         </div>
       )}
+
+       <FreeDemoPopup
+        isOpen={demoPopupOpen}
+        onClose={() => setDemoPopupOpen(false)}
+      />
     </main>
   );
 };
