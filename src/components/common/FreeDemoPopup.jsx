@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { createPortal } from "react-dom";
 import { X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { createEnquiryApi } from "../../api/enquiryApi";
@@ -121,9 +122,9 @@ const FreeDemoPopup = ({ isOpen, onClose }) => {
 
   if (!isOpen) return null;
 
-  return (
+  return createPortal(
     <div
-      className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-[2px] flex items-center justify-center px-4 py-6"
+      className="fixed inset-0 z-[9999] bg-black/60 backdrop-blur-[2px] flex items-center justify-center p-4"
       onClick={handleClose}
     >
       <div
@@ -242,7 +243,7 @@ const FreeDemoPopup = ({ isOpen, onClose }) => {
             )}
           </div>
 
-          {/* Course + Mode */}
+          {/* Course + Preferred Mode */}
           <div className="grid sm:grid-cols-2 gap-4">
             <div>
               <select
@@ -256,21 +257,27 @@ const FreeDemoPopup = ({ isOpen, onClose }) => {
                 }`}
               >
                 <option value="">Interested Course</option>
+
                 <option value="Full Stack Web Development">
                   Full Stack Web Development
                 </option>
+
                 <option value="Python Programming">
                   Python Programming
                 </option>
+
                 <option value="Java Full Stack">
                   Java Full Stack
                 </option>
+
                 <option value="Data Science & Analytics">
                   Data Science & Analytics
                 </option>
+
                 <option value="Software Testing">
                   Software Testing
                 </option>
+
                 <option value="UI/UX Design">
                   UI/UX Design
                 </option>
@@ -290,9 +297,17 @@ const FreeDemoPopup = ({ isOpen, onClose }) => {
                 onChange={handleChange}
                 className="w-full border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary text-textGray"
               >
-                <option value="Not Selected">Preferred Mode</option>
-                <option value="Online">Online</option>
-                <option value="Offline">Offline</option>
+                <option value="Not Selected">
+                  Preferred Mode
+                </option>
+
+                <option value="Online">
+                  Online
+                </option>
+
+                <option value="Offline">
+                  Offline
+                </option>
               </select>
             </div>
           </div>
@@ -320,7 +335,7 @@ const FreeDemoPopup = ({ isOpen, onClose }) => {
             )}
           </div>
 
-          {/* Submit */}
+          {/* Submit Button */}
           <button
             type="submit"
             disabled={loading}
@@ -330,7 +345,8 @@ const FreeDemoPopup = ({ isOpen, onClose }) => {
           </button>
         </form>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 
