@@ -1,7 +1,7 @@
 import { Link, NavLink } from "react-router-dom";
 import { ChevronDown, Menu, PhoneCall, X } from "lucide-react";
 import { useEffect, useState } from "react";
-import logo from "../../assets/logo/it-sparks-logo.png";
+import logo from "../../assets/logo/it-sparks-logo.webp";
 import { getCoursesApi } from "../../api/courseApi";
 import { getSettingsApi } from "../../api/settingApi";
 import FreeDemoPopup from "./FreeDemoPopup";
@@ -44,6 +44,8 @@ const Navbar = () => {
             <img
               src={logo}
               alt="IT Sparks Technologies"
+              width="160"
+              height="160"
               className="h-[56px] w-auto object-contain"
             />
 
