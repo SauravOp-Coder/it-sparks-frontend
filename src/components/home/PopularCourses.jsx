@@ -53,9 +53,7 @@ const PopularCourses = () => {
       <div className="container-custom relative">
         {/* Centered Heading Container */}
         <div className="flex flex-col items-center text-center max-w-3xl mx-auto gap-5">
-          <span className="inline-flex text-primary font-extrabold uppercase tracking-wide text-sm bg-primary/10 px-4 py-2 rounded-full w-fit">
-            Popular Courses
-          </span>
+          
 
           <h2 className="text-3xl md:text-5xl font-black tracking-tight text-dark leading-tight">
             {title}

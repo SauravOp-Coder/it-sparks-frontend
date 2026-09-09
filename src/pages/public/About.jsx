@@ -113,9 +113,7 @@ const About = () => {
 
             <div>
 
-              <span className="inline-flex bg-primary/10 text-primary px-4 py-2 rounded-full font-bold text-sm uppercase tracking-wider">
-                About IT Sparks Technologies
-              </span>
+             
 
               <h1 className="text-4xl lg:text-6xl font-black leading-tight text-dark mt-6">
                 Practical IT Training That Builds Real Careers

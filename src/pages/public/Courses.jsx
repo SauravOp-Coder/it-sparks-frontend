@@ -44,9 +44,7 @@ const Courses = () => {
       <section className="section-padding bg-white">
         <div className="container-custom">
           <div className="text-center max-w-3xl mx-auto">
-            <span className="inline-flex text-primary font-extrabold uppercase tracking-wide text-sm bg-primary/10 px-4 py-2 rounded-full">
-              Our Courses
-            </span>
+            
 
             <h2 className="text-3xl md:text-5xl font-black tracking-tight text-dark mt-5">
               Learn practical skills with real projects
