@@ -37,7 +37,7 @@ const HomeContentBuilder = () => {
         : "";
 
     switch (section.type) {
-            case "heading":
+      case "heading":
         return (
           <div
             key={index}
@@ -56,14 +56,14 @@ const HomeContentBuilder = () => {
           <div key={index}>
             {section.title && (
               <h2
-                className={`text-3xl font-black text-dark mb-4 ${textClass}`}
+                className={`text-3xl font-black text-dark mb-3 ${textClass}`}
               >
                 {section.title}
               </h2>
             )}
 
             <p
-              className={`leading-8 text-textGray whitespace-pre-line ${textClass}`}
+              className={`leading-7 text-textGray whitespace-pre-line ${textClass}`}
             >
               {section.content}
             </p>
@@ -80,26 +80,27 @@ const HomeContentBuilder = () => {
               {section.title}
             </h2>
 
-            <p className="mt-4 whitespace-pre-line leading-8">
+            <p className="mt-3 whitespace-pre-line leading-7">
               {section.content}
             </p>
           </div>
         );
-              case "bulletList":
+
+      case "bulletList":
         return (
           <div key={index}>
-            <h2 className="text-3xl font-black mb-5">
+            <h2 className="text-3xl font-black mb-4">
               {section.title}
             </h2>
 
-            <div className="grid md:grid-cols-2 gap-4">
+            <div className="grid md:grid-cols-2 gap-x-6 gap-y-3">
               {section.items.map((item, i) => (
                 <div
                   key={i}
                   className="flex items-start gap-3"
                 >
                   <CircleCheckBig
-                    className="text-primary mt-1"
+                    className="text-primary mt-1 shrink-0"
                     size={20}
                   />
 
@@ -115,11 +116,11 @@ const HomeContentBuilder = () => {
       case "numberedList":
         return (
           <div key={index}>
-            <h2 className="text-3xl font-black mb-5">
+            <h2 className="text-3xl font-black mb-4">
               {section.title}
             </h2>
 
-            <ol className="list-decimal pl-6 space-y-3">
+            <ol className="list-decimal pl-6 space-y-2 leading-7">
               {section.items.map((item, i) => (
                 <li key={i}>
                   {item}
@@ -133,127 +134,125 @@ const HomeContentBuilder = () => {
         return null;
     }
   };
- 
-  return (
-  <section className="py-12 bg-white w-full">
-    <div className="container mx-auto px-6 max-w-5xl">
-      
-      {/* ========================= */}
-      {/* Dynamic Home Sections */}
-      {/* ========================= */}
-      {sections.length > 0 ? (
-        <div className="space-y-8 text-gray-700 leading-relaxed">
-          {sections.map((section, index) => (
-            <div
-              key={section._id || index}
-              className={
-                section.layout === "split"
-                  ? "grid md:grid-cols-2 gap-8 items-center"
-                  : "w-full"
-              }
-            >
-              {renderSection(section, index)}
-            </div>
-          ))}
-        </div>
-      ) : (
-        <div className="w-full max-w-xl mx-auto rounded-2xl border-2 border-dashed border-gray-300 py-12 px-6 text-center">
-          <h3 className="text-xl font-bold text-gray-600">
-            No Home Content Found
-          </h3>
-          <p className="mt-2 text-sm text-textGray">
-            Please add sections from the Admin Panel.
-          </p>
-        </div>
-      )}
 
-      
-      {/* ========================= */}
-      {/* CTA Section */}
-      {/* ========================= */}
-      {home?.ctaTitle && (
-        <div className="mt-20 w-full">
-          <div className="rounded-3xl bg-primary p-8 md:p-12 text-center text-white shadow-lg max-w-4xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight">
-              {home.ctaTitle}
+  return (
+    <section className="py-12 bg-white w-full">
+      <div className="container mx-auto px-6 max-w-6xl">
+
+        {/* ========================= */}
+        {/* Dynamic Home Sections */}
+        {/* ========================= */}
+        {sections.length > 0 ? (
+          <div className="space-y-5 text-gray-700">
+            {sections.map((section, index) => (
+              <div
+                key={section._id || index}
+                className={
+                  section.layout === "split"
+                    ? "grid md:grid-cols-2 gap-6 items-center"
+                    : "w-full"
+                }
+              >
+                {renderSection(section, index)}
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="w-full max-w-xl mx-auto rounded-2xl border-2 border-dashed border-gray-300 py-12 px-6 text-center">
+            <h3 className="text-xl font-bold text-gray-600">
+              No Home Content Found
+            </h3>
+
+            <p className="mt-2 text-sm text-textGray">
+              Please add sections from the Admin Panel.
+            </p>
+          </div>
+        )}
+
+        {/* ========================= */}
+        {/* CTA Section */}
+        {/* ========================= */}
+        {home?.ctaTitle && (
+          <div className="mt-20 w-full">
+            <div className="rounded-3xl bg-primary p-8 md:p-12 text-center text-white shadow-lg max-w-4xl mx-auto">
+              <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight">
+                {home.ctaTitle}
+              </h2>
+
+              {home.ctaSubtitle && (
+                <p className="mt-3 max-w-2xl mx-auto text-base md:text-lg opacity-90 leading-relaxed">
+                  {home.ctaSubtitle}
+                </p>
+              )}
+
+              {home.ctaButtonText && (
+                <a
+                  href={home.ctaButtonLink || "/contact"}
+                  className="inline-block mt-6 rounded-xl bg-white px-7 py-3.5 text-base font-bold text-primary transition hover:scale-105 shadow-sm"
+                >
+                  {home.ctaButtonText}
+                </a>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* ========================= */}
+        {/* FAQs */}
+        {/* ========================= */}
+        {faqs.length > 0 && (
+          <div className="mt-16 w-full">
+            <h2 className="text-3xl font-extrabold text-center text-dark tracking-tight mb-8">
+              Frequently Asked Questions
             </h2>
 
-            {home.ctaSubtitle && (
-              <p className="mt-3 max-w-2xl mx-auto text-base md:text-lg opacity-90 leading-relaxed">
-                {home.ctaSubtitle}
-              </p>
-            )}
+            <div className="space-y-3 max-w-4xl mx-auto">
+              {faqs.map((faq, index) => {
+                const open = openFaqs[index];
 
-            {home.ctaButtonText && (
-              <a
-                href={home.ctaButtonLink || "/contact"}
-                className="inline-block mt-6 rounded-xl bg-white px-7 py-3.5 text-base font-bold text-primary transition hover:scale-105 shadow-sm"
-              >
-                {home.ctaButtonText}
-              </a>
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* ========================= */}
-      {/* FAQs */}
-      {/* ========================= */}
-      {faqs.length > 0 && (
-        <div className="mt-16 w-full">
-          <h2 className="text-3xl font-extrabold text-center text-dark tracking-tight mb-8">
-            Frequently Asked Questions
-          </h2>
-
-          <div className="space-y-3 max-w-4xl mx-auto">
-            {faqs.map((faq, index) => {
-              const open = openFaqs[index];
-
-              return (
-                <div
-                  key={index}
-                  className="rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden transition-all"
-                >
-                  <button
-                    type="button"
-                    aria-expanded={Boolean(open)}
-                    onClick={() =>
-                      setOpenFaqs((prev) => ({
-                        ...prev,
-                        [index]: !prev[index],
-                      }))
-                    }
-                    className="flex w-full items-center justify-between p-5 text-left transition hover:bg-gray-50/50"
+                return (
+                  <div
+                    key={index}
+                    className="rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden transition-all"
                   >
-                    <span className="font-bold text-base md:text-lg text-dark pr-4">
-                      {faq.question}
-                    </span>
-                    {open ? (
-                      <ChevronUp className="text-primary shrink-0 w-5 h-5" />
-                    ) : (
-                      <ChevronDown className="text-primary shrink-0 w-5 h-5" />
+                    <button
+                      type="button"
+                      aria-expanded={Boolean(open)}
+                      onClick={() =>
+                        setOpenFaqs((prev) => ({
+                          ...prev,
+                          [index]: !prev[index],
+                        }))
+                      }
+                      className="flex w-full items-center justify-between p-5 text-left transition hover:bg-gray-50/50"
+                    >
+                      <span className="font-bold text-base md:text-lg text-dark pr-4">
+                        {faq.question}
+                      </span>
+
+                      {open ? (
+                        <ChevronUp className="text-primary shrink-0 w-5 h-5" />
+                      ) : (
+                        <ChevronDown className="text-primary shrink-0 w-5 h-5" />
+                      )}
+                    </button>
+
+                    {open && (
+                      <div className="px-5 pb-5 pt-1 text-gray-600 border-t border-gray-100">
+                        <p className="leading-relaxed text-sm md:text-base whitespace-pre-line">
+                          {faq.answer}
+                        </p>
+                      </div>
                     )}
-                  </button>
-
-                  {open && (
-                    <div className="px-5 pb-5 pt-1 text-gray-600 border-t border-gray-100">
-                      <p className="leading-relaxed text-sm md:text-base whitespace-pre-line">
-                        {faq.answer}
-                      </p>
-                    </div>
-                  )}
-                </div>
-              );
-            })}
+                  </div>
+                );
+              })}
+            </div>
           </div>
-        </div>
-      )}
-
-
-    </div>
-  </section>
-);
+        )}
+      </div>
+    </section>
+  );
 };
-
 
 export default HomeContentBuilder;
