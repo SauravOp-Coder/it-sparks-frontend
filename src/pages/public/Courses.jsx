@@ -38,22 +38,14 @@ const Courses = () => {
       <PageBanner
         page="courses"
         fallbackTitle="Explore Our Professional IT Courses"
-        fallbackSubtitle="Choose practical courses designed for students, freshers, and working professionals."
+        fallbackSubtitle=" Browse courses and choose the right learning path based on your
+              interest, background, and career goal."
       />
 
       <section className="section-padding bg-white">
         <div className="container-custom">
           <div className="text-center max-w-3xl mx-auto">
             
-
-            <h2 className="text-3xl md:text-5xl font-black tracking-tight text-dark mt-5">
-              Learn practical skills with real projects
-            </h2>
-
-            <p className="text-textGray leading-8 mt-5 text-lg">
-              Browse courses and choose the right learning path based on your
-              interest, background, and career goal.
-            </p>
           </div>
 
           {loading ? (
