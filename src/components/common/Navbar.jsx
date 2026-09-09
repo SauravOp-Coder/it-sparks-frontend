@@ -4,11 +4,14 @@ import { useEffect, useState } from "react";
 import logo from "../../assets/logo/it-sparks-logo.png";
 import { getCoursesApi } from "../../api/courseApi";
 import { getSettingsApi } from "../../api/settingApi";
+import FreeDemoPopup from "../../components/common/FreeDemoPopup";
 
 const Navbar = () => {
   const [openMenu, setOpenMenu] = useState(false);
   const [courses, setCourses] = useState([]);
   const [settings, setSettings] = useState(null);
+  const [demoPopupOpen, setDemoPopupOpen] = useState(false);
+  
 
   const fetchData = async () => {
     try {
@@ -131,9 +134,13 @@ const Navbar = () => {
           <div className="hidden lg:flex items-center gap-4">
             
 
-            <Link to="/contact" className="primary-btn py-3">
-              Book Free Demo
-            </Link>
+          <button
+  type="button"
+  onClick={() => setDemoPopupOpen(true)}
+  className="hidden lg:flex items-center gap-4"
+>
+  Join Free Demo
+</button>
           </div>
 
           <button
@@ -176,6 +183,10 @@ const Navbar = () => {
             </div>
           </div>
         )}
+        <FreeDemoPopup
+  isOpen={demoPopupOpen}
+  onClose={() => setDemoPopupOpen(false)}
+/>
       </div>
     </header>
   );
