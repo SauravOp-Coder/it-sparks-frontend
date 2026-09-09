@@ -25,13 +25,16 @@ const values = [
   "Quality Without Compromise",
 ];
 
-const actionPlan = [
+const actionPlanLeft = [
   "Design curriculum based on current industry requirements",
   "Integrate AI and emerging technologies into every learning pathway",
   "Deliver hands-on training through real industry projects",
   "Focus on deployment-ready skills rather than theoretical knowledge",
   "Provide structured internship opportunities",
   "Conduct regular project evaluations and technical assessments",
+];
+
+const actionPlanRight = [
   "Build professional portfolios through GitHub and live project documentation",
   "Organize mock interviews and Interview Simulation Programs (ISP)",
   "Offer resume optimization and career mentoring",
@@ -50,85 +53,90 @@ const About = () => {
         canonical="/about"
       />
 
-      {/* ABOUT BANNER - UNCHANGED */}
+      {/* BANNER UNCHANGED */}
       <PageBanner
         page="about"
         fallbackTitle="About IT Sparks Technologies"
         fallbackSubtitle="We provide practical IT training, career guidance, and project-based learning for students and professionals."
       />
 
-      {/* ABOUT IT SPARKS */}
+      {/* ABOUT IT SPARKS TECHNOLOGIES */}
       <section className="py-20 md:py-24 bg-white">
         <div className="container-custom">
-          <div className="grid lg:grid-cols-[0.75fr_1.25fr] gap-10 lg:gap-16 items-start">
-            <div className="lg:sticky lg:top-32">
-              <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center">
-                <GraduationCap className="text-primary" size={29} />
-              </div>
-
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-dark leading-tight mt-6">
-                About IT Sparks Technologies
-              </h2>
+          <div className="text-center max-w-4xl mx-auto mb-12">
+            <div className="w-14 h-14 mx-auto rounded-2xl bg-primary/10 flex items-center justify-center">
+              <GraduationCap className="text-primary" size={30} />
             </div>
 
-            <div className="space-y-6 text-textGray text-[17px] leading-8">
-              <p>
-                IT Sparks Technologies is an IT training institute dedicated to
-                building job-ready professionals through practical learning,
-                real-world implementation, and project-driven education. Apart
-                from traditional training institutes, we combine modern
-                technologies with live industry projects to prepare our
-                students for real business challenges.
-              </p>
+            <h2 className="text-3xl md:text-5xl font-black text-dark mt-6">
+              About IT Sparks Technologies
+            </h2>
+          </div>
 
-              <p>
-                We offer IT training courses such as Full Stack AI (Generative
-                AI & Agentic AI), Data Analytics with AI, Data Science with AI,
-                AWS Cloud Computing & DevOps, and ETL Developer. We designed
-                all our IT training courses around the latest technologies,
-                workflows, and development practices used by today's leading
-                technology companies.
-              </p>
+          <div className="grid lg:grid-cols-2 gap-8 items-stretch">
+            <div className="bg-lightBg border border-borderSoft rounded-card p-8 md:p-10">
+              <div className="space-y-6 text-textGray leading-8">
+                <p>
+                  IT Sparks Technologies is an IT training institute dedicated
+                  to building job-ready professionals through practical
+                  learning, real-world implementation, and project-driven
+                  education. Apart from traditional training institutes, we
+                  combine modern technologies with live industry projects to
+                  prepare our students for real business challenges.
+                </p>
 
-              <p>
-                Our every student gets hands-on experience through
-                industry-level projects, our expert mentorship and guidance,
-                internship opportunities, portfolio development, interview
-                preparation, and structured placement assistance. We focus on
-                building practical skills that allow our students to
-                confidently design, develop, deploy, and handle all modern
-                software and AI solutions in their field.
-              </p>
+                <p>
+                  We offer IT training courses such as Full Stack AI (Generative
+                  AI & Agentic AI), Data Analytics with AI, Data Science with
+                  AI, AWS Cloud Computing & DevOps, and ETL Developer. We
+                  designed all our IT training courses around the latest
+                  technologies, workflows, and development practices used by
+                  today's leading technology companies.
+                </p>
 
-              <p>
-                As we are experienced developers of AI-driven business tools,
-                our technological framework plays an important role in shaping
-                our training processes. At IT Sparks Technologies our students
-                not just learn theoretical concepts but also work on real
-                industry live projects, tackle actual business challenges, and
-                build their strong professional portfolios that showcase all
-                their skills and talents.
-              </p>
+                <p>
+                  Our every student gets hands-on experience through
+                  industry-level projects, our expert mentorship and guidance,
+                  internship opportunities, portfolio development, interview
+                  preparation, and structured placement assistance. We focus on
+                  building practical skills that allow our students to
+                  confidently design, develop, deploy, and handle all modern
+                  software and AI solutions in their field.
+                </p>
+              </div>
+            </div>
 
-              <p>
-                No matter if you’re just starting out as a fresher, graduate,
-                or experienced working professional, IT Sparks Technologies
-                provides the environment that turns your knowledge into
-                practical expertise and builds a successful technical career.
-              </p>
+            <div className="bg-white border border-borderSoft rounded-card p-8 md:p-10 shadow-card">
+              <div className="space-y-6 text-textGray leading-8">
+                <p>
+                  As we are experienced developers of AI-driven business tools,
+                  our technological framework plays an important role in
+                  shaping our training processes. At IT Sparks Technologies our
+                  students not just learn theoretical concepts but also work on
+                  real industry live projects, tackle actual business
+                  challenges, and build their strong professional portfolios
+                  that showcase all their skills and talents.
+                </p>
+
+                <p>
+                  No matter if you’re just starting out as a fresher, graduate,
+                  or experienced working professional, IT Sparks Technologies
+                  provides the environment that turns your knowledge into
+                  practical expertise and builds a successful technical career.
+                </p>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* VISION & MISSION */}
+      {/* VISION + MISSION */}
       <section className="py-20 md:py-24 bg-lightBg">
         <div className="container-custom">
-          <div className="grid lg:grid-cols-2 gap-7">
-            {/* Vision */}
-            <div className="h-full bg-dark rounded-card p-8 md:p-10">
+          <div className="grid lg:grid-cols-2 gap-8 items-stretch">
+            <div className="bg-dark rounded-card p-8 md:p-10 h-full">
               <div className="w-14 h-14 rounded-2xl bg-white/10 flex items-center justify-center">
-                <BadgeCheck className="text-white" size={29} />
+                <BadgeCheck className="text-white" size={30} />
               </div>
 
               <h2 className="text-3xl md:text-4xl font-black text-white mt-6">
@@ -147,10 +155,9 @@ const About = () => {
               </p>
             </div>
 
-            {/* Mission */}
-            <div className="h-full bg-white border border-borderSoft rounded-card p-8 md:p-10 shadow-card">
+            <div className="bg-white border border-borderSoft rounded-card p-8 md:p-10 shadow-card h-full">
               <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center">
-                <Target className="text-primary" size={29} />
+                <Target className="text-primary" size={30} />
               </div>
 
               <h2 className="text-3xl md:text-4xl font-black text-dark mt-6">
@@ -176,19 +183,19 @@ const About = () => {
       {/* OUR STRATEGY */}
       <section className="py-20 md:py-24 bg-white">
         <div className="container-custom">
-          <div className="grid lg:grid-cols-[0.75fr_1.25fr] gap-10 lg:gap-16 items-start">
-            <div>
-              <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center">
-                <GitBranch className="text-primary" size={29} />
+          <div className="bg-lightBg border border-borderSoft rounded-card p-8 md:p-10">
+            <div className="grid lg:grid-cols-2 gap-8 items-center">
+              <div>
+                <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center">
+                  <GitBranch className="text-primary" size={30} />
+                </div>
+
+                <h2 className="text-3xl md:text-4xl font-black text-dark mt-6">
+                  Our Strategy
+                </h2>
               </div>
 
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-dark mt-6">
-                Our Strategy
-              </h2>
-            </div>
-
-            <div>
-              <p className="text-textGray text-[17px] leading-8">
+              <p className="text-textGray leading-8">
                 Our strategy is built around experiential learning rather than
                 conventional teaching. We combine modern technologies,
                 real-world industry projects, AI-driven innovation, structured
@@ -207,30 +214,32 @@ const About = () => {
       {/* OUR VALUES */}
       <section className="py-20 md:py-24 bg-lightBg">
         <div className="container-custom">
-          <div className="grid lg:grid-cols-[0.75fr_1.25fr] gap-10 lg:gap-16 items-start">
-            <div>
-              <div className="w-14 h-14 rounded-2xl bg-primary text-white flex items-center justify-center">
-                <CheckCircle2 size={29} />
-              </div>
-
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-dark mt-6">
-                Our Values
-              </h2>
+          <div className="text-center max-w-3xl mx-auto mb-12">
+            <div className="w-14 h-14 mx-auto rounded-2xl bg-primary/10 flex items-center justify-center">
+              <CheckCircle2 className="text-primary" size={30} />
             </div>
 
-            <div className="bg-white border border-borderSoft rounded-card shadow-card p-7 md:p-9">
-              <ul className="grid sm:grid-cols-2 gap-x-10 gap-y-5">
-                {values.map((value, index) => (
-                  <li
-                    key={index}
-                    className="flex items-start gap-3 text-softDark leading-7"
-                  >
-                    <span className="mt-[10px] h-2 w-2 rounded-full bg-primary shrink-0" />
-                    <span>{value}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            <h2 className="text-3xl md:text-5xl font-black text-dark mt-6">
+              Our Values
+            </h2>
+          </div>
+
+          <div className="bg-white border border-borderSoft rounded-card shadow-card p-8 md:p-10">
+            <ul className="grid md:grid-cols-2 gap-x-12 gap-y-5">
+              {values.map((value, index) => (
+                <li
+                  key={index}
+                  className="flex items-start gap-4 text-textGray leading-7"
+                >
+                  <CheckCircle2
+                    size={20}
+                    className="text-primary shrink-0 mt-1"
+                  />
+
+                  <span>{value}</span>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       </section>
@@ -238,25 +247,47 @@ const About = () => {
       {/* STRATEGY & ACTION PLAN */}
       <section className="py-20 md:py-24 bg-white">
         <div className="container-custom">
-          <div className="grid lg:grid-cols-[0.75fr_1.25fr] gap-10 lg:gap-16 items-start">
-            <div>
-              <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center">
-                <BookOpenCheck className="text-primary" size={29} />
-              </div>
-
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-dark leading-tight mt-6">
-                Strategy & Action Plan
-              </h2>
+          <div className="text-center max-w-3xl mx-auto mb-12">
+            <div className="w-14 h-14 mx-auto rounded-2xl bg-primary/10 flex items-center justify-center">
+              <BookOpenCheck className="text-primary" size={30} />
             </div>
 
-            <div className="bg-lightBg border border-borderSoft rounded-card p-7 md:p-9">
-              <ul className="grid md:grid-cols-2 gap-x-10 gap-y-5">
-                {actionPlan.map((item, index) => (
+            <h2 className="text-3xl md:text-5xl font-black text-dark mt-6">
+              Strategy & Action Plan
+            </h2>
+          </div>
+
+          <div className="grid lg:grid-cols-2 gap-8 items-stretch">
+            <div className="bg-lightBg border border-borderSoft rounded-card p-8 md:p-10">
+              <ul className="space-y-5">
+                {actionPlanLeft.map((item, index) => (
                   <li
                     key={index}
-                    className="flex items-start gap-3 text-softDark leading-7"
+                    className="flex items-start gap-4 text-textGray leading-7"
                   >
-                    <span className="mt-[10px] h-2 w-2 rounded-full bg-primary shrink-0" />
+                    <CheckCircle2
+                      size={20}
+                      className="text-primary shrink-0 mt-1"
+                    />
+
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="bg-lightBg border border-borderSoft rounded-card p-8 md:p-10">
+              <ul className="space-y-5">
+                {actionPlanRight.map((item, index) => (
+                  <li
+                    key={index}
+                    className="flex items-start gap-4 text-textGray leading-7"
+                  >
+                    <CheckCircle2
+                      size={20}
+                      className="text-primary shrink-0 mt-1"
+                    />
+
                     <span>{item}</span>
                   </li>
                 ))}
@@ -266,29 +297,29 @@ const About = () => {
         </div>
       </section>
 
-      {/* HOW WE WORK */}
+      {/* HOW WE WORK? */}
       <section className="py-20 md:py-24 bg-dark">
         <div className="container-custom">
-          <div className="grid lg:grid-cols-[0.75fr_1.25fr] gap-10 lg:gap-16 items-start">
-            <div className="lg:sticky lg:top-32">
-              <div className="w-14 h-14 rounded-2xl bg-primary flex items-center justify-center">
-                <GraduationCap className="text-white" size={29} />
-              </div>
-
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-black text-white mt-6">
-                How We Work?
-              </h2>
+          <div className="text-center max-w-3xl mx-auto mb-12">
+            <div className="w-14 h-14 mx-auto rounded-2xl bg-primary flex items-center justify-center">
+              <GraduationCap className="text-white" size={30} />
             </div>
 
-            <div className="bg-white/5 border border-white/10 rounded-card p-7 md:p-10">
-              <div className="space-y-0">
-                <p className="text-white/80 text-[17px] leading-8 pb-7">
+            <h2 className="text-3xl md:text-5xl font-black text-white mt-6">
+              How We Work?
+            </h2>
+          </div>
+
+          <div className="grid lg:grid-cols-2 gap-8 items-stretch">
+            <div className="bg-white/5 border border-white/10 rounded-card p-8 md:p-10">
+              <div className="space-y-7">
+                <p className="text-white/80 leading-8">
                   Our training method is based on a step-by-step implementation
                   model that replicates the workflow of today's leading
                   technology companies.
                 </p>
 
-                <p className="text-white/80 text-[17px] leading-8 py-7 border-t border-white/10">
+                <p className="text-white/80 leading-8">
                   Initially, all students focus on building strong technical
                   fundamentals. Then, they gradually move on to practical
                   assignments and guided implementation. Finally, as their
@@ -297,8 +328,12 @@ const About = () => {
                   business challenges using the most recent tools, frameworks,
                   and deployment practices.
                 </p>
+              </div>
+            </div>
 
-                <p className="text-white/80 text-[17px] leading-8 py-7 border-t border-white/10">
+            <div className="bg-white/5 border border-white/10 rounded-card p-8 md:p-10">
+              <div className="space-y-7">
+                <p className="text-white/80 leading-8">
                   Also, during the entire duration of the program, students are
                   continuously mentored by professionals from the industry.
                   These mentors continuously review their project works, give
@@ -309,7 +344,7 @@ const About = () => {
                   communication, and problem-solving skills.
                 </p>
 
-                <p className="text-white/80 text-[17px] leading-8 py-7 border-t border-white/10">
+                <p className="text-white/80 leading-8">
                   After the completion of the projects, students get involved
                   in gaining internship experience. They also work on portfolio
                   development, GitHub optimisation, resume building and undergo
@@ -319,15 +354,17 @@ const About = () => {
                   preparation, career counseling, and job openings until they
                   get ready to confidently begin their professional careers.
                 </p>
-
-                <p className="text-white text-[17px] font-bold leading-8 pt-7 border-t border-white/10">
-                  Here, at IT Sparks Technologies, education is not just
-                  theoretical learning. It is a continuous process of building,
-                  creating, deploying, and growing, because real careers are
-                  built through real experience.
-                </p>
               </div>
             </div>
+          </div>
+
+          <div className="mt-8 bg-primary rounded-card p-8 md:p-10">
+            <p className="text-white text-center font-bold text-lg leading-8 max-w-5xl mx-auto">
+              Here, at IT Sparks Technologies, education is not just
+              theoretical learning. It is a continuous process of building,
+              creating, deploying, and growing, because real careers are built
+              through real experience.
+            </p>
           </div>
         </div>
       </section>
