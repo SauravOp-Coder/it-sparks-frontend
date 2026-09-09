@@ -10,6 +10,7 @@ import {
 
 const EnquiryPopup = () => {
   const navigate = useNavigate();
+
   const [showPopup, setShowPopup] = useState(false);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState("");
@@ -37,8 +38,14 @@ const EnquiryPopup = () => {
     const { name, value } = e.target;
 
     let nextValue = value;
-    if (name === "mobile") nextValue = sanitizeMobileInput(value);
-    if (name === "fullName") nextValue = sanitizeNameInput(value);
+
+    if (name === "mobile") {
+      nextValue = sanitizeMobileInput(value);
+    }
+
+    if (name === "fullName") {
+      nextValue = sanitizeNameInput(value);
+    }
 
     setFormData((prev) => ({
       ...prev,
@@ -46,7 +53,10 @@ const EnquiryPopup = () => {
     }));
 
     if (fieldErrors[name]) {
-      setFieldErrors((prev) => ({ ...prev, [name]: "" }));
+      setFieldErrors((prev) => ({
+        ...prev,
+        [name]: "",
+      }));
     }
   };
 
@@ -54,6 +64,7 @@ const EnquiryPopup = () => {
     e.preventDefault();
 
     const errors = validateEnquiryForm(formData);
+
     if (Object.keys(errors).length > 0) {
       setFieldErrors(errors);
       return;
@@ -71,6 +82,7 @@ const EnquiryPopup = () => {
       });
 
       setSuccess("Enquiry submitted successfully.");
+
       setFormData({
         fullName: "",
         mobile: "",
@@ -86,7 +98,9 @@ const EnquiryPopup = () => {
         navigate("/thank-you");
       }, 1500);
     } catch (error) {
-      setError(error.response?.data?.message || "Failed to submit enquiry.");
+      setError(
+        error.response?.data?.message || "Failed to submit enquiry."
+      );
     } finally {
       setLoading(false);
     }
@@ -95,9 +109,16 @@ const EnquiryPopup = () => {
   if (!showPopup) return null;
 
   return (
-    <div className="fixed inset-0 z-[80] bg-black/60 flex items-center justify-center px-4">
-      <div className="bg-white rounded-card w-full max-w-xl shadow-soft relative overflow-hidden">
+    <div
+      className="fixed inset-0 z-[80] bg-black/60 flex items-center justify-center px-4"
+      onClick={() => setShowPopup(false)}
+    >
+      <div
+        className="bg-white rounded-card w-full max-w-xl shadow-soft relative overflow-hidden"
+        onClick={(e) => e.stopPropagation()}
+      >
         <button
+          type="button"
           onClick={() => setShowPopup(false)}
           className="absolute top-4 right-4 h-9 w-9 rounded-full bg-lightBg flex items-center justify-center text-dark hover:text-primary transition"
           aria-label="Close popup"
@@ -109,15 +130,21 @@ const EnquiryPopup = () => {
           <span className="text-primary font-bold uppercase text-sm">
             Course Enquiry
           </span>
+
           <h2 className="text-2xl font-extrabold mt-2">
             Book Your Free Demo Session
           </h2>
+
           <p className="text-white/70 mt-2">
             Fill the form and our team will contact you shortly.
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} noValidate className="p-6 grid gap-4">
+        <form
+          onSubmit={handleSubmit}
+          noValidate
+          className="p-6 grid gap-4"
+        >
           {success && (
             <div className="bg-green-50 border border-green-100 text-green-700 rounded-button px-4 py-3 text-sm font-semibold">
               {success}
@@ -139,11 +166,16 @@ const EnquiryPopup = () => {
                 onChange={handleChange}
                 placeholder="Full Name"
                 className={`w-full border rounded-button px-4 py-3 outline-none focus:border-primary ${
-                  fieldErrors.fullName ? "border-red-400" : "border-borderSoft"
+                  fieldErrors.fullName
+                    ? "border-red-400"
+                    : "border-borderSoft"
                 }`}
               />
+
               {fieldErrors.fullName && (
-                <p className="text-red-500 text-xs mt-1 px-1">{fieldErrors.fullName}</p>
+                <p className="text-red-500 text-xs mt-1 px-1">
+                  {fieldErrors.fullName}
+                </p>
               )}
             </div>
 
@@ -157,11 +189,16 @@ const EnquiryPopup = () => {
                 onChange={handleChange}
                 placeholder="Mobile Number"
                 className={`w-full border rounded-button px-4 py-3 outline-none focus:border-primary ${
-                  fieldErrors.mobile ? "border-red-400" : "border-borderSoft"
+                  fieldErrors.mobile
+                    ? "border-red-400"
+                    : "border-borderSoft"
                 }`}
               />
+
               {fieldErrors.mobile && (
-                <p className="text-red-500 text-xs mt-1 px-1">{fieldErrors.mobile}</p>
+                <p className="text-red-500 text-xs mt-1 px-1">
+                  {fieldErrors.mobile}
+                </p>
               )}
             </div>
           </div>
@@ -174,11 +211,16 @@ const EnquiryPopup = () => {
               onChange={handleChange}
               placeholder="Email Address"
               className={`w-full border rounded-button px-4 py-3 outline-none focus:border-primary ${
-                fieldErrors.email ? "border-red-400" : "border-borderSoft"
+                fieldErrors.email
+                  ? "border-red-400"
+                  : "border-borderSoft"
               }`}
             />
+
             {fieldErrors.email && (
-              <p className="text-red-500 text-xs mt-1 px-1">{fieldErrors.email}</p>
+              <p className="text-red-500 text-xs mt-1 px-1">
+                {fieldErrors.email}
+              </p>
             )}
           </div>
 
@@ -189,7 +231,9 @@ const EnquiryPopup = () => {
                 value={formData.interestedCourse}
                 onChange={handleChange}
                 className={`w-full border rounded-button px-4 py-3 outline-none focus:border-primary text-textGray ${
-                  fieldErrors.interestedCourse ? "border-red-400" : "border-borderSoft"
+                  fieldErrors.interestedCourse
+                    ? "border-red-400"
+                    : "border-borderSoft"
                 }`}
               >
                 <option value="">Interested Course</option>
@@ -200,8 +244,11 @@ const EnquiryPopup = () => {
                 <option>Software Testing</option>
                 <option>UI/UX Design</option>
               </select>
+
               {fieldErrors.interestedCourse && (
-                <p className="text-red-500 text-xs mt-1 px-1">{fieldErrors.interestedCourse}</p>
+                <p className="text-red-500 text-xs mt-1 px-1">
+                  {fieldErrors.interestedCourse}
+                </p>
               )}
             </div>
 
@@ -226,15 +273,24 @@ const EnquiryPopup = () => {
               rows="3"
               maxLength={500}
               className={`w-full border rounded-button px-4 py-3 outline-none focus:border-primary resize-none ${
-                fieldErrors.message ? "border-red-400" : "border-borderSoft"
+                fieldErrors.message
+                  ? "border-red-400"
+                  : "border-borderSoft"
               }`}
             />
+
             {fieldErrors.message && (
-              <p className="text-red-500 text-xs mt-1 px-1">{fieldErrors.message}</p>
+              <p className="text-red-500 text-xs mt-1 px-1">
+                {fieldErrors.message}
+              </p>
             )}
           </div>
 
-          <button type="submit" disabled={loading} className="primary-btn w-full">
+          <button
+            type="submit"
+            disabled={loading}
+            className="primary-btn w-full"
+          >
             {loading ? "Submitting..." : "Submit Enquiry"}
           </button>
         </form>
