@@ -114,10 +114,7 @@ const Navbar = () => {
   </div>
 </div>
 
-            <NavLink to="/placements" className={navLinkClass}>
-              Placements
-            </NavLink>
-
+           
             <NavLink to="/gallery" className={navLinkClass}>
               Gallery
             </NavLink>
