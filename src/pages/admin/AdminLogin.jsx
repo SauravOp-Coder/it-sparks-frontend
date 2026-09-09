@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { Lock, Mail } from "lucide-react";
 import { useState } from "react";
-import logo from "../../assets/logo/it-sparks-logo.png";
+import logo from "../../assets/logo/it-sparks-logo.webp";
 import { loginAdminApi } from "../../api/authApi";
 
 const AdminLogin = () => {
@@ -30,9 +30,9 @@ const AdminLogin = () => {
       setError("");
 
       const data = await loginAdminApi(loginData);
-      
-localStorage.setItem("token", data.token);
-localStorage.setItem("adminInfo", JSON.stringify(data.admin));
+
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("adminInfo", JSON.stringify(data.admin));
 
       navigate("/admin/dashboard");
     } catch (error) {
@@ -51,10 +51,15 @@ localStorage.setItem("adminInfo", JSON.stringify(data.admin));
           <img
             src={logo}
             alt="IT Sparks Technologies"
+            width="160"
+            height="160"
             className="h-[72px] w-auto bg-white rounded-card p-2 mx-auto mb-5"
           />
 
-          <h1 className="text-2xl font-extrabold">Admin Login</h1>
+          <h1 className="text-2xl font-extrabold">
+            Admin Login
+          </h1>
+
           <p className="text-white/70 mt-2">
             Login to manage website content
           </p>
@@ -71,8 +76,10 @@ localStorage.setItem("adminInfo", JSON.stringify(data.admin));
             <label className="text-sm font-bold text-dark">
               Email Address
             </label>
+
             <div className="mt-2 flex items-center gap-3 border border-borderSoft rounded-button px-4 py-3 focus-within:border-primary">
               <Mail size={19} className="text-textGray" />
+
               <input
                 type="email"
                 name="email"
@@ -85,9 +92,13 @@ localStorage.setItem("adminInfo", JSON.stringify(data.admin));
           </div>
 
           <div>
-            <label className="text-sm font-bold text-dark">Password</label>
+            <label className="text-sm font-bold text-dark">
+              Password
+            </label>
+
             <div className="mt-2 flex items-center gap-3 border border-borderSoft rounded-button px-4 py-3 focus-within:border-primary">
               <Lock size={19} className="text-textGray" />
+
               <input
                 type="password"
                 name="password"
@@ -99,7 +110,11 @@ localStorage.setItem("adminInfo", JSON.stringify(data.admin));
             </div>
           </div>
 
-          <button type="submit" disabled={loading} className="primary-btn w-full">
+          <button
+            type="submit"
+            disabled={loading}
+            className="primary-btn w-full"
+          >
             {loading ? "Logging in..." : "Login"}
           </button>
 
