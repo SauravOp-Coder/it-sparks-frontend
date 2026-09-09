@@ -167,6 +167,35 @@ const HomeContentBuilder = () => {
         </div>
       )}
 
+      
+      {/* ========================= */}
+      {/* CTA Section */}
+      {/* ========================= */}
+      {home?.ctaTitle && (
+        <div className="mt-20 w-full">
+          <div className="rounded-3xl bg-primary p-8 md:p-12 text-center text-white shadow-lg max-w-4xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight">
+              {home.ctaTitle}
+            </h2>
+
+            {home.ctaSubtitle && (
+              <p className="mt-3 max-w-2xl mx-auto text-base md:text-lg opacity-90 leading-relaxed">
+                {home.ctaSubtitle}
+              </p>
+            )}
+
+            {home.ctaButtonText && (
+              <a
+                href={home.ctaButtonLink || "/contact"}
+                className="inline-block mt-6 rounded-xl bg-white px-7 py-3.5 text-base font-bold text-primary transition hover:scale-105 shadow-sm"
+              >
+                {home.ctaButtonText}
+              </a>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* ========================= */}
       {/* FAQs */}
       {/* ========================= */}
@@ -220,33 +249,6 @@ const HomeContentBuilder = () => {
         </div>
       )}
 
-      {/* ========================= */}
-      {/* CTA Section */}
-      {/* ========================= */}
-      {home?.ctaTitle && (
-        <div className="mt-20 w-full">
-          <div className="rounded-3xl bg-primary p-8 md:p-12 text-center text-white shadow-lg max-w-4xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight">
-              {home.ctaTitle}
-            </h2>
-
-            {home.ctaSubtitle && (
-              <p className="mt-3 max-w-2xl mx-auto text-base md:text-lg opacity-90 leading-relaxed">
-                {home.ctaSubtitle}
-              </p>
-            )}
-
-            {home.ctaButtonText && (
-              <a
-                href={home.ctaButtonLink || "/contact"}
-                className="inline-block mt-6 rounded-xl bg-white px-7 py-3.5 text-base font-bold text-primary transition hover:scale-105 shadow-sm"
-              >
-                {home.ctaButtonText}
-              </a>
-            )}
-          </div>
-        </div>
-      )}
 
     </div>
   </section>
