@@ -10,129 +10,6 @@ import {
 const CourseCard = ({ course }) => {
   const courseSlug = course.slug || course._id || course.id;
 
-   const validateBrochureForm = (data) => {
-      const errors = {};
-  
-      if (!data.name.trim()) {
-        errors.name = "Name is required.";
-      } else if (!nameRegex.test(data.name.trim())) {
-        errors.name = "Enter a valid name (letters only, 2-50 characters).";
-      }
-  
-      if (!data.mobile.trim()) {
-        errors.mobile = "Mobile number is required.";
-      } else if (!mobileRegex.test(data.mobile.trim())) {
-        errors.mobile = "Enter a valid 10-digit mobile number.";
-      }
-  
-      if (data.email.trim() && !emailRegex.test(data.email.trim())) {
-        errors.email = "Enter a valid email address.";
-      }
-  
-      return errors;
-    };
-  
-   const getPdfFileName = () => {
-    const safeTitle = course.title
-      .replace(/[^a-z0-9]/gi, "-")
-      .replace(/-+/g, "-")
-      .toLowerCase();
-  
-    const originalName = course.brochure?.originalName;
-  
-    if (originalName && originalName.toLowerCase().endsWith(".pdf")) {
-      return originalName;
-    }
-  
-    return `${safeTitle}-brochure.pdf`;
-  };
-  
-  const downloadBrochure = async () => {
-    if (!course?.brochure?.url) return;
-  
-    try {
-      const response = await fetch(course.brochure.url);
-      const blob = await response.blob();
-  
-      const pdfBlob = new Blob([blob], {
-        type: "application/pdf",
-      });
-  
-      const blobUrl = window.URL.createObjectURL(pdfBlob);
-  
-      const link = document.createElement("a");
-      link.href = blobUrl;
-      link.download = getPdfFileName();
-  
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-  
-      window.URL.revokeObjectURL(blobUrl);
-    } catch (error) {
-      window.open(course.brochure.url, "_blank");
-    }
-  };
-    const handleBrochureSubmit = async (e) => {
-      e.preventDefault();
-  
-      const errors = validateBrochureForm(enquiryData);
-      if (Object.keys(errors).length > 0) {
-        setBrochureFieldErrors(errors);
-        return;
-      }
-  
-      try {
-        setBrochureLoading(true);
-        setBrochureError("");
-        setBrochureFieldErrors({});
-  
-        await createEnquiryApi({
-          name: enquiryData.name,
-          fullName: enquiryData.name,
-  
-          mobile: enquiryData.mobile,
-          number: enquiryData.mobile,
-          phone: enquiryData.mobile,
-          mobileNumber: enquiryData.mobile,
-  
-          email: enquiryData.email,
-  
-          interestedCourse: course.title,
-          course: course.title,
-          courseName: course.title,
-  
-          enquiryType: "Brochure Download",
-          message:
-            enquiryData.message ||
-            `Student downloaded brochure for ${course.title}`,
-        });
-  
-        setShowBrochureForm(false);
-        setEnquiryData({
-          name: "",
-          mobile: "",
-          email: "",
-          message: "",
-        });
-  
-        downloadBrochure();
-  
-        // Redirect to thank you page after a short delay
-        setTimeout(() => {
-          navigate("/thank-you");
-        }, 500);
-      } catch (error) {
-        setBrochureError(
-          error.response?.data?.message ||
-            "Failed to submit enquiry. Please try again."
-        );
-      } finally {
-        setBrochureLoading(false);
-      }
-    };
-  
-
   return (
     <div className="group bg-white border border-borderSoft rounded-card shadow-card overflow-hidden card-hover">
       <div className="relative h-[230px] overflow-hidden bg-gradient-to-br from-primary/10 via-lightBg to-white">
@@ -192,13 +69,12 @@ const CourseCard = ({ course }) => {
         </div>
 
         <div className="grid grid-cols-2 gap-3 mt-6">
-           <button 
-                type="submit"
-                disabled={brochureLoading}
-                className="primary-btn text-sm px-3 py-3"
-              >
-                {brochureLoading ? "Submitting..." : "Submit & Download"}
-              </button>
+          <Link
+            to={`/courses/${courseSlug}`}
+            className="secondary-btn text-sm px-3 py-3"
+          >
+            Details
+          </Link>
 
           <Link to="/contact" className="primary-btn text-sm px-3 py-3">
             Enquire
