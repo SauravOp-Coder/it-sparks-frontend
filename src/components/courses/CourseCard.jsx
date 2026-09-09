@@ -69,12 +69,13 @@ const CourseCard = ({ course }) => {
         </div>
 
         <div className="grid grid-cols-2 gap-3 mt-6">
-          <Link
-            to={`/courses/${courseSlug}`}
-            className="secondary-btn text-sm px-3 py-3"
-          >
-            Details
-          </Link>
+           <button
+                type="submit"
+                disabled={brochureLoading}
+                className="primary-btn"
+              >
+                {brochureLoading ? "Submitting..." : "Submit & Download"}
+              </button>
 
           <Link to="/contact" className="primary-btn text-sm px-3 py-3">
             Enquire
