@@ -44,9 +44,7 @@ const Courses = () => {
 
       <section className="section-padding bg-white">
         <div className="container-custom">
-          <div className="text-center max-w-3xl mx-auto">
-            
-          </div>
+         
 
           {loading ? (
             <div className="mt-14 bg-lightBg border border-borderSoft rounded-card p-10 text-center text-textGray font-semibold">
