@@ -94,7 +94,6 @@ const HomeBannerSlider = () => {
         {/* Overlay */}
         <div className="absolute inset-0 bg-gradient-to-r from-[#020817]/95 via-[#020817]/70 to-[#020817]/30" />
 
-        <div className="absolute inset-0 bg-black/20" />
       </div>
 
       {/* Content */}
