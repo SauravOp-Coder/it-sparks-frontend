@@ -27,7 +27,7 @@ const WhatsAppButton = () => {
       href={`https://wa.me/${cleanNumber}?text=Hi, I want to know more about IT Sparks Technologies courses.`}
       target="_blank"
       rel="noreferrer"
-      className="fixed bottom-6 right-6 z-50 h-14 w-14 rounded-full bg-green-500 text-white flex items-center justify-center shadow-soft hover:scale-105 transition"
+      className="fixed bottom-6 left-6 z-50 h-14 w-14 rounded-full bg-green-500 text-white flex items-center justify-center shadow-soft hover:scale-105 transition"
       aria-label="Chat on WhatsApp"
     >
       <MessageCircle size={28} />
