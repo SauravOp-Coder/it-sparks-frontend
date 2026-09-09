@@ -4,14 +4,15 @@ import { useEffect, useState } from "react";
 import logo from "../../assets/logo/it-sparks-logo.png";
 import { getCoursesApi } from "../../api/courseApi";
 import { getSettingsApi } from "../../api/settingApi";
-import FreeDemoPopup from "../../components/common/FreeDemoPopup";
+import FreeDemoPopup from "./FreeDemoPopup";
 
 const Navbar = () => {
   const [openMenu, setOpenMenu] = useState(false);
   const [courses, setCourses] = useState([]);
   const [settings, setSettings] = useState(null);
+
+  // NEW: Free Demo Popup state
   const [demoPopupOpen, setDemoPopupOpen] = useState(false);
-  
 
   const fetchData = async () => {
     try {
@@ -50,6 +51,7 @@ const Navbar = () => {
               <p className="text-[18px] font-black tracking-tight text-dark">
                 IT Sparks
               </p>
+
               <p className="text-[12px] font-bold tracking-[0.2em] text-primary uppercase">
                 Technologies
               </p>
@@ -65,59 +67,60 @@ const Navbar = () => {
               About
             </NavLink>
 
-       <div className="relative group">
-  <NavLink
-    to="/courses"
-    className="text-[15px] font-bold text-softDark hover:text-primary transition flex items-center gap-1"
-  >
-    Courses <ChevronDown size={16} />
-  </NavLink>
+            <div className="relative group">
+              <NavLink
+                to="/courses"
+                className="text-[15px] font-bold text-softDark hover:text-primary transition flex items-center gap-1"
+              >
+                Courses <ChevronDown size={16} />
+              </NavLink>
 
-  <div className="absolute left-1/2 -translate-x-1/2 top-full pt-6 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
-    <div className="w-[520px] bg-white border border-borderSoft rounded-card shadow-soft p-4">
-      <div className="grid grid-cols-2 gap-2">
-        {courses.length > 0 ? (
-          courses.map((course) => (
-            <Link
-              key={course._id}
-              to={`/courses/${course.slug || course._id}`}
-              className="p-4 rounded-[18px] hover:bg-lightBg transition"
-            >
-              <p className="font-extrabold text-dark text-sm">
-                {/* FIXED HERE: replaced dropdownTitle with dropdownName */}
-                {course.dropdownName || course.title}
-              </p>
-              <p className="text-xs text-textGray mt-1 line-clamp-2">
-                {course.description}
-              </p>
-            </Link>
-          ))
-        ) : (
-          <Link
-            to="/courses"
-            className="col-span-2 p-4 rounded-[18px] hover:bg-lightBg transition"
-          >
-            <p className="font-extrabold text-dark">
-              Explore Courses
-            </p>
-            <p className="text-sm text-textGray mt-1">
-              View all available practical IT courses.
-            </p>
-          </Link>
-        )}
-      </div>
+              <div className="absolute left-1/2 -translate-x-1/2 top-full pt-6 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                <div className="w-[520px] bg-white border border-borderSoft rounded-card shadow-soft p-4">
+                  <div className="grid grid-cols-2 gap-2">
+                    {courses.length > 0 ? (
+                      courses.map((course) => (
+                        <Link
+                          key={course._id}
+                          to={`/courses/${course.slug || course._id}`}
+                          className="p-4 rounded-[18px] hover:bg-lightBg transition"
+                        >
+                          <p className="font-extrabold text-dark text-sm">
+                            {/* FIXED HERE: replaced dropdownTitle with dropdownName */}
+                            {course.dropdownName || course.title}
+                          </p>
 
-      <Link
-        to="/courses"
-        className="mt-4 w-full primary-btn text-sm py-3 flex items-center justify-center"
-      >
-        View All Courses
-      </Link>
-    </div>
-  </div>
-</div>
+                          <p className="text-xs text-textGray mt-1 line-clamp-2">
+                            {course.description}
+                          </p>
+                        </Link>
+                      ))
+                    ) : (
+                      <Link
+                        to="/courses"
+                        className="col-span-2 p-4 rounded-[18px] hover:bg-lightBg transition"
+                      >
+                        <p className="font-extrabold text-dark">
+                          Explore Courses
+                        </p>
 
-           
+                        <p className="text-sm text-textGray mt-1">
+                          View all available practical IT courses.
+                        </p>
+                      </Link>
+                    )}
+                  </div>
+
+                  <Link
+                    to="/courses"
+                    className="mt-4 w-full primary-btn text-sm py-3 flex items-center justify-center"
+                  >
+                    View All Courses
+                  </Link>
+                </div>
+              </div>
+            </div>
+
             <NavLink to="/gallery" className={navLinkClass}>
               Gallery
             </NavLink>
@@ -132,15 +135,13 @@ const Navbar = () => {
           </div>
 
           <div className="hidden lg:flex items-center gap-4">
-            
-
-          <button
-  type="button"
-  onClick={() => setDemoPopupOpen(true)}
-  className="hidden lg:flex items-center gap-4"
->
-  Join Free Demo
-</button>
+            <button
+              type="button"
+              onClick={() => setDemoPopupOpen(true)}
+              className="primary-btn py-3"
+            >
+              Book Free Demo
+            </button>
           </div>
 
           <button
@@ -173,21 +174,25 @@ const Navbar = () => {
                 </NavLink>
               ))}
 
-              <Link
-                to="/contact"
-                onClick={() => setOpenMenu(false)}
+              <button
+                type="button"
+                onClick={() => {
+                  setOpenMenu(false);
+                  setDemoPopupOpen(true);
+                }}
                 className="primary-btn w-full"
               >
                 Book Free Demo
-              </Link>
+              </button>
             </div>
           </div>
         )}
-        <FreeDemoPopup
-  isOpen={demoPopupOpen}
-  onClose={() => setDemoPopupOpen(false)}
-/>
       </div>
+
+      <FreeDemoPopup
+        isOpen={demoPopupOpen}
+        onClose={() => setDemoPopupOpen(false)}
+      />
     </header>
   );
 };
