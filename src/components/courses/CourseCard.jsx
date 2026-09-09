@@ -192,10 +192,10 @@ const CourseCard = ({ course }) => {
         </div>
 
         <div className="grid grid-cols-2 gap-3 mt-6">
-           <button
+           <button 
                 type="submit"
                 disabled={brochureLoading}
-                className="primary-btn"
+                className="primary-btn text-sm px-3 py-3"
               >
                 {brochureLoading ? "Submitting..." : "Submit & Download"}
               </button>
