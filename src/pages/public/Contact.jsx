@@ -529,40 +529,50 @@ const Contact = () => {
           GOOGLE MAP SECTION
       ====================================================== */}
 
-      <section className="pb-20 bg-white">
-        <div className="container-custom">
-          <div className="bg-lightBg border border-borderSoft rounded-card overflow-hidden">
-            <div className="h-[360px] flex items-center justify-center text-center px-6">
-              <div>
-                <MapPin
-                  className="text-primary mx-auto mb-4"
-                  size={42}
-                />
+      {/* =====================================================
+    GOOGLE MAP SECTION
+====================================================== */}
 
-                <h2 className="text-2xl font-extrabold text-dark">
-                  Google Map Section
-                </h2>
+<section className="pb-20 bg-white">
+  <div className="container-custom">
+    <div className="bg-lightBg border border-borderSoft rounded-card overflow-hidden shadow-card">
+      <a
+        href={
+          settings?.googleMapLink ||
+          `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+            settings?.address ||
+              "IT Sparks Technologies, Narhe, Pune, Maharashtra 411041"
+          )}`
+        }
+        target="_blank"
+        rel="noopener noreferrer"
+        className="relative block h-[360px] w-full group"
+        aria-label="Open IT Sparks Technologies location in Google Maps"
+      >
+        <iframe
+          title="IT Sparks Technologies Location"
+          src={`https://www.google.com/maps?q=${encodeURIComponent(
+            settings?.address ||
+              "IT Sparks Technologies, First Floor, Shop No. S-20, Audumbar Complex, A Wing, Narhe, Pune, Maharashtra 411041"
+          )}&output=embed`}
+          width="100%"
+          height="100%"
+          loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
+          className="absolute inset-0 w-full h-full border-0 pointer-events-none"
+        />
 
-                <p className="text-textGray mt-2 mb-5">
-                  View our location on Google Maps.
-                </p>
+        {/* Hover indication */}
+        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition pointer-events-none" />
 
-                <a
-                  href={
-                    settings?.googleMapLink ||
-                    "https://www.google.com/maps"
-                  }
-                  target="_blank"
-                  rel="noreferrer"
-                  className="primary-btn inline-flex items-center justify-center"
-                >
-                  Open Google Map
-                </a>
-              </div>
-            </div>
-          </div>
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white text-dark px-5 py-3 rounded-button shadow-card font-bold flex items-center gap-2 pointer-events-none">
+          <MapPin size={18} className="text-primary" />
+          Open in Google Maps
         </div>
-      </section>
+      </a>
+    </div>
+  </div>
+</section>
     </main>
   );
 };
