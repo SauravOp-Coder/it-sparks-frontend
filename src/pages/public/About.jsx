@@ -64,13 +64,9 @@ const About = () => {
       <section className="py-20 md:py-24 bg-white">
         <div className="container-custom">
           <div className="text-center max-w-4xl mx-auto mb-12">
-            <div className="w-14 h-14 mx-auto rounded-2xl bg-primary/10 flex items-center justify-center">
-              <GraduationCap className="text-primary" size={30} />
-            </div>
+           
 
-            <h2 className="text-3xl md:text-5xl font-black text-dark mt-6">
-              About IT Sparks Technologies
-            </h2>
+           
           </div>
 
           <div className="grid lg:grid-cols-2 gap-8 items-stretch">
