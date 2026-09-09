@@ -121,10 +121,10 @@ const HomeBannerSlider = () => {
             )}
 
             <Link
-              to="/courses"
+              to="/contact"
               className="inline-flex items-center px-8 py-4 border border-white/40 text-white rounded-xl font-bold backdrop-blur hover:bg-white hover:text-dark transition"
             >
-              Explore Courses
+              Contact
             </Link>
           </div>
         </div>
