@@ -21,15 +21,22 @@ const HeroSection = () => {
   }, []);
 
   const heroBadge = home?.heroBadge || "IT Training Institute";
+
   const heroHeading =
     home?.heroHeading || "Build Your Career With Practical IT Training";
+
   const heroSubheading =
     home?.heroSubheading ||
     "Learn industry-focused skills with practical training, real projects, expert guidance, and placement support.";
+
   const primaryButtonText = home?.primaryButtonText || "Explore Courses";
   const primaryButtonLink = home?.primaryButtonLink || "/courses";
-  const secondaryButtonText = home?.secondaryButtonText || "Book Free Demo";
-  const secondaryButtonLink = home?.secondaryButtonLink || "/contact";
+
+  const secondaryButtonText =
+    home?.secondaryButtonText || "Book Free Demo";
+
+  const secondaryButtonLink =
+    home?.secondaryButtonLink || "/contact";
 
   return (
     <section className="relative overflow-hidden bg-gradient-to-br from-white via-lightBg to-white">
@@ -37,6 +44,7 @@ const HeroSection = () => {
 
       <div className="container-custom relative py-20 lg:py-28">
         <div className="grid lg:grid-cols-[1.05fr_0.95fr] gap-12 items-center">
+
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
@@ -56,11 +64,18 @@ const HeroSection = () => {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 mt-8">
-              <Link to={primaryButtonLink} className="primary-btn">
-                {primaryButtonText} <ArrowRight size={19} className="ml-2" />
+              <Link
+                to={primaryButtonLink}
+                className="primary-btn"
+              >
+                {primaryButtonText}
+                <ArrowRight size={19} className="ml-2" />
               </Link>
 
-              <Link to={secondaryButtonLink} className="secondary-btn">
+              <Link
+                to={secondaryButtonLink}
+                className="secondary-btn"
+              >
                 <PlayCircle size={19} className="mr-2" />
                 {secondaryButtonText}
               </Link>
@@ -68,18 +83,33 @@ const HeroSection = () => {
 
             <div className="grid grid-cols-3 gap-4 mt-10 max-w-xl">
               <div className="bg-white rounded-card p-5 shadow-card">
-                <h3 className="text-2xl font-extrabold text-dark">20+</h3>
-                <p className="text-sm text-textGray mt-1">Courses</p>
+                <h3 className="text-2xl font-extrabold text-dark">
+                  20+
+                </h3>
+
+                <p className="text-sm text-textGray mt-1">
+                  Courses
+                </p>
               </div>
 
               <div className="bg-white rounded-card p-5 shadow-card">
-                <h3 className="text-2xl font-extrabold text-dark">500+</h3>
-                <p className="text-sm text-textGray mt-1">Students</p>
+                <h3 className="text-2xl font-extrabold text-dark">
+                  500+
+                </h3>
+
+                <p className="text-sm text-textGray mt-1">
+                  Students
+                </p>
               </div>
 
               <div className="bg-white rounded-card p-5 shadow-card">
-                <h3 className="text-2xl font-extrabold text-dark">100%</h3>
-                <p className="text-sm text-textGray mt-1">Practical</p>
+                <h3 className="text-2xl font-extrabold text-dark">
+                  100%
+                </h3>
+
+                <p className="text-sm text-textGray mt-1">
+                  Practical
+                </p>
               </div>
             </div>
           </motion.div>
@@ -90,9 +120,7 @@ const HeroSection = () => {
             transition={{ duration: 0.55, delay: 0.1 }}
             className="relative"
           >
-            <div className="absolute -inset-4 bg-primary/10 rounded-[40px] blur-2xl" />
-
-            <div className="relative bg-dark rounded-[34px] p-5 shadow-soft overflow-hidden">
+            <div className="relative bg-dark rounded-[34px] p-5 overflow-hidden">
               {home?.heroImage?.url ? (
                 <img
                   src={home.heroImage.url}
@@ -105,6 +133,7 @@ const HeroSection = () => {
                     <h3 className="text-4xl font-extrabold">
                       IT Sparks Technologies
                     </h3>
+
                     <p className="text-white/75 mt-4 leading-7">
                       Practical training. Real projects. Career growth.
                     </p>
@@ -113,13 +142,17 @@ const HeroSection = () => {
               )}
 
               <div className="absolute bottom-8 left-8 right-8 bg-white/95 backdrop-blur rounded-card p-5 shadow-card">
-                <p className="text-sm font-bold text-primary">Live Training</p>
+                <p className="text-sm font-bold text-primary">
+                  Live Training
+                </p>
+
                 <h3 className="text-xl font-extrabold text-dark mt-1">
                   Project-based learning approach
                 </h3>
               </div>
             </div>
           </motion.div>
+
         </div>
       </div>
     </section>
