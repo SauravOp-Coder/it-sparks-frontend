@@ -121,7 +121,7 @@ const HomeBannerSlider = () => {
               to="/contact"
               className="inline-flex items-center px-8 py-4 border border-white/40 text-white rounded-xl font-bold backdrop-blur hover:bg-white hover:text-dark transition"
             >
-              Contact
+              Contact Us 
             </Link>
           </div>
         </div>
