@@ -93,9 +93,6 @@ const HomeBannerSlider = () => {
           decoding="async"
           className="h-full w-full object-cover"
         />
-
-        {/* Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#020817]/95 via-[#020817]/70 to-[#020817]/30" />
       </div>
 
       {/* Content */}
