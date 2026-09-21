@@ -9,6 +9,9 @@ const Gallery = () => {
   const [galleryItems, setGalleryItems] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  
+  const [demoPopupOpen, setDemoPopupOpen] = useState(false);
+
   const fetchGallery = async () => {
     try {
       setLoading(true);
