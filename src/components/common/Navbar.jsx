@@ -161,7 +161,7 @@ const Navbar = () => {
                 ["/", "Home"],
                 ["/about", "About"],
                 ["/courses", "Courses"],
-                ["/placements", "Placements"],
+              
                 ["/gallery", "Gallery"],
                 ["/blog", "Blog"],
                 ["/contact", "Contact"],
