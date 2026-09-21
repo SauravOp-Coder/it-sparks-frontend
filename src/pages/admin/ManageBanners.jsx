@@ -17,6 +17,7 @@ const emptyForm = {
   order: "0",
   isVisible: true,
   image: null,
+  mobileImage: null,
 };
 
 const pages = [
@@ -80,6 +81,7 @@ const ManageBanners = () => {
       order: String(banner.order || 0),
       isVisible: Boolean(banner.isVisible),
       image: null,
+      mobileImage: null,
     });
 
     setShowForm(true);
@@ -254,14 +256,34 @@ const ManageBanners = () => {
               placeholder="Order"
               className="border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
             />
+          </div>
 
-            <input
-              name="image"
-              type="file"
-              accept="image/*"
-              onChange={handleChange}
-              className="border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
-            />
+          <div className="grid md:grid-cols-2 gap-5 mt-5">
+            <div className="flex flex-col gap-1">
+              <label className="text-xs font-bold text-textGray px-1">
+                Desktop / Landscape Image
+              </label>
+              <input
+                name="image"
+                type="file"
+                accept="image/*"
+                onChange={handleChange}
+                className="border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
+              />
+            </div>
+
+            <div className="flex flex-col gap-1">
+              <label className="text-xs font-bold text-textGray px-1">
+                Mobile Image (optional \u2014 falls back to desktop image if not set)
+              </label>
+              <input
+                name="mobileImage"
+                type="file"
+                accept="image/*"
+                onChange={handleChange}
+                className="border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
+              />
+            </div>
           </div>
 
           <label className="flex items-center gap-2 font-semibold text-dark mt-5">
@@ -324,6 +346,13 @@ const ManageBanners = () => {
                     <Image size={42} className="text-primary" />
                   )}
                 </div>
+
+                {banner.mobileImage?.url && (
+                  <div className="px-6 pt-4 flex items-center gap-2 text-xs font-bold text-primary">
+                    <Image size={14} />
+                    Mobile image set
+                  </div>
+                )}
 
                 <div className="p-6">
                   <div className="flex items-center justify-between gap-3 flex-wrap">

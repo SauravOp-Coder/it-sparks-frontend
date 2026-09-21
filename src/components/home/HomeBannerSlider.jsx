@@ -62,6 +62,8 @@ const HomeBannerSlider = () => {
   }
 
   const banner = banners[activeIndex];
+  const desktopImageUrl = banner.image?.url;
+  const mobileImageUrl = banner.mobileImage?.url || banner.image?.url;
 
   const nextSlide = () =>
     setActiveIndex((prev) => (prev + 1) % banners.length);
@@ -75,14 +77,31 @@ const HomeBannerSlider = () => {
     <section className="relative h-[100vh] min-h-[700px] overflow-hidden">
       {/* Background Image Optimized for LCP */}
       <div className="absolute inset-0">
+        {/* Mobile image */}
         <img
-          key={banner._id || banner.image?.url || activeIndex}
-          src={optimizeCloudinaryImage(banner.image?.url, 1600)}
+          key={`mobile-${banner._id || activeIndex}`}
+          src={optimizeCloudinaryImage(mobileImageUrl, 768)}
           srcSet={`
-            ${optimizeCloudinaryImage(banner.image?.url, 480)} 480w,
-            ${optimizeCloudinaryImage(banner.image?.url, 768)} 768w,
-            ${optimizeCloudinaryImage(banner.image?.url, 1200)} 1200w,
-            ${optimizeCloudinaryImage(banner.image?.url, 1600)} 1600w
+            ${optimizeCloudinaryImage(mobileImageUrl, 480)} 480w,
+            ${optimizeCloudinaryImage(mobileImageUrl, 768)} 768w
+          `}
+          sizes="100vw"
+          alt={banner.title}
+          width="768"
+          height="1024"
+          loading="eager"
+          fetchPriority="high"
+          decoding="async"
+          className="block md:hidden h-full w-full object-cover"
+        />
+
+        {/* Desktop / landscape image */}
+        <img
+          key={`desktop-${banner._id || activeIndex}`}
+          src={optimizeCloudinaryImage(desktopImageUrl, 1600)}
+          srcSet={`
+            ${optimizeCloudinaryImage(desktopImageUrl, 1200)} 1200w,
+            ${optimizeCloudinaryImage(desktopImageUrl, 1600)} 1600w
           `}
           sizes="100vw"
           alt={banner.title}
@@ -91,7 +110,7 @@ const HomeBannerSlider = () => {
           loading="eager"
           fetchPriority="high"
           decoding="async"
-          className="h-full w-full object-cover"
+          className="hidden md:block h-full w-full object-cover"
         />
       </div>
 
