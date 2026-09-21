@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { getGalleryApi } from "../../api/galleryApi";
 import PageBanner from "../../components/common/PageBanner";
 import SEO from "../../components/common/SEO";
+import FreeDemoPopup from "../../components/common/FreeDemoPopup";
 
 const Gallery = () => {
   const [galleryItems, setGalleryItems] = useState([]);
@@ -105,21 +106,23 @@ const Gallery = () => {
             </div>
 
              <button
-              type="button"
-              onClick={() => setDemoPopupOpen(true)}
-              className="primary-btn"
-            >
-              Get Course Guidance
-            </button>
+                type="button"
+                onClick={() => {
+                  setOpenMenu(false);
+                  setDemoPopupOpen(true);
+                }}
+                className="primary-btn w-full"
+              >
+                Book Free Demo
+              </button>
           </div>
         </div>
       </section>
-      <FreeDemoPopup
+       <FreeDemoPopup
         isOpen={demoPopupOpen}
         onClose={() => setDemoPopupOpen(false)}
       />
     </main>
-    
   );
 };
 
