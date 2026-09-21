@@ -8,6 +8,8 @@ import {
   validateEnquiryForm,
 } from "../../utils/validators";
 
+const POPUP_STORAGE_KEY = "enquiryPopupShown";
+
 const EnquiryPopup = () => {
   const navigate = useNavigate();
 
@@ -26,12 +28,36 @@ const EnquiryPopup = () => {
     message: "",
   });
 
+  const closePopupForSession = () => {
+    setShowPopup(false);
+    try {
+      sessionStorage.setItem(POPUP_STORAGE_KEY, "true");
+    } catch (error) {
+      // sessionStorage unavailable (e.g. private browsing) - fail silently
+    }
+  };
+
   useEffect(() => {
-    const interval = setInterval(() => {
+    let alreadyShown = false;
+
+    try {
+      alreadyShown = sessionStorage.getItem(POPUP_STORAGE_KEY) === "true";
+    } catch (error) {
+      alreadyShown = false;
+    }
+
+    if (alreadyShown) return;
+
+    const timer = setTimeout(() => {
       setShowPopup(true);
+      try {
+        sessionStorage.setItem(POPUP_STORAGE_KEY, "true");
+      } catch (error) {
+        // fail silently
+      }
     }, 30000);
 
-    return () => clearInterval(interval);
+    return () => clearTimeout(timer);
   }, []);
 
   const handleChange = (e) => {
@@ -93,7 +119,7 @@ const EnquiryPopup = () => {
       });
 
       setTimeout(() => {
-        setShowPopup(false);
+        closePopupForSession();
         setSuccess("");
         navigate("/thank-you");
       }, 1500);
@@ -111,7 +137,7 @@ const EnquiryPopup = () => {
   return (
     <div
       className="fixed inset-0 z-[80] bg-black/60 flex items-center justify-center px-4"
-      onClick={() => setShowPopup(false)}
+      onClick={closePopupForSession}
     >
       <div
         className="bg-white rounded-card w-full max-w-xl shadow-soft relative overflow-hidden"
@@ -119,7 +145,7 @@ const EnquiryPopup = () => {
       >
         <button
           type="button"
-          onClick={() => setShowPopup(false)}
+          onClick={closePopupForSession}
           className="absolute top-4 right-4 h-9 w-9 rounded-full bg-lightBg flex items-center justify-center text-dark hover:text-primary transition"
           aria-label="Close popup"
         >
