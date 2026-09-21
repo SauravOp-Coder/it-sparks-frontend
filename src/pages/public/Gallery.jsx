@@ -105,16 +105,13 @@ const Gallery = () => {
               </p>
             </div>
 
-             <button
-                type="button"
-                onClick={() => {
-                  setOpenMenu(false);
-                  setDemoPopupOpen(true);
-                }}
-                className="primary-btn w-full"
-              >
-                Book Free Demo
-              </button>
+              <button
+              type="button"
+              onClick={() => setDemoPopupOpen(true)}
+              className="primary-btn"
+            >
+              Get Course Guidance
+            </button>
           </div>
         </div>
       </section>
