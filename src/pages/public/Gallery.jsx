@@ -104,9 +104,13 @@ const Gallery = () => {
               </p>
             </div>
 
-            <a href="/contact" className="primary-btn">
-              Join Free Demo
-            </a>
+             <button
+              type="button"
+              onClick={() => setDemoPopupOpen(true)}
+              className="primary-btn"
+            >
+              Get Course Guidance
+            </button>
           </div>
         </div>
       </section>
