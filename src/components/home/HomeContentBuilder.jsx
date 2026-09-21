@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { CircleCheckBig } from "lucide-react";
 import { getHomeContentApi } from "../../api/homeApi";
 import FaqSection from "../common/FaqSection";
+import EnquireSection from "../common/EnquireSection";
 
 const splitParagraphs = (text = "") =>
   text
@@ -193,9 +194,17 @@ const HomeContentBuilder = () => {
           </div>
         )}
 
+              {/* ========================= */}
+      {/* Enquire Section */}
+      {/* ========================= */}
+      <EnquireSection />
+
+      
+
         {/* ========================= */}
         {/* FAQs */}
         {/* ========================= */}
+
 
         <FaqSection />
 
