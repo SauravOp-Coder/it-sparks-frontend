@@ -114,7 +114,12 @@ const Gallery = () => {
           </div>
         </div>
       </section>
+      <FreeDemoPopup
+        isOpen={demoPopupOpen}
+        onClose={() => setDemoPopupOpen(false)}
+      />
     </main>
+    
   );
 };
 
