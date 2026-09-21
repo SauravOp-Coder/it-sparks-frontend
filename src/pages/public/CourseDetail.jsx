@@ -1,25 +1,17 @@
 import { useEffect, useState } from "react";
-import { Link, useParams, useNavigate } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import {
   ArrowLeft,
   CheckCircle2,
   Download,
   FileText,
   Loader2,
-  X,
 } from "lucide-react";
 import { getCourseByIdApi } from "../../api/courseApi";
-import { createEnquiryApi } from "../../api/enquiryApi";
 import SEO from "../../components/common/SEO";
 import FaqSection from "../../components/common/FaqSection";
 import FreeDemoPopup from "../../components/common/FreeDemoPopup";
-import {
-  nameRegex,
-  emailRegex,
-  mobileRegex,
-  sanitizeMobileInput,
-  sanitizeNameInput,
-} from "../../utils/validators";
+import BrochureFormPopup from "../../components/common/BrochureFormPopup";
 
 const textCaseClass = {
   normal: "",
@@ -30,24 +22,12 @@ const textCaseClass = {
 
 const CourseDetail = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
 
   const [course, setCourse] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const [showBrochureForm, setShowBrochureForm] = useState(false);
-  const [brochureLoading, setBrochureLoading] = useState(false);
-  const [brochureError, setBrochureError] = useState("");
-  const [brochureFieldErrors, setBrochureFieldErrors] = useState({});
-
   const [demoPopupOpen, setDemoPopupOpen] = useState(false);
-
-  const [enquiryData, setEnquiryData] = useState({
-    name: "",
-    mobile: "",
-    email: "",
-    message: "",
-  });
+  const [brochurePopupOpen, setBrochurePopupOpen] = useState(false);
 
   const fetchCourse = async () => {
     try {
@@ -64,145 +44,6 @@ const CourseDetail = () => {
   useEffect(() => {
     fetchCourse();
   }, [id]);
-
-  const handleEnquiryChange = (e) => {
-    const { name, value } = e.target;
-
-    let nextValue = value;
-    if (name === "mobile") nextValue = sanitizeMobileInput(value);
-    if (name === "name") nextValue = sanitizeNameInput(value);
-
-    setEnquiryData((prev) => ({
-      ...prev,
-      [name]: nextValue,
-    }));
-
-    if (brochureFieldErrors[name]) {
-      setBrochureFieldErrors((prev) => ({ ...prev, [name]: "" }));
-    }
-  };
-
-  const validateBrochureForm = (data) => {
-    const errors = {};
-
-    if (!data.name.trim()) {
-      errors.name = "Name is required.";
-    } else if (!nameRegex.test(data.name.trim())) {
-      errors.name = "Enter a valid name (letters only, 2-50 characters).";
-    }
-
-    if (!data.mobile.trim()) {
-      errors.mobile = "Mobile number is required.";
-    } else if (!mobileRegex.test(data.mobile.trim())) {
-      errors.mobile = "Enter a valid 10-digit mobile number.";
-    }
-
-    if (data.email.trim() && !emailRegex.test(data.email.trim())) {
-      errors.email = "Enter a valid email address.";
-    }
-
-    return errors;
-  };
-
- const getPdfFileName = () => {
-  const safeTitle = course.title
-    .replace(/[^a-z0-9]/gi, "-")
-    .replace(/-+/g, "-")
-    .toLowerCase();
-
-  const originalName = course.brochure?.originalName;
-
-  if (originalName && originalName.toLowerCase().endsWith(".pdf")) {
-    return originalName;
-  }
-
-  return `${safeTitle}-brochure.pdf`;
-};
-
-const downloadBrochure = async () => {
-  if (!course?.brochure?.url) return;
-
-  try {
-    const response = await fetch(course.brochure.url);
-    const blob = await response.blob();
-
-    const pdfBlob = new Blob([blob], {
-      type: "application/pdf",
-    });
-
-    const blobUrl = window.URL.createObjectURL(pdfBlob);
-
-    const link = document.createElement("a");
-    link.href = blobUrl;
-    link.download = getPdfFileName();
-
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-
-    window.URL.revokeObjectURL(blobUrl);
-  } catch (error) {
-    window.open(course.brochure.url, "_blank");
-  }
-};
-  const handleBrochureSubmit = async (e) => {
-    e.preventDefault();
-
-    const errors = validateBrochureForm(enquiryData);
-    if (Object.keys(errors).length > 0) {
-      setBrochureFieldErrors(errors);
-      return;
-    }
-
-    try {
-      setBrochureLoading(true);
-      setBrochureError("");
-      setBrochureFieldErrors({});
-
-      await createEnquiryApi({
-        name: enquiryData.name,
-        fullName: enquiryData.name,
-
-        mobile: enquiryData.mobile,
-        number: enquiryData.mobile,
-        phone: enquiryData.mobile,
-        mobileNumber: enquiryData.mobile,
-
-        email: enquiryData.email,
-
-        interestedCourse: course.title,
-        course: course.title,
-        courseName: course.title,
-
-        enquiryType: "Brochure Download",
-        message:
-          enquiryData.message ||
-          `Student downloaded brochure for ${course.title}`,
-      });
-
-      setShowBrochureForm(false);
-      setEnquiryData({
-        name: "",
-        mobile: "",
-        email: "",
-        message: "",
-      });
-
-      downloadBrochure();
-
-      // Redirect to thank you page after a short delay
-      setTimeout(() => {
-        navigate("/thank-you");
-      }, 500);
-    } catch (error) {
-      setBrochureError(
-        error.response?.data?.message ||
-          "Failed to submit enquiry. Please try again."
-      );
-    } finally {
-      setBrochureLoading(false);
-    }
-  };
 
   const renderSection = (section, index) => {
     const caseClass = textCaseClass[section.textCase] || "";
@@ -383,17 +224,18 @@ const downloadBrochure = async () => {
               </div>
 
               <div className="flex flex-wrap gap-4 mt-8">
-               <button
-  type="button"
-  onClick={() => setDemoPopupOpen(true)}
-  className="primary-btn"
->
-  Enquire Now
-</button>
+                <button
+                  type="button"
+                  onClick={() => setDemoPopupOpen(true)}
+                  className="primary-btn"
+                >
+                  Enquire Now
+                </button>
 
                 {course.brochure?.url && (
                   <button
-                    onClick={() => setShowBrochureForm(true)}
+                    type="button"
+                    onClick={() => setBrochurePopupOpen(true)}
                     className="secondary-btn"
                   >
                     <Download size={18} className="mr-2" />
@@ -490,16 +332,17 @@ const downloadBrochure = async () => {
               </div>
 
               <button
-  type="button"
-  onClick={() => setDemoPopupOpen(true)}
-  className="primary-btn"
->
-  Enquire Now
-</button>
+                type="button"
+                onClick={() => setDemoPopupOpen(true)}
+                className="primary-btn w-full mt-7"
+              >
+                Enquire Now
+              </button>
 
               {course.brochure?.url && (
                 <button
-                  onClick={() => setShowBrochureForm(true)}
+                  type="button"
+                  onClick={() => setBrochurePopupOpen(true)}
                   className="secondary-btn w-full mt-3"
                 >
                   <Download size={18} className="mr-2" />
@@ -511,104 +354,18 @@ const downloadBrochure = async () => {
         </div>
       </section>
 
-      {showBrochureForm && (
-        <div className="fixed inset-0 z-[999] bg-dark/70 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-card shadow-soft w-full max-w-xl p-7 relative">
-            <button
-              onClick={() => setShowBrochureForm(false)}
-              className="absolute right-5 top-5 h-10 w-10 rounded-full bg-lightBg flex items-center justify-center hover:text-red-500 transition"
-            >
-              <X size={20} />
-            </button>
-
-            <h2 className="text-2xl font-black text-dark">
-              Download Course Brochure
-            </h2>
-
-            <p className="text-textGray leading-7 mt-2">
-              Fill your details to download the brochure for{" "}
-              <b>{course.title}</b>.
-            </p>
-
-            {brochureError && (
-              <div className="bg-red-50 border border-red-100 text-red-600 rounded-button px-4 py-3 text-sm font-semibold mt-5">
-                {brochureError}
-              </div>
-            )}
-
-            <form onSubmit={handleBrochureSubmit} noValidate className="grid gap-4 mt-6">
-              <div>
-                <input
-                  name="name"
-                  value={enquiryData.name}
-                  onChange={handleEnquiryChange}
-                  placeholder="Full Name"
-                  className={`w-full border rounded-button px-4 py-3 outline-none focus:border-primary ${
-                    brochureFieldErrors.name ? "border-red-400" : "border-borderSoft"
-                  }`}
-                />
-                {brochureFieldErrors.name && (
-                  <p className="text-red-500 text-xs mt-1 px-1">{brochureFieldErrors.name}</p>
-                )}
-              </div>
-
-              <div>
-                <input
-                  name="mobile"
-                  inputMode="numeric"
-                  maxLength={10}
-                  value={enquiryData.mobile}
-                  onChange={handleEnquiryChange}
-                  placeholder="Mobile Number"
-                  className={`w-full border rounded-button px-4 py-3 outline-none focus:border-primary ${
-                    brochureFieldErrors.mobile ? "border-red-400" : "border-borderSoft"
-                  }`}
-                />
-                {brochureFieldErrors.mobile && (
-                  <p className="text-red-500 text-xs mt-1 px-1">{brochureFieldErrors.mobile}</p>
-                )}
-              </div>
-
-              <div>
-                <input
-                  name="email"
-                  value={enquiryData.email}
-                  onChange={handleEnquiryChange}
-                  placeholder="Email Address"
-                  className={`w-full border rounded-button px-4 py-3 outline-none focus:border-primary ${
-                    brochureFieldErrors.email ? "border-red-400" : "border-borderSoft"
-                  }`}
-                />
-                {brochureFieldErrors.email && (
-                  <p className="text-red-500 text-xs mt-1 px-1">{brochureFieldErrors.email}</p>
-                )}
-              </div>
-
-              <textarea
-                name="message"
-                value={enquiryData.message}
-                onChange={handleEnquiryChange}
-                rows="4"
-                placeholder="Message optional"
-                className="border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary resize-none"
-              />
-
-              <button
-                type="submit"
-                disabled={brochureLoading}
-                className="primary-btn"
-              >
-                {brochureLoading ? "Submitting..." : "Submit & Download"}
-              </button>
-            </form>
-          </div>
-        </div>
-      )}
-
-       <FreeDemoPopup
+      <FreeDemoPopup
         isOpen={demoPopupOpen}
         onClose={() => setDemoPopupOpen(false)}
       />
+
+      {course?.brochure?.url && (
+        <BrochureFormPopup
+          isOpen={brochurePopupOpen}
+          onClose={() => setBrochurePopupOpen(false)}
+          course={course}
+        />
+      )}
     </main>
   );
 };

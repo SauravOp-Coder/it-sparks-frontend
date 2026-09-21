@@ -9,56 +9,14 @@ import {
   Signal,
 } from "lucide-react";
 import FreeDemoPopup from "../common/FreeDemoPopup";
+import BrochureFormPopup from "../common/BrochureFormPopup";
 import { optimizeCloudinaryImage } from "../../utils/imageOptimizer";
 
 const CourseCard = ({ course }) => {
   const courseSlug = course.slug || course._id || course.id;
 
   const [demoPopupOpen, setDemoPopupOpen] = useState(false);
-  const [brochureLoading, setBrochureLoading] = useState(false);
-
-  const handleBrochureDownload = async () => {
-    if (!course?.brochure?.url) return;
-
-    try {
-      setBrochureLoading(true);
-
-      const response = await fetch(course.brochure.url);
-      const blob = await response.blob();
-
-      const pdfBlob = new Blob([blob], {
-        type: "application/pdf",
-      });
-
-      const blobUrl = window.URL.createObjectURL(pdfBlob);
-
-      const safeTitle = course.title
-        .replace(/[^a-z0-9]/gi, "-")
-        .replace(/-+/g, "-")
-        .toLowerCase();
-
-      const fileName =
-        course.brochure?.originalName &&
-        course.brochure.originalName.toLowerCase().endsWith(".pdf")
-          ? course.brochure.originalName
-          : `${safeTitle}-brochure.pdf`;
-
-      const link = document.createElement("a");
-
-      link.href = blobUrl;
-      link.download = fileName;
-
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-
-      window.URL.revokeObjectURL(blobUrl);
-    } catch (error) {
-      window.open(course.brochure.url, "_blank");
-    } finally {
-      setBrochureLoading(false);
-    }
-  };
+  const [brochurePopupOpen, setBrochurePopupOpen] = useState(false);
 
   return (
     <>
@@ -127,18 +85,6 @@ const CourseCard = ({ course }) => {
           </div>
 
           <div className="grid grid-cols-2 gap-3 mt-6">
-            {/* Download Brochure */}
-            <button
-              type="button"
-              onClick={handleBrochureDownload}
-              disabled={!course?.brochure?.url || brochureLoading}
-              className="secondary-btn text-sm px-3 py-3 disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              <Download size={17} className="mr-2" />
-
-              {brochureLoading ? "Downloading..." : "Download Brochure"}
-            </button>
-
             {/* Enquiry Popup */}
             <button
               type="button"
@@ -146,6 +92,17 @@ const CourseCard = ({ course }) => {
               className="primary-btn text-sm px-3 py-3"
             >
               Enquire
+            </button>
+
+            {/* Download Brochure */}
+            <button
+              type="button"
+              onClick={() => setBrochurePopupOpen(true)}
+              disabled={!course?.brochure?.url}
+              className="secondary-btn text-sm px-3 py-3 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <Download size={17} className="mr-2" />
+              Download Brochure
             </button>
           </div>
 
@@ -167,6 +124,14 @@ const CourseCard = ({ course }) => {
         isOpen={demoPopupOpen}
         onClose={() => setDemoPopupOpen(false)}
       />
+
+      {course?.brochure?.url && (
+        <BrochureFormPopup
+          isOpen={brochurePopupOpen}
+          onClose={() => setBrochurePopupOpen(false)}
+          course={course}
+        />
+      )}
     </>
   );
 };
