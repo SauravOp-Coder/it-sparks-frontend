@@ -1,14 +1,16 @@
 import { useEffect, useState } from "react";
-import {
-  ChevronDown,
-  ChevronUp,
-  CircleCheckBig,
-} from "lucide-react";
+import { CircleCheckBig } from "lucide-react";
 import { getHomeContentApi } from "../../api/homeApi";
+import FaqSection from "../common/FaqSection";
+
+const splitParagraphs = (text = "") =>
+  text
+    .split(/\n\s*\n/)
+    .map((p) => p.trim())
+    .filter(Boolean);
 
 const HomeContentBuilder = () => {
   const [home, setHome] = useState(null);
-  const [openFaqs, setOpenFaqs] = useState({});
 
   useEffect(() => {
     const loadHome = async () => {
@@ -16,7 +18,7 @@ const HomeContentBuilder = () => {
         const data = await getHomeContentApi();
         setHome(data.homeContent || {});
       } catch (error) {
-        console.error(error);
+        console.error("Failed to load home content:", error);
       }
     };
 
@@ -24,7 +26,6 @@ const HomeContentBuilder = () => {
   }, []);
 
   const sections = home?.homeSections || [];
-  const faqs = home?.faqs || [];
 
   const renderSection = (section, index) => {
     const textClass =
@@ -39,10 +40,7 @@ const HomeContentBuilder = () => {
     switch (section.type) {
       case "heading":
         return (
-          <div
-            key={index}
-            className="rounded-3xl bg-primary/5 p-8"
-          >
+          <div key={index} className="rounded-3xl bg-primary/5 p-8">
             <h2
               className={`text-3xl md:text-4xl font-black text-dark ${textClass}`}
             >
@@ -51,60 +49,82 @@ const HomeContentBuilder = () => {
           </div>
         );
 
+      case "subheading":
+        return (
+          <div key={index} className="mt-2">
+            <h3
+              className={`text-xl md:text-2xl font-extrabold text-dark ${textClass}`}
+            >
+              {section.title || section.content}
+            </h3>
+          </div>
+        );
+
       case "paragraph":
         return (
           <div key={index}>
             {section.title && (
               <h2
-                className={`text-3xl font-black text-dark mb-3 ${textClass}`}
+                className={`text-3xl font-black text-dark mb-4 ${textClass}`}
               >
                 {section.title}
               </h2>
             )}
 
-            <p
-              className={`leading-7 text-textGray whitespace-pre-line ${textClass}`}
-            >
-              {section.content}
-            </p>
+            <div className="space-y-3">
+              {splitParagraphs(section.content).map((para, i) => (
+                <p
+                  key={i}
+                  className={`leading-8 text-textGray whitespace-pre-line ${textClass}`}
+                >
+                  {para}
+                </p>
+              ))}
+            </div>
           </div>
         );
 
       case "highlight":
         return (
-          <div
-            key={index}
-            className="rounded-3xl bg-primary text-white p-8"
-          >
-            <h2 className="text-3xl font-black">
-              {section.title}
-            </h2>
+          <div key={index} className="rounded-3xl bg-primary text-white p-8">
+            {section.title && (
+              <h2
+                className={`text-3xl font-black ${textClass}`}
+              >
+                {section.title}
+              </h2>
+            )}
 
-            <p className="mt-3 whitespace-pre-line leading-7">
-              {section.content}
-            </p>
+            {section.content && (
+              <p
+                className={`mt-4 whitespace-pre-line leading-8 ${textClass}`}
+              >
+                {section.content}
+              </p>
+            )}
           </div>
         );
 
       case "bulletList":
         return (
           <div key={index}>
-            <h2 className="text-3xl font-black mb-4">
-              {section.title}
-            </h2>
+            {section.title && (
+              <h2
+                className={`text-3xl font-black mb-5 text-dark ${textClass}`}
+              >
+                {section.title}
+              </h2>
+            )}
 
-            <div className="grid md:grid-cols-2 gap-x-6 gap-y-3">
-              {section.items.map((item, i) => (
-                <div
-                  key={i}
-                  className="flex items-start gap-3"
-                >
+            <div className="grid md:grid-cols-2 gap-4">
+              {(section.items || []).map((item, i) => (
+                <div key={i} className="flex items-start gap-3">
                   <CircleCheckBig
                     className="text-primary mt-1 shrink-0"
                     size={20}
                   />
 
-                  <span className="leading-7">
+                  <span className={`leading-7 ${textClass}`}>
                     {item}
                   </span>
                 </div>
@@ -116,13 +136,17 @@ const HomeContentBuilder = () => {
       case "numberedList":
         return (
           <div key={index}>
-            <h2 className="text-3xl font-black mb-4">
-              {section.title}
-            </h2>
+            {section.title && (
+              <h2
+                className={`text-3xl font-black mb-5 text-dark ${textClass}`}
+              >
+                {section.title}
+              </h2>
+            )}
 
-            <ol className="list-decimal pl-6 space-y-2 leading-7">
-              {section.items.map((item, i) => (
-                <li key={i}>
+            <ol className="list-decimal pl-6 space-y-3">
+              {(section.items || []).map((item, i) => (
+                <li key={i} className={`leading-7 ${textClass}`}>
                   {item}
                 </li>
               ))}
@@ -137,19 +161,19 @@ const HomeContentBuilder = () => {
 
   return (
     <section className="py-12 bg-white w-full">
-      <div className="container mx-auto px-6 max-w-6xl">
-
+      <div className="container mx-auto px-6 max-w-5xl">
         {/* ========================= */}
         {/* Dynamic Home Sections */}
         {/* ========================= */}
+
         {sections.length > 0 ? (
-          <div className="space-y-5 text-gray-700">
+          <div className="space-y-8 text-gray-700 leading-relaxed">
             {sections.map((section, index) => (
               <div
                 key={section._id || index}
                 className={
                   section.layout === "split"
-                    ? "grid md:grid-cols-2 gap-6 items-center"
+                    ? "grid md:grid-cols-2 gap-8 items-center"
                     : "w-full"
                 }
               >
@@ -170,8 +194,15 @@ const HomeContentBuilder = () => {
         )}
 
         {/* ========================= */}
+        {/* FAQs */}
+        {/* ========================= */}
+
+        <FaqSection />
+
+        {/* ========================= */}
         {/* CTA Section */}
         {/* ========================= */}
+
         {home?.ctaTitle && (
           <div className="mt-20 w-full">
             <div className="rounded-3xl bg-primary p-8 md:p-12 text-center text-white shadow-lg max-w-4xl mx-auto">
@@ -193,60 +224,6 @@ const HomeContentBuilder = () => {
                   {home.ctaButtonText}
                 </a>
               )}
-            </div>
-          </div>
-        )}
-
-        {/* ========================= */}
-        {/* FAQs */}
-        {/* ========================= */}
-        {faqs.length > 0 && (
-          <div className="mt-16 w-full">
-            <h2 className="text-3xl font-extrabold text-center text-dark tracking-tight mb-8">
-              Frequently Asked Questions
-            </h2>
-
-            <div className="space-y-3 max-w-4xl mx-auto">
-              {faqs.map((faq, index) => {
-                const open = openFaqs[index];
-
-                return (
-                  <div
-                    key={index}
-                    className="rounded-xl border border-gray-200 bg-white shadow-sm overflow-hidden transition-all"
-                  >
-                    <button
-                      type="button"
-                      aria-expanded={Boolean(open)}
-                      onClick={() =>
-                        setOpenFaqs((prev) => ({
-                          ...prev,
-                          [index]: !prev[index],
-                        }))
-                      }
-                      className="flex w-full items-center justify-between p-5 text-left transition hover:bg-gray-50/50"
-                    >
-                      <span className="font-bold text-base md:text-lg text-dark pr-4">
-                        {faq.question}
-                      </span>
-
-                      {open ? (
-                        <ChevronUp className="text-primary shrink-0 w-5 h-5" />
-                      ) : (
-                        <ChevronDown className="text-primary shrink-0 w-5 h-5" />
-                      )}
-                    </button>
-
-                    {open && (
-                      <div className="px-5 pb-5 pt-1 text-gray-600 border-t border-gray-100">
-                        <p className="leading-relaxed text-sm md:text-base whitespace-pre-line">
-                          {faq.answer}
-                        </p>
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
             </div>
           </div>
         )}

@@ -345,7 +345,7 @@ const ManageHome = () => {
 
             <div className="grid md:grid-cols-3 gap-4">
 
-              <select
+                            <select
                 value={section.type}
                 onChange={(e) =>
                   updateSection(index, "type", e.target.value)
@@ -353,6 +353,7 @@ const ManageHome = () => {
                 className="border rounded-lg p-3"
               >
                 <option value="heading">Heading</option>
+                <option value="subheading">Subheading</option>
                 <option value="paragraph">Paragraph</option>
                 <option value="bulletList">Bullet List</option>
                 <option value="numberedList">Numbered List</option>
