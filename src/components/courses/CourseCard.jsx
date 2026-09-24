@@ -89,7 +89,7 @@ const CourseCard = ({ course }) => {
             <button
               type="button"
               onClick={() => setDemoPopupOpen(true)}
-              className="bg-white text-primary border border-primary rounded-button font-bold text-sm px-3 py-3 hover:bg-primary/5 transition"
+              className="secondary-btn text-sm px-3 py-3"
             >
               Enquire
             </button>
@@ -99,7 +99,7 @@ const CourseCard = ({ course }) => {
               type="button"
               onClick={() => setBrochurePopupOpen(true)}
               disabled={!course?.brochure?.url}
-              className="bg-primary text-white rounded-button font-bold text-sm px-3 py-3 flex items-center justify-center hover:bg-primaryDark transition disabled:opacity-50 disabled:cursor-not-allowed"
+              className="primary-btn text-sm px-3 py-3 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <Download size={17} className="mr-2" />
               Download Brochure
