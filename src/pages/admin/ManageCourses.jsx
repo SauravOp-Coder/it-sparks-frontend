@@ -468,6 +468,7 @@ const ManageCourses = () => {
                     className="border border-borderSoft rounded-button px-3 py-2 text-sm outline-none bg-white"
                   >
                     <option value="paragraph">Paragraph</option>
+                    <option value="subheading">Subheading</option>
                     <option value="list">List</option>
                   </select>
                   <select

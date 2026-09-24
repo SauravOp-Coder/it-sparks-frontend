@@ -20,6 +20,12 @@ const textCaseClass = {
   capitalize: "capitalize",
 };
 
+const splitParagraphs = (text = "") =>
+  text
+    .split(/\n\s*\n/)
+    .map((p) => p.trim())
+    .filter(Boolean);
+
 const CourseDetail = () => {
   const { id } = useParams();
 
@@ -58,6 +64,16 @@ const CourseDetail = () => {
       );
     }
 
+    if (section.type === "subheading") {
+      return (
+        <div key={section._id || index} className="mt-5">
+          <h3 className={`text-xl md:text-2xl font-extrabold text-dark ${caseClass}`}>
+            {section.title || section.content}
+          </h3>
+        </div>
+      );
+    }
+
     if (section.type === "paragraph") {
       return (
         <div key={section._id || index} className="mt-6">
@@ -67,9 +83,16 @@ const CourseDetail = () => {
             </h3>
           )}
 
-          <p className={`text-textGray leading-8 mt-3 whitespace-pre-line ${caseClass}`}>
-            {section.content}
-          </p>
+          <div className="space-y-3 mt-3">
+            {splitParagraphs(section.content).map((para, i) => (
+              <p
+                key={i}
+                className={`text-textGray leading-8 whitespace-pre-line ${caseClass}`}
+              >
+                {para}
+              </p>
+            ))}
+          </div>
         </div>
       );
     }

@@ -5,6 +5,31 @@ import SEO from "../../components/common/SEO";
 import { useEffect, useState } from "react";
 import { getBlogsApi, getSingleBlogApi } from "../../api/blogApi";
 
+const splitBlocks = (text = "") =>
+  text
+    .split(/\n\s*\n/)
+    .map((block) => block.trim())
+    .filter(Boolean);
+
+const renderContentBlock = (block, index) => {
+  if (block.startsWith("## ")) {
+    return (
+      <h3
+        key={index}
+        className="text-xl md:text-2xl font-extrabold text-dark mt-6 mb-1"
+      >
+        {block.replace(/^##\s+/, "")}
+      </h3>
+    );
+  }
+
+  return (
+    <p key={index} className="text-textGray leading-9 text-lg whitespace-pre-line">
+      {block}
+    </p>
+  );
+};
+
 const BlogDetail = () => {
   const { id } = useParams();
 
@@ -133,9 +158,9 @@ const BlogDetail = () => {
           </div>
 
           <article className="bg-white border border-borderSoft rounded-card shadow-card p-7 md:p-10">
-            <p className="text-textGray leading-9 text-lg whitespace-pre-line">
-              {blog.content}
-            </p>
+            <div className="space-y-4">
+              {splitBlocks(blog.content).map(renderContentBlock)}
+            </div>
 
             <div className="mt-8 bg-lightBg border border-borderSoft rounded-card p-6">
               <h3 className="text-2xl font-extrabold text-dark">
