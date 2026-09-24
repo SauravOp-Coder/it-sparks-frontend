@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Send } from "lucide-react";
 import { createEnquiryApi } from "../../api/enquiryApi";
+import { getCoursesApi } from "../../api/courseApi";
 import {
   sanitizeMobileInput,
   sanitizeNameInput,
@@ -25,13 +26,34 @@ const EnquireSection = ({
   const [success, setSuccess] = useState("");
   const [error, setError] = useState("");
   const [fieldErrors, setFieldErrors] = useState({});
+  const [courses, setCourses] = useState([]);
+
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const data = await getCoursesApi();
+        setCourses(data.courses || []);
+      } catch (error) {
+        console.error("Failed to fetch courses:", error);
+        setCourses([]);
+      }
+    };
+
+    fetchCourses();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
 
     let nextValue = value;
-    if (name === "mobile") nextValue = sanitizeMobileInput(value);
-    if (name === "fullName") nextValue = sanitizeNameInput(value);
+
+    if (name === "mobile") {
+      nextValue = sanitizeMobileInput(value);
+    }
+
+    if (name === "fullName") {
+      nextValue = sanitizeNameInput(value);
+    }
 
     setFormData((prev) => ({
       ...prev,
@@ -39,7 +61,10 @@ const EnquireSection = ({
     }));
 
     if (fieldErrors[name]) {
-      setFieldErrors((prev) => ({ ...prev, [name]: "" }));
+      setFieldErrors((prev) => ({
+        ...prev,
+        [name]: "",
+      }));
     }
   };
 
@@ -47,6 +72,7 @@ const EnquireSection = ({
     e.preventDefault();
 
     const errors = validateEnquiryForm(formData);
+
     if (Object.keys(errors).length > 0) {
       setFieldErrors(errors);
       return;
@@ -63,7 +89,10 @@ const EnquireSection = ({
         source,
       });
 
-      setSuccess("Enquiry submitted successfully. Our team will contact you soon.");
+      setSuccess(
+        "Enquiry submitted successfully. Our team will contact you soon."
+      );
+
       setFormData({
         fullName: "",
         mobile: "",
@@ -73,7 +102,9 @@ const EnquireSection = ({
         message: "",
       });
     } catch (error) {
-      setError(error.response?.data?.message || "Failed to submit enquiry.");
+      setError(
+        error.response?.data?.message || "Failed to submit enquiry."
+      );
     } finally {
       setLoading(false);
     }
@@ -86,10 +117,17 @@ const EnquireSection = ({
           <h2 className="text-3xl font-extrabold text-dark tracking-tight">
             {title}
           </h2>
-          <p className="text-textGray leading-7 mt-3">{subtitle}</p>
+
+          <p className="text-textGray leading-7 mt-3">
+            {subtitle}
+          </p>
         </div>
 
-        <form onSubmit={handleSubmit} noValidate className="grid gap-4 mt-8 max-w-2xl mx-auto">
+        <form
+          onSubmit={handleSubmit}
+          noValidate
+          className="grid gap-4 mt-8 max-w-2xl mx-auto"
+        >
           {success && (
             <div className="bg-green-50 border border-green-100 text-green-700 rounded-button px-4 py-3 text-sm font-semibold">
               {success}
@@ -111,11 +149,16 @@ const EnquireSection = ({
                 onChange={handleChange}
                 placeholder="Full Name"
                 className={`w-full border rounded-button px-4 py-3 outline-none focus:border-primary bg-white ${
-                  fieldErrors.fullName ? "border-red-400" : "border-borderSoft"
+                  fieldErrors.fullName
+                    ? "border-red-400"
+                    : "border-borderSoft"
                 }`}
               />
+
               {fieldErrors.fullName && (
-                <p className="text-red-500 text-xs mt-1 px-1">{fieldErrors.fullName}</p>
+                <p className="text-red-500 text-xs mt-1 px-1">
+                  {fieldErrors.fullName}
+                </p>
               )}
             </div>
 
@@ -129,11 +172,16 @@ const EnquireSection = ({
                 onChange={handleChange}
                 placeholder="Mobile Number"
                 className={`w-full border rounded-button px-4 py-3 outline-none focus:border-primary bg-white ${
-                  fieldErrors.mobile ? "border-red-400" : "border-borderSoft"
+                  fieldErrors.mobile
+                    ? "border-red-400"
+                    : "border-borderSoft"
                 }`}
               />
+
               {fieldErrors.mobile && (
-                <p className="text-red-500 text-xs mt-1 px-1">{fieldErrors.mobile}</p>
+                <p className="text-red-500 text-xs mt-1 px-1">
+                  {fieldErrors.mobile}
+                </p>
               )}
             </div>
           </div>
@@ -146,11 +194,16 @@ const EnquireSection = ({
               onChange={handleChange}
               placeholder="Email Address"
               className={`w-full border rounded-button px-4 py-3 outline-none focus:border-primary bg-white ${
-                fieldErrors.email ? "border-red-400" : "border-borderSoft"
+                fieldErrors.email
+                  ? "border-red-400"
+                  : "border-borderSoft"
               }`}
             />
+
             {fieldErrors.email && (
-              <p className="text-red-500 text-xs mt-1 px-1">{fieldErrors.email}</p>
+              <p className="text-red-500 text-xs mt-1 px-1">
+                {fieldErrors.email}
+              </p>
             )}
           </div>
 
@@ -160,19 +213,29 @@ const EnquireSection = ({
               value={formData.interestedCourse}
               onChange={handleChange}
               className={`w-full border rounded-button px-4 py-3 outline-none focus:border-primary text-textGray bg-white ${
-                fieldErrors.interestedCourse ? "border-red-400" : "border-borderSoft"
+                fieldErrors.interestedCourse
+                  ? "border-red-400"
+                  : "border-borderSoft"
               }`}
             >
-              <option value="">Interested Course</option>
-              <option>Full Stack Web Development</option>
-              <option>Python Programming</option>
-              <option>Java Full Stack</option>
-              <option>Data Science & Analytics</option>
-              <option>Software Testing</option>
-              <option>UI/UX Design</option>
+              <option value="">
+                Interested Course
+              </option>
+
+              {courses.map((course) => (
+                <option
+                  key={course._id || course.slug || course.title}
+                  value={course.title}
+                >
+                  {course.title}
+                </option>
+              ))}
             </select>
+
             {fieldErrors.interestedCourse && (
-              <p className="text-red-500 text-xs mt-1 px-1">{fieldErrors.interestedCourse}</p>
+              <p className="text-red-500 text-xs mt-1 px-1">
+                {fieldErrors.interestedCourse}
+              </p>
             )}
           </div>
 
@@ -185,17 +248,30 @@ const EnquireSection = ({
               rows="3"
               maxLength={500}
               className={`w-full border rounded-button px-4 py-3 outline-none focus:border-primary resize-none bg-white ${
-                fieldErrors.message ? "border-red-400" : "border-borderSoft"
+                fieldErrors.message
+                  ? "border-red-400"
+                  : "border-borderSoft"
               }`}
             />
+
             {fieldErrors.message && (
-              <p className="text-red-500 text-xs mt-1 px-1">{fieldErrors.message}</p>
+              <p className="text-red-500 text-xs mt-1 px-1">
+                {fieldErrors.message}
+              </p>
             )}
           </div>
 
-          <button type="submit" disabled={loading} className="primary-btn w-full">
+          <button
+            type="submit"
+            disabled={loading}
+            className="primary-btn w-full"
+          >
             {loading ? "Submitting..." : "Submit Enquiry"}
-            <Send size={18} className="ml-2" />
+
+            <Send
+              size={18}
+              className="ml-2"
+            />
           </button>
         </form>
       </div>

@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 
 import { createEnquiryApi } from "../../api/enquiryApi";
 import { getSettingsApi } from "../../api/settingApi";
+import { getCoursesApi } from "../../api/courseApi";
 
 import PageBanner from "../../components/common/PageBanner";
 import SEO from "../../components/common/SEO";
@@ -38,6 +39,7 @@ const Contact = () => {
   const [error, setError] = useState("");
   const [fieldErrors, setFieldErrors] = useState({});
   const [settings, setSettings] = useState(null);
+  const [courses, setCourses] = useState([]);
 
   // =========================================================
   // FETCH SETTINGS
@@ -53,8 +55,19 @@ const Contact = () => {
     }
   };
 
+  const fetchCourses = async () => {
+    try {
+      const data = await getCoursesApi();
+      setCourses(data.courses || []);
+    } catch (error) {
+      console.error("Failed to fetch courses:", error);
+      setCourses([]);
+    }
+  };
+
   useEffect(() => {
     fetchSettings();
+    fetchCourses();
   }, []);
 
   // =========================================================
@@ -436,29 +449,14 @@ const Contact = () => {
                         Interested Course
                       </option>
 
-                      <option value="Full Stack Web Development">
-                        Full Stack Web Development
-                      </option>
-
-                      <option value="Python Programming">
-                        Python Programming
-                      </option>
-
-                      <option value="Java Full Stack">
-                        Java Full Stack
-                      </option>
-
-                      <option value="Data Science & Analytics">
-                        Data Science & Analytics
-                      </option>
-
-                      <option value="Software Testing">
-                        Software Testing
-                      </option>
-
-                      <option value="UI/UX Design">
-                        UI/UX Design
-                      </option>
+                      {courses.map((course) => (
+                        <option
+                          key={course._id || course.slug || course.title}
+                          value={course.title}
+                        >
+                          {course.title}
+                        </option>
+                      ))}
                     </select>
 
                     {fieldErrors.interestedCourse && (

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { createEnquiryApi } from "../../api/enquiryApi";
+import { getCoursesApi } from "../../api/courseApi";
 import {
   sanitizeMobileInput,
   sanitizeNameInput,
@@ -18,6 +19,7 @@ const EnquiryPopup = () => {
   const [success, setSuccess] = useState("");
   const [error, setError] = useState("");
   const [fieldErrors, setFieldErrors] = useState({});
+  const [courses, setCourses] = useState([]);
 
   const [formData, setFormData] = useState({
     fullName: "",
@@ -30,8 +32,12 @@ const EnquiryPopup = () => {
 
   const closePopupForSession = () => {
     setShowPopup(false);
+
     try {
-      sessionStorage.setItem(POPUP_STORAGE_KEY, "true");
+      sessionStorage.setItem(
+        POPUP_STORAGE_KEY,
+        "true"
+      );
     } catch (error) {
       // sessionStorage unavailable (e.g. private browsing) - fail silently
     }
@@ -41,7 +47,9 @@ const EnquiryPopup = () => {
     let alreadyShown = false;
 
     try {
-      alreadyShown = sessionStorage.getItem(POPUP_STORAGE_KEY) === "true";
+      alreadyShown =
+        sessionStorage.getItem(POPUP_STORAGE_KEY) ===
+        "true";
     } catch (error) {
       alreadyShown = false;
     }
@@ -50,14 +58,36 @@ const EnquiryPopup = () => {
 
     const timer = setTimeout(() => {
       setShowPopup(true);
+
       try {
-        sessionStorage.setItem(POPUP_STORAGE_KEY, "true");
+        sessionStorage.setItem(
+          POPUP_STORAGE_KEY,
+          "true"
+        );
       } catch (error) {
         // fail silently
       }
     }, 30000);
 
     return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const data = await getCoursesApi();
+        setCourses(data.courses || []);
+      } catch (error) {
+        console.error(
+          "Failed to fetch courses:",
+          error
+        );
+
+        setCourses([]);
+      }
+    };
+
+    fetchCourses();
   }, []);
 
   const handleChange = (e) => {
@@ -89,7 +119,8 @@ const EnquiryPopup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const errors = validateEnquiryForm(formData);
+    const errors =
+      validateEnquiryForm(formData);
 
     if (Object.keys(errors).length > 0) {
       setFieldErrors(errors);
@@ -107,7 +138,9 @@ const EnquiryPopup = () => {
         source: "Popup Form",
       });
 
-      setSuccess("Enquiry submitted successfully.");
+      setSuccess(
+        "Enquiry submitted successfully."
+      );
 
       setFormData({
         fullName: "",
@@ -125,7 +158,8 @@ const EnquiryPopup = () => {
       }, 1500);
     } catch (error) {
       setError(
-        error.response?.data?.message || "Failed to submit enquiry."
+        error.response?.data?.message ||
+          "Failed to submit enquiry."
       );
     } finally {
       setLoading(false);
@@ -162,7 +196,8 @@ const EnquiryPopup = () => {
           </h2>
 
           <p className="text-white/70 mt-2">
-            Fill the form and our team will contact you shortly.
+            Fill the form and our team will
+            contact you shortly.
           </p>
         </div>
 
@@ -262,18 +297,29 @@ const EnquiryPopup = () => {
                     : "border-borderSoft"
                 }`}
               >
-                <option value="">Interested Course</option>
-                <option>Full Stack Web Development</option>
-                <option>Python Programming</option>
-                <option>Java Full Stack</option>
-                <option>Data Science & Analytics</option>
-                <option>Software Testing</option>
-                <option>UI/UX Design</option>
+                <option value="">
+                  Interested Course
+                </option>
+
+                {courses.map((course) => (
+                  <option
+                    key={
+                      course._id ||
+                      course.slug ||
+                      course.title
+                    }
+                    value={course.title}
+                  >
+                    {course.title}
+                  </option>
+                ))}
               </select>
 
               {fieldErrors.interestedCourse && (
                 <p className="text-red-500 text-xs mt-1 px-1">
-                  {fieldErrors.interestedCourse}
+                  {
+                    fieldErrors.interestedCourse
+                  }
                 </p>
               )}
             </div>
@@ -284,9 +330,17 @@ const EnquiryPopup = () => {
               onChange={handleChange}
               className="w-full border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary text-textGray"
             >
-              <option value="Not Selected">Preferred Mode</option>
-              <option value="Online">Online</option>
-              <option value="Offline">Offline</option>
+              <option value="Not Selected">
+                Preferred Mode
+              </option>
+
+              <option value="Online">
+                Online
+              </option>
+
+              <option value="Offline">
+                Offline
+              </option>
             </select>
           </div>
 
@@ -317,7 +371,9 @@ const EnquiryPopup = () => {
             disabled={loading}
             className="primary-btn w-full"
           >
-            {loading ? "Submitting..." : "Submit Enquiry"}
+            {loading
+              ? "Submitting..."
+              : "Submit Enquiry"}
           </button>
         </form>
       </div>
