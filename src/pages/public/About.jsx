@@ -53,7 +53,6 @@ const About = () => {
         canonical="/about"
       />
 
-      {/* BANNER UNCHANGED */}
       <PageBanner
         page="about"
         fallbackTitle="About IT Sparks Technologies"
@@ -61,17 +60,11 @@ const About = () => {
       />
 
       {/* ABOUT IT SPARKS TECHNOLOGIES */}
-      <section className="py-20 md:py-24 bg-white">
+      <section className="py-16 md:py-20 bg-white">
         <div className="container-custom">
-          <div className="text-center max-w-4xl mx-auto mb-12">
-           
-
-           
-          </div>
-
-          <div className="grid lg:grid-cols-2 gap-8 items-stretch">
-            <div className="bg-lightBg border border-borderSoft rounded-card p-8 md:p-10">
-              <div className="space-y-6 text-textGray leading-8">
+          <div className="grid lg:grid-cols-2 gap-6 items-stretch">
+            <div className="bg-lightBg border border-borderSoft rounded-card p-7 md:p-9">
+              <div className="space-y-5 text-textGray leading-7">
                 <p>
                   IT Sparks Technologies is an IT training institute dedicated
                   to building job-ready professionals through practical
@@ -102,8 +95,8 @@ const About = () => {
               </div>
             </div>
 
-            <div className="bg-white border border-borderSoft rounded-card p-8 md:p-10 shadow-card">
-              <div className="space-y-6 text-textGray leading-8">
+            <div className="bg-white border border-borderSoft rounded-card p-7 md:p-9 shadow-card">
+              <div className="space-y-5 text-textGray leading-7">
                 <p>
                   As we are experienced developers of AI-driven business tools,
                   our technological framework plays an important role in
@@ -127,19 +120,19 @@ const About = () => {
       </section>
 
       {/* VISION + MISSION */}
-      <section className="py-20 md:py-24 bg-lightBg">
+      <section className="py-16 md:py-20 bg-lightBg">
         <div className="container-custom">
-          <div className="grid lg:grid-cols-2 gap-8 items-stretch">
-            <div className="bg-dark rounded-card p-8 md:p-10 h-full">
+          <div className="grid lg:grid-cols-2 gap-6 items-stretch">
+            <div className="bg-dark rounded-card p-7 md:p-9 h-full">
               <div className="w-14 h-14 rounded-2xl bg-white/10 flex items-center justify-center">
                 <BadgeCheck className="text-white" size={30} />
               </div>
 
-              <h2 className="text-3xl md:text-4xl font-black text-white mt-6">
+              <h2 className="text-3xl md:text-4xl font-black text-white mt-5">
                 Our Vision
               </h2>
 
-              <p className="text-white/80 leading-8 mt-6">
+              <p className="text-white/80 leading-7 mt-4">
                 Our goal is to build a future where tech experts emerge from
                 creativity, hands-on experience from practical implementation,
                 industry collaboration and teamwork with industry leaders. We
@@ -151,16 +144,16 @@ const About = () => {
               </p>
             </div>
 
-            <div className="bg-white border border-borderSoft rounded-card p-8 md:p-10 shadow-card h-full">
+            <div className="bg-white border border-borderSoft rounded-card p-7 md:p-9 shadow-card h-full">
               <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center">
                 <Target className="text-primary" size={30} />
               </div>
 
-              <h2 className="text-3xl md:text-4xl font-black text-dark mt-6">
+              <h2 className="text-3xl md:text-4xl font-black text-dark mt-5">
                 Our Mission
               </h2>
 
-              <p className="text-textGray leading-8 mt-6">
+              <p className="text-textGray leading-7 mt-4">
                 Our mission is to bridge the gap between academic theoretical
                 education and current industry requirements by providing live
                 project based practical technology training. Through real-life
@@ -177,21 +170,21 @@ const About = () => {
       </section>
 
       {/* OUR STRATEGY */}
-      <section className="py-20 md:py-24 bg-white">
+      <section className="py-16 md:py-20 bg-white">
         <div className="container-custom">
-          <div className="bg-lightBg border border-borderSoft rounded-card p-8 md:p-10">
-            <div className="grid lg:grid-cols-2 gap-8 items-center">
+          <div className="bg-lightBg border border-borderSoft rounded-card p-7 md:p-10">
+            <div className="grid lg:grid-cols-[0.4fr_1fr] gap-8 lg:gap-12 items-center">
               <div>
                 <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center">
                   <GitBranch className="text-primary" size={30} />
                 </div>
 
-                <h2 className="text-3xl md:text-4xl font-black text-dark mt-6">
+                <h2 className="text-3xl md:text-4xl font-black text-dark mt-5">
                   Our Strategy
                 </h2>
               </div>
 
-              <p className="text-textGray leading-8">
+              <p className="text-textGray leading-7">
                 Our strategy is built around experiential learning rather than
                 conventional teaching. We combine modern technologies,
                 real-world industry projects, AI-driven innovation, structured
@@ -208,24 +201,24 @@ const About = () => {
       </section>
 
       {/* OUR VALUES */}
-      <section className="py-20 md:py-24 bg-lightBg">
+      <section className="py-16 md:py-20 bg-lightBg">
         <div className="container-custom">
-          <div className="text-center max-w-3xl mx-auto mb-12">
+          <div className="text-center mb-9">
             <div className="w-14 h-14 mx-auto rounded-2xl bg-primary/10 flex items-center justify-center">
               <CheckCircle2 className="text-primary" size={30} />
             </div>
 
-            <h2 className="text-3xl md:text-5xl font-black text-dark mt-6">
+            <h2 className="text-3xl md:text-5xl font-black text-dark mt-5">
               Our Values
             </h2>
           </div>
 
-          <div className="bg-white border border-borderSoft rounded-card shadow-card p-8 md:p-10">
-            <ul className="grid md:grid-cols-2 gap-x-12 gap-y-5">
+          <div className="bg-white border border-borderSoft rounded-card shadow-card p-7 md:p-9">
+            <ul className="grid md:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-4">
               {values.map((value, index) => (
                 <li
                   key={index}
-                  className="flex items-start gap-4 text-textGray leading-7"
+                  className="flex items-start gap-3 text-textGray leading-7"
                 >
                   <CheckCircle2
                     size={20}
@@ -241,25 +234,25 @@ const About = () => {
       </section>
 
       {/* STRATEGY & ACTION PLAN */}
-      <section className="py-20 md:py-24 bg-white">
+      <section className="py-16 md:py-20 bg-white">
         <div className="container-custom">
-          <div className="text-center max-w-3xl mx-auto mb-12">
+          <div className="text-center mb-9">
             <div className="w-14 h-14 mx-auto rounded-2xl bg-primary/10 flex items-center justify-center">
               <BookOpenCheck className="text-primary" size={30} />
             </div>
 
-            <h2 className="text-3xl md:text-5xl font-black text-dark mt-6">
+            <h2 className="text-3xl md:text-5xl font-black text-dark mt-5">
               Strategy & Action Plan
             </h2>
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-8 items-stretch">
-            <div className="bg-lightBg border border-borderSoft rounded-card p-8 md:p-10">
-              <ul className="space-y-5">
+          <div className="bg-lightBg border border-borderSoft rounded-card p-7 md:p-10">
+            <div className="grid lg:grid-cols-2 gap-x-12 gap-y-4">
+              <ul className="space-y-4">
                 {actionPlanLeft.map((item, index) => (
                   <li
                     key={index}
-                    className="flex items-start gap-4 text-textGray leading-7"
+                    className="flex items-start gap-3 text-textGray leading-7"
                   >
                     <CheckCircle2
                       size={20}
@@ -270,14 +263,12 @@ const About = () => {
                   </li>
                 ))}
               </ul>
-            </div>
 
-            <div className="bg-lightBg border border-borderSoft rounded-card p-8 md:p-10">
-              <ul className="space-y-5">
+              <ul className="space-y-4">
                 {actionPlanRight.map((item, index) => (
                   <li
                     key={index}
-                    className="flex items-start gap-4 text-textGray leading-7"
+                    className="flex items-start gap-3 text-textGray leading-7"
                   >
                     <CheckCircle2
                       size={20}
@@ -294,28 +285,28 @@ const About = () => {
       </section>
 
       {/* HOW WE WORK? */}
-      <section className="py-20 md:py-24 bg-dark">
+      <section className="py-16 md:py-20 bg-dark">
         <div className="container-custom">
-          <div className="text-center max-w-3xl mx-auto mb-12">
+          <div className="text-center mb-9">
             <div className="w-14 h-14 mx-auto rounded-2xl bg-primary flex items-center justify-center">
               <GraduationCap className="text-white" size={30} />
             </div>
 
-            <h2 className="text-3xl md:text-5xl font-black text-white mt-6">
+            <h2 className="text-3xl md:text-5xl font-black text-white mt-5">
               How We Work?
             </h2>
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-8 items-stretch">
-            <div className="bg-white/5 border border-white/10 rounded-card p-8 md:p-10">
-              <div className="space-y-7">
-                <p className="text-white/80 leading-8">
+          <div className="grid lg:grid-cols-2 gap-6 items-stretch">
+            <div className="bg-white/5 border border-white/10 rounded-card p-7 md:p-9">
+              <div className="space-y-5">
+                <p className="text-white/80 leading-7">
                   Our training method is based on a step-by-step implementation
                   model that replicates the workflow of today's leading
                   technology companies.
                 </p>
 
-                <p className="text-white/80 leading-8">
+                <p className="text-white/80 leading-7">
                   Initially, all students focus on building strong technical
                   fundamentals. Then, they gradually move on to practical
                   assignments and guided implementation. Finally, as their
@@ -327,9 +318,9 @@ const About = () => {
               </div>
             </div>
 
-            <div className="bg-white/5 border border-white/10 rounded-card p-8 md:p-10">
-              <div className="space-y-7">
-                <p className="text-white/80 leading-8">
+            <div className="bg-white/5 border border-white/10 rounded-card p-7 md:p-9">
+              <div className="space-y-5">
+                <p className="text-white/80 leading-7">
                   Also, during the entire duration of the program, students are
                   continuously mentored by professionals from the industry.
                   These mentors continuously review their project works, give
@@ -340,7 +331,7 @@ const About = () => {
                   communication, and problem-solving skills.
                 </p>
 
-                <p className="text-white/80 leading-8">
+                <p className="text-white/80 leading-7">
                   After the completion of the projects, students get involved
                   in gaining internship experience. They also work on portfolio
                   development, GitHub optimisation, resume building and undergo
@@ -354,8 +345,8 @@ const About = () => {
             </div>
           </div>
 
-          <div className="mt-8 bg-primary rounded-card p-8 md:p-10">
-            <p className="text-white text-center font-bold text-lg leading-8 max-w-5xl mx-auto">
+          <div className="mt-6 bg-primary rounded-card p-7 md:p-9">
+            <p className="text-white text-center font-bold text-lg leading-7 max-w-5xl mx-auto">
               Here, at IT Sparks Technologies, education is not just
               theoretical learning. It is a continuous process of building,
               creating, deploying, and growing, because real careers are built
