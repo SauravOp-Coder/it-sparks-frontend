@@ -144,7 +144,7 @@ const FreeDemoPopup = ({ isOpen, onClose }) => {
         {/* Header */}
         <div className="bg-dark text-white p-6 pr-16">
           <span className="text-primary font-bold uppercase text-sm">
-            Enquire Now
+            Free Demo Popup
           </span>
 
           <h2 className="text-2xl font-extrabold mt-2">

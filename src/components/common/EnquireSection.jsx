@@ -8,7 +8,7 @@ import {
 } from "../../utils/validators";
 
 const EnquireSection = ({
-  title = "Enquire Now",
+  title = "EnquireSection",
   subtitle = "Have a question or want to know more? Fill in your details and our team will get back to you shortly.",
   source = "Enquire Section",
 }) => {
