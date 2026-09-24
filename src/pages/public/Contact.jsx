@@ -203,7 +203,11 @@ const Contact = () => {
               </div>
 
               {/* Phone */}
-              <div className="bg-lightBg border border-borderSoft rounded-card p-6 flex gap-4">
+              
+                <a
+                  href="tel:+917517514455"
+                className="bg-lightBg border border-borderSoft rounded-card p-6 flex gap-4 hover:border-primary transition"
+              >
                 <PhoneCall
                   className="text-primary shrink-0"
                   size={28}
@@ -218,10 +222,16 @@ const Contact = () => {
                     +91 75175 14455
                   </p>
                 </div>
-              </div>
+              </a>
 
               {/* WhatsApp */}
-              <div className="bg-lightBg border border-borderSoft rounded-card p-6 flex gap-4">
+              
+                <a
+                  href="https://wa.me/917517514144"
+                target="_blank"
+                rel="noreferrer"
+                className="bg-lightBg border border-borderSoft rounded-card p-6 flex gap-4 hover:border-primary transition"
+              >
                 <MessageCircle
                   className="text-primary shrink-0"
                   size={28}
@@ -236,10 +246,14 @@ const Contact = () => {
                     +91 75175 14144
                   </p>
                 </div>
-              </div>
+              </a>
 
               {/* Email */}
-              <div className="bg-lightBg border border-borderSoft rounded-card p-6 flex gap-4">
+              
+                <a
+                  href="mailto:contact@itsparkstech.com"
+                className="bg-lightBg border border-borderSoft rounded-card p-6 flex gap-4 hover:border-primary transition"
+              >
                 <Mail
                   className="text-primary shrink-0"
                   size={28}
@@ -254,10 +268,15 @@ const Contact = () => {
                     contact@itsparkstech.com
                   </p>
                 </div>
-              </div>
+              </a>
 
               {/* Address */}
-              <div className="bg-lightBg border border-borderSoft rounded-card p-6 flex gap-4">
+              <a
+                href="https://www.google.com/maps/search/?api=1&query=IT%20Sparks%20Technologies%2C%20First%20Floor%2C%20Shop%20No.%20S-20%2C%20Audumbar%20Complex%2C%20A%20Wing%2C%20Narhe%2C%20Pune%2C%20Maharashtra%20411041"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-lightBg border border-borderSoft rounded-card p-6 flex gap-4"
+              >
                 <MapPin
                   className="text-primary shrink-0"
                   size={28}
@@ -274,7 +293,7 @@ const Contact = () => {
                     A Wing, Narhe, Pune, Maharashtra 411041
                   </p>
                 </div>
-              </div>
+              </a>
             </div>
 
             {/* =================================================
@@ -536,8 +555,9 @@ const Contact = () => {
 <section className="pb-20 bg-white">
   <div className="container-custom">
     <div className="bg-lightBg border border-borderSoft rounded-card overflow-hidden shadow-card">
-      <a
-        href={
+      
+        <a
+          href={
           settings?.googleMapLink ||
           `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
             settings?.address ||
