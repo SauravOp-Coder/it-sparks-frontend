@@ -285,28 +285,28 @@ const About = () => {
       </section>
 
       {/* HOW WE WORK? */}
-      <section className="py-16 md:py-20 bg-dark">
+      <section className="py-16 md:py-20 bg-lightBg">
         <div className="container-custom">
           <div className="text-center mb-9">
-            <div className="w-14 h-14 mx-auto rounded-2xl bg-primary flex items-center justify-center">
-              <GraduationCap className="text-white" size={30} />
+            <div className="w-14 h-14 mx-auto rounded-2xl bg-primary/10 flex items-center justify-center">
+              <GraduationCap className="text-primary" size={30} />
             </div>
 
-            <h2 className="text-3xl md:text-5xl font-black text-white mt-5">
+            <h2 className="text-3xl md:text-5xl font-black text-dark mt-5">
               How We Work?
             </h2>
           </div>
 
           <div className="grid lg:grid-cols-2 gap-6 items-stretch">
-            <div className="bg-white/5 border border-white/10 rounded-card p-7 md:p-9">
+            <div className="bg-white border border-borderSoft rounded-card p-7 md:p-9 shadow-card">
               <div className="space-y-5">
-                <p className="text-white/80 leading-7">
+                <p className="text-textGray leading-7">
                   Our training method is based on a step-by-step implementation
                   model that replicates the workflow of today's leading
                   technology companies.
                 </p>
 
-                <p className="text-white/80 leading-7">
+                <p className="text-textGray leading-7">
                   Initially, all students focus on building strong technical
                   fundamentals. Then, they gradually move on to practical
                   assignments and guided implementation. Finally, as their
@@ -318,9 +318,9 @@ const About = () => {
               </div>
             </div>
 
-            <div className="bg-white/5 border border-white/10 rounded-card p-7 md:p-9">
+            <div className="bg-white border border-borderSoft rounded-card p-7 md:p-9 shadow-card">
               <div className="space-y-5">
-                <p className="text-white/80 leading-7">
+                <p className="text-textGray leading-7">
                   Also, during the entire duration of the program, students are
                   continuously mentored by professionals from the industry.
                   These mentors continuously review their project works, give
@@ -331,7 +331,7 @@ const About = () => {
                   communication, and problem-solving skills.
                 </p>
 
-                <p className="text-white/80 leading-7">
+                <p className="text-textGray leading-7">
                   After the completion of the projects, students get involved
                   in gaining internship experience. They also work on portfolio
                   development, GitHub optimisation, resume building and undergo
