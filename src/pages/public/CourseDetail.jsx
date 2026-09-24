@@ -54,10 +54,15 @@ const CourseDetail = () => {
   const renderSection = (section, index) => {
     const caseClass = textCaseClass[section.textCase] || "";
 
-       if (section.type === "heading") {
+    if (section.type === "heading") {
       return (
-        <div key={section._id || index} className="mt-8 border-l-4 border-primary pl-4">
-          <h2 className={`text-4xl md:text-5xl font-black text-dark leading-tight ${caseClass}`}>
+        <div
+          key={section._id || index}
+          className="mt-6 border-l-4 border-primary pl-4"
+        >
+          <h2
+            className={`text-4xl md:text-5xl font-black text-dark leading-tight ${caseClass}`}
+          >
             {section.title || section.content}
           </h2>
         </div>
@@ -66,8 +71,10 @@ const CourseDetail = () => {
 
     if (section.type === "subheading") {
       return (
-        <div key={section._id || index} className="mt-5">
-          <h3 className={`text-lg md:text-xl font-bold text-dark ${caseClass}`}>
+        <div key={section._id || index} className="mt-4">
+          <h3
+            className={`text-lg md:text-xl font-bold text-dark ${caseClass}`}
+          >
             {section.title || section.content}
           </h3>
         </div>
@@ -76,18 +83,20 @@ const CourseDetail = () => {
 
     if (section.type === "paragraph") {
       return (
-        <div key={section._id || index} className="mt-6">
+        <div key={section._id || index} className="mt-4">
           {section.title && (
-            <h3 className={`text-2xl font-extrabold text-dark ${caseClass}`}>
+            <h3
+              className={`text-2xl font-extrabold text-dark ${caseClass}`}
+            >
               {section.title}
             </h3>
           )}
 
-          <div className="space-y-3 mt-3">
+          <div className="space-y-2 mt-2">
             {splitParagraphs(section.content).map((para, i) => (
               <p
                 key={i}
-                className={`text-textGray leading-8 whitespace-pre-line ${caseClass}`}
+                className={`text-textGray leading-7 whitespace-pre-line ${caseClass}`}
               >
                 {para}
               </p>
@@ -99,20 +108,26 @@ const CourseDetail = () => {
 
     if (section.type === "bulletList") {
       return (
-        <div key={section._id || index} className="mt-7">
+        <div key={section._id || index} className="mt-5">
           {section.title && (
-            <h3 className={`text-2xl font-extrabold text-dark ${caseClass}`}>
+            <h3
+              className={`text-2xl font-extrabold text-dark ${caseClass}`}
+            >
               {section.title}
             </h3>
           )}
 
-          <ul className="grid gap-3 mt-4">
+          <ul className="grid gap-2 mt-3">
             {(section.items || []).map((item, itemIndex) => (
               <li
                 key={itemIndex}
                 className={`flex gap-3 text-textGray leading-7 ${caseClass}`}
               >
-                <CheckCircle2 size={20} className="text-primary shrink-0 mt-1" />
+                <CheckCircle2
+                  size={20}
+                  className="text-primary shrink-0 mt-1"
+                />
+
                 <span>{item}</span>
               </li>
             ))}
@@ -123,14 +138,16 @@ const CourseDetail = () => {
 
     if (section.type === "numberedList") {
       return (
-        <div key={section._id || index} className="mt-7">
+        <div key={section._id || index} className="mt-5">
           {section.title && (
-            <h3 className={`text-2xl font-extrabold text-dark ${caseClass}`}>
+            <h3
+              className={`text-2xl font-extrabold text-dark ${caseClass}`}
+            >
               {section.title}
             </h3>
           )}
 
-          <ol className="grid gap-3 mt-4 list-decimal pl-6">
+          <ol className="grid gap-2 mt-3 list-decimal pl-6">
             {(section.items || []).map((item, itemIndex) => (
               <li
                 key={itemIndex}
@@ -148,15 +165,19 @@ const CourseDetail = () => {
       return (
         <div
           key={section._id || index}
-          className="mt-7 bg-primary/10 border border-primary/20 rounded-card p-6"
+          className="mt-5 bg-primary/10 border border-primary/20 rounded-card p-6"
         >
           {section.title && (
-            <h3 className={`text-2xl font-extrabold text-primary ${caseClass}`}>
+            <h3
+              className={`text-2xl font-extrabold text-primary ${caseClass}`}
+            >
               {section.title}
             </h3>
           )}
 
-          <p className={`text-dark leading-8 mt-3 font-semibold whitespace-pre-line ${caseClass}`}>
+          <p
+            className={`text-dark leading-7 mt-2 font-semibold whitespace-pre-line ${caseClass}`}
+          >
             {section.content}
           </p>
         </div>
@@ -178,7 +199,10 @@ const CourseDetail = () => {
     return (
       <main className="section-padding">
         <div className="container-custom text-center">
-          <h1 className="text-3xl font-black text-dark">Course not found</h1>
+          <h1 className="text-3xl font-black text-dark">
+            Course not found
+          </h1>
+
           <Link to="/courses" className="primary-btn mt-6">
             Back to Courses
           </Link>
@@ -188,11 +212,12 @@ const CourseDetail = () => {
   }
 
   const hasDetailSections =
-    Array.isArray(course.detailSections) && course.detailSections.length > 0;
+    Array.isArray(course.detailSections) &&
+    course.detailSections.length > 0;
 
   return (
     <main>
-            <SEO
+      <SEO
         title={course.metaTitle || course.title}
         description={
           course.metaDescription ||
@@ -206,6 +231,7 @@ const CourseDetail = () => {
         canonical={`/courses/${course.slug || id}`}
         ogImage={course.image?.url || undefined}
       />
+
       <section className="bg-gradient-to-br from-dark via-softDark to-dark text-white py-20">
         <div className="container-custom">
           <Link
@@ -294,35 +320,39 @@ const CourseDetail = () => {
               </h2>
 
               {hasDetailSections ? (
-                <div>{course.detailSections.map(renderSection)}</div>
+                <div>
+                  {course.detailSections.map(renderSection)}
+                </div>
               ) : (
-                <p className="text-textGray leading-8 mt-5">
+                <p className="text-textGray leading-7 mt-4">
                   {course.description}
                 </p>
               )}
 
-              {Array.isArray(course.syllabus) && course.syllabus.length > 0 && (
-                <div className="mt-10">
-                  <h2 className="text-3xl font-black text-dark">
-                    Course Syllabus
-                  </h2>
+              {Array.isArray(course.syllabus) &&
+                course.syllabus.length > 0 && (
+                  <div className="mt-7">
+                    <h2 className="text-3xl font-black text-dark">
+                      Course Syllabus
+                    </h2>
 
-                  <ul className="grid gap-3 mt-5">
-                    {course.syllabus.map((item, index) => (
-                      <li
-                        key={index}
-                        className="flex gap-3 text-textGray leading-7"
-                      >
-                        <CheckCircle2
-                          size={20}
-                          className="text-primary shrink-0 mt-1"
-                        />
-                        <span>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
+                    <ul className="grid gap-2 mt-4">
+                      {course.syllabus.map((item, index) => (
+                        <li
+                          key={index}
+                          className="flex gap-3 text-textGray leading-7"
+                        >
+                          <CheckCircle2
+                            size={20}
+                            className="text-primary shrink-0 mt-1"
+                          />
+
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
             </div>
 
             <aside className="bg-lightBg border border-borderSoft rounded-card p-6 h-fit sticky top-28">
@@ -332,26 +362,34 @@ const CourseDetail = () => {
 
               <div className="grid gap-4 mt-6">
                 <div>
-                  <p className="text-sm text-textGray">Duration</p>
+                  <p className="text-sm text-textGray">
+                    Duration
+                  </p>
+
                   <p className="font-extrabold text-dark">
                     {course.duration || "Contact for details"}
                   </p>
                 </div>
 
                 <div>
-                  <p className="text-sm text-textGray">Mode</p>
+                  <p className="text-sm text-textGray">
+                    Mode
+                  </p>
+
                   <p className="font-extrabold text-dark">
                     {course.mode || "Online / Offline"}
                   </p>
                 </div>
 
                 <div>
-                  <p className="text-sm text-textGray">Level</p>
+                  <p className="text-sm text-textGray">
+                    Level
+                  </p>
+
                   <p className="font-extrabold text-dark">
                     {course.level || "Beginner to Advanced"}
                   </p>
                 </div>
-
               </div>
 
               <button
