@@ -87,37 +87,7 @@ const Gallery = () => {
         </div>
       </section>
 
-      <section className="py-16 bg-dark text-white">
-        <div className="container-custom">
-          <div className="grid lg:grid-cols-[1fr_auto] gap-8 items-center">
-            <div>
-              <div className="flex items-center gap-3 mb-3">
-                <Sparkles className="text-primary" size={26} />
-                <span className="text-primary font-bold uppercase tracking-wide text-sm">
-                  Training Environment
-                </span>
-              </div>
-
-              <h2 className="text-3xl font-extrabold">
-                Learn in a practical and focused environment
-              </h2>
-
-              <p className="text-white/70 leading-7 mt-3">
-                Students get practical exposure through training sessions,
-                assignments, workshops, and project-based learning.
-              </p>
-            </div>
-
-              <button
-              type="button"
-              onClick={() => setDemoPopupOpen(true)}
-              className="primary-btn"
-            >
-              Get Course Guidance
-            </button>
-          </div>
-        </div>
-      </section>
+     
        <FreeDemoPopup
         isOpen={demoPopupOpen}
         onClose={() => setDemoPopupOpen(false)}
