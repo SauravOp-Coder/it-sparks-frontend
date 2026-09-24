@@ -38,9 +38,7 @@ useEffect(() => {
       <div className="container-custom">
         <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
           <div className="max-w-2xl">
-            <span className="text-primary font-bold uppercase tracking-wide text-sm">
-              Student Reviews
-            </span>
+           
             <h2 className="text-3xl md:text-4xl font-extrabold text-dark mt-3">
               What students say about IT Sparks Technologies
             </h2>

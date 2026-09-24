@@ -76,9 +76,7 @@ const Courses = () => {
         <div className="container-custom">
           <div className="grid lg:grid-cols-[1fr_auto] gap-8 items-center">
             <div>
-              <span className="text-primary font-extrabold uppercase tracking-wide text-sm">
-                Need Help?
-              </span>
+             
 
               <h2 className="text-3xl md:text-4xl font-black mt-3">
                 Confused about which course to choose?
