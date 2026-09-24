@@ -6,7 +6,6 @@ import SEO from "../../components/common/SEO";
 import FaqSection from "../../components/common/FaqSection";
 import FreeDemoPopup from "../../components/common/FreeDemoPopup";
 import { getCoursesApi } from "../../api/courseApi";
-import EnquireSection from "../common/EnquireSection";
 
 const Courses = () => {
   const [courses, setCourses] = useState([]);
@@ -73,10 +72,34 @@ const Courses = () => {
         </div>
       </section>
 
-             {/* ========================= */}
-      {/* Enquire Section */}
-      {/* ========================= */}
-      <EnquireSection />
+      <section className="py-20 bg-dark text-white">
+        <div className="container-custom">
+          <div className="grid lg:grid-cols-[1fr_auto] gap-8 items-center">
+            <div>
+              <span className="text-primary font-extrabold uppercase tracking-wide text-sm">
+                Need Help?
+              </span>
+
+              <h2 className="text-3xl md:text-4xl font-black mt-3">
+                Confused about which course to choose?
+              </h2>
+
+              <p className="text-white/70 leading-8 mt-4 max-w-2xl">
+                Contact our team and get guidance based on your background,
+                interest, and career goals.
+              </p>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setDemoPopupOpen(true)}
+              className="primary-btn"
+            >
+              Get Course Guidance
+            </button>
+          </div>
+        </div>
+      </section>
 
       <ReviewSection />
 
