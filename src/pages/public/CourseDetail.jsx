@@ -54,10 +54,10 @@ const CourseDetail = () => {
   const renderSection = (section, index) => {
     const caseClass = textCaseClass[section.textCase] || "";
 
-    if (section.type === "heading") {
+       if (section.type === "heading") {
       return (
-        <div key={section._id || index} className="mt-8">
-          <h2 className={`text-3xl font-black text-dark ${caseClass}`}>
+        <div key={section._id || index} className="mt-8 border-l-4 border-primary pl-4">
+          <h2 className={`text-4xl md:text-5xl font-black text-dark leading-tight ${caseClass}`}>
             {section.title || section.content}
           </h2>
         </div>
@@ -67,7 +67,7 @@ const CourseDetail = () => {
     if (section.type === "subheading") {
       return (
         <div key={section._id || index} className="mt-5">
-          <h3 className={`text-xl md:text-2xl font-extrabold text-dark ${caseClass}`}>
+          <h3 className={`text-lg md:text-xl font-bold text-dark ${caseClass}`}>
             {section.title || section.content}
           </h3>
         </div>

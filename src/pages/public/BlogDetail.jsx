@@ -16,7 +16,7 @@ const renderContentBlock = (block, index) => {
     return (
       <h3
         key={index}
-        className="text-xl md:text-2xl font-extrabold text-dark mt-6 mb-1"
+        className="text-lg md:text-xl font-bold text-dark mt-6 mb-1"
       >
         {block.replace(/^##\s+/, "")}
       </h3>
