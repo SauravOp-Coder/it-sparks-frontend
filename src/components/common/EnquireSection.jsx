@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Send } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { createEnquiryApi } from "../../api/enquiryApi";
 import { getCoursesApi } from "../../api/courseApi";
 import {
@@ -13,6 +14,8 @@ const EnquireSection = ({
   subtitle = "Have a question or want to know more? Fill in your details and our team will get back to you shortly.",
   source = "Enquire Section",
 }) => {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     fullName: "",
     mobile: "",
@@ -101,6 +104,10 @@ const EnquireSection = ({
         preferredMode: "Not Selected",
         message: "",
       });
+
+      setTimeout(() => {
+        navigate("/thank-you");
+      }, 1500);
     } catch (error) {
       setError(
         error.response?.data?.message || "Failed to submit enquiry."
