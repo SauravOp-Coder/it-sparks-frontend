@@ -39,11 +39,14 @@ const HomeContentBuilder = () => {
         : "";
 
     switch (section.type) {
-      case "heading":
+            case "heading":
         return (
-          <div key={index} className="rounded-3xl bg-primary/5 p-8">
+          <div
+            key={index}
+            className="rounded-3xl bg-primary/5 border-l-4 border-primary p-8"
+          >
             <h2
-              className={`text-3xl md:text-4xl font-black text-dark ${textClass}`}
+              className={`text-4xl md:text-5xl font-black text-dark leading-tight ${textClass}`}
             >
               {section.title}
             </h2>
@@ -54,12 +57,13 @@ const HomeContentBuilder = () => {
         return (
           <div key={index} className="mt-2">
             <h3
-              className={`text-xl md:text-2xl font-extrabold text-dark ${textClass}`}
+              className={`text-lg md:text-xl font-bold text-dark ${textClass}`}
             >
               {section.title || section.content}
             </h3>
           </div>
         );
+       
 
       case "paragraph":
         return (
