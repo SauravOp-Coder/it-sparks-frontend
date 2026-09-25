@@ -9,7 +9,12 @@ import {
   validateEnquiryForm,
 } from "../../utils/validators";
 
-const POPUP_STORAGE_KEY = "enquiryPopupShown";
+// =========================================================
+// POPUP STATE FOR CURRENT WEBSITE LOAD
+// Resets automatically when browser page is reloaded
+// =========================================================
+
+let popupShownThisPageLoad = false;
 
 const EnquiryPopup = () => {
   const navigate = useNavigate();
@@ -30,52 +35,71 @@ const EnquiryPopup = () => {
     message: "",
   });
 
-  const closePopupForSession = () => {
-    setShowPopup(false);
+  // =========================================================
+  // CLOSE POPUP
+  // =========================================================
 
-    try {
-      sessionStorage.setItem(
-        POPUP_STORAGE_KEY,
-        "true"
-      );
-    } catch (error) {
-      // sessionStorage unavailable (e.g. private browsing) - fail silently
-    }
+  const closePopup = () => {
+    setShowPopup(false);
   };
 
-  useEffect(() => {
-    let alreadyShown = false;
+  // =========================================================
+  // SHOW POPUP ONCE AFTER 30 SECONDS
+  // =========================================================
 
-    try {
-      alreadyShown =
-        sessionStorage.getItem(POPUP_STORAGE_KEY) ===
-        "true";
-    } catch (error) {
-      alreadyShown = false;
+  useEffect(() => {
+    // Popup already appeared during this website load
+    if (popupShownThisPageLoad) {
+      return;
     }
 
-    if (alreadyShown) return;
+    /*
+      performance.now() tells us approximately how long
+      the current browser page has been open.
+
+      Example:
+      Website open for 10 sec
+      User changes page
+      Remaining popup time = 20 sec
+
+      Reload website
+      performance.now() resets
+      Timer starts again from 30 sec
+    */
+
+    const elapsedTime =
+      typeof performance !== "undefined"
+        ? performance.now()
+        : 0;
+
+    const remainingTime = Math.max(
+      30000 - elapsedTime,
+      0
+    );
 
     const timer = setTimeout(() => {
-      setShowPopup(true);
-
-      try {
-        sessionStorage.setItem(
-          POPUP_STORAGE_KEY,
-          "true"
-        );
-      } catch (error) {
-        // fail silently
+      if (popupShownThisPageLoad) {
+        return;
       }
-    }, 30000);
 
-    return () => clearTimeout(timer);
+      popupShownThisPageLoad = true;
+      setShowPopup(true);
+    }, remainingTime);
+
+    return () => {
+      clearTimeout(timer);
+    };
   }, []);
+
+  // =========================================================
+  // FETCH COURSES
+  // =========================================================
 
   useEffect(() => {
     const fetchCourses = async () => {
       try {
         const data = await getCoursesApi();
+
         setCourses(data.courses || []);
       } catch (error) {
         console.error(
@@ -89,6 +113,10 @@ const EnquiryPopup = () => {
 
     fetchCourses();
   }, []);
+
+  // =========================================================
+  // HANDLE INPUT CHANGE
+  // =========================================================
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -115,6 +143,10 @@ const EnquiryPopup = () => {
       }));
     }
   };
+
+  // =========================================================
+  // HANDLE SUBMIT
+  // =========================================================
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -152,7 +184,7 @@ const EnquiryPopup = () => {
       });
 
       setTimeout(() => {
-        closePopupForSession();
+        closePopup();
         setSuccess("");
         navigate("/thank-you");
       }, 1500);
@@ -166,26 +198,38 @@ const EnquiryPopup = () => {
     }
   };
 
-  if (!showPopup) return null;
+  // =========================================================
+  // DON'T RENDER UNTIL 30 SECONDS
+  // =========================================================
+
+  if (!showPopup) {
+    return null;
+  }
+
+  // =========================================================
+  // POPUP
+  // =========================================================
 
   return (
     <div
       className="fixed inset-0 z-[80] bg-black/60 flex items-center justify-center px-4"
-      onClick={closePopupForSession}
+      onClick={closePopup}
     >
       <div
         className="bg-white rounded-card w-full max-w-xl shadow-soft relative overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
+        {/* CLOSE BUTTON */}
         <button
           type="button"
-          onClick={closePopupForSession}
+          onClick={closePopup}
           className="absolute top-4 right-4 h-9 w-9 rounded-full bg-lightBg flex items-center justify-center text-dark hover:text-primary transition"
           aria-label="Close popup"
         >
           <X size={20} />
         </button>
 
+        {/* HEADER */}
         <div className="bg-dark text-white p-6">
           <span className="text-primary font-bold uppercase text-sm">
             Course Enquiry
@@ -201,23 +245,27 @@ const EnquiryPopup = () => {
           </p>
         </div>
 
+        {/* FORM */}
         <form
           onSubmit={handleSubmit}
           noValidate
           className="p-6 grid gap-4"
         >
+          {/* SUCCESS */}
           {success && (
             <div className="bg-green-50 border border-green-100 text-green-700 rounded-button px-4 py-3 text-sm font-semibold">
               {success}
             </div>
           )}
 
+          {/* ERROR */}
           {error && (
             <div className="bg-red-50 border border-red-100 text-red-600 rounded-button px-4 py-3 text-sm font-semibold">
               {error}
             </div>
           )}
 
+          {/* NAME + MOBILE */}
           <div className="grid sm:grid-cols-2 gap-4">
             <div>
               <input
@@ -264,6 +312,7 @@ const EnquiryPopup = () => {
             </div>
           </div>
 
+          {/* EMAIL */}
           <div>
             <input
               type="email"
@@ -285,6 +334,7 @@ const EnquiryPopup = () => {
             )}
           </div>
 
+          {/* COURSE + MODE */}
           <div className="grid sm:grid-cols-2 gap-4">
             <div>
               <select
@@ -317,9 +367,7 @@ const EnquiryPopup = () => {
 
               {fieldErrors.interestedCourse && (
                 <p className="text-red-500 text-xs mt-1 px-1">
-                  {
-                    fieldErrors.interestedCourse
-                  }
+                  {fieldErrors.interestedCourse}
                 </p>
               )}
             </div>
@@ -344,6 +392,7 @@ const EnquiryPopup = () => {
             </select>
           </div>
 
+          {/* MESSAGE */}
           <div>
             <textarea
               name="message"
@@ -366,6 +415,7 @@ const EnquiryPopup = () => {
             )}
           </div>
 
+          {/* SUBMIT */}
           <button
             type="submit"
             disabled={loading}
