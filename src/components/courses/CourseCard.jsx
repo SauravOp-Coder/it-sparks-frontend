@@ -84,12 +84,12 @@ const CourseCard = ({ course }) => {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-3 mt-6">
+          <div className="grid gap-3 mt-6">
             {/* Enquiry Popup */}
             <button
               type="button"
               onClick={() => setDemoPopupOpen(true)}
-              className="secondary-btn text-sm px-3 py-3"
+              className="secondary-btn text-sm px-3 py-3 w-full"
             >
               Enquire
             </button>
@@ -99,7 +99,7 @@ const CourseCard = ({ course }) => {
               type="button"
               onClick={() => setBrochurePopupOpen(true)}
               disabled={!course?.brochure?.url}
-              className="primary-btn text-sm px-3 py-3 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="primary-btn text-sm px-3 py-3 w-full disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <Download size={17} className="mr-2" />
               Download Brochure
