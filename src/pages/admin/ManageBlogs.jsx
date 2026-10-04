@@ -13,6 +13,7 @@ const emptyForm = {
   publishedDate: "",
   shortDescription: "",
   content: "",
+  slug: "",
   metaTitle: "",
   metaDescription: "",
   metaKeywords: "",
@@ -63,6 +64,7 @@ const ManageBlogs = () => {
 
     setFormData({
       title: blog.title || "",
+      slug: blog.slug || "",
       category: blog.category || "",
       publishedDate: blog.publishedDate
         ? blog.publishedDate.slice(0, 10)
@@ -201,6 +203,22 @@ const ManageBlogs = () => {
               placeholder="Blog Title"
               className="border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
             />
+
+                        <div className="md:col-span-2">
+              <label className="text-xs font-bold text-textGray px-1">
+                URL Slug (leave blank to auto-generate from title)
+              </label>
+              <input
+                name="slug"
+                value={formData.slug}
+                onChange={handleChange}
+                placeholder="e.g. top-5-it-skills-to-learn-in-2026"
+                className="w-full border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary mt-1"
+              />
+              <p className="text-xs text-textGray mt-1 px-1">
+                Live URL: itsparkstech.com/blog/{formData.slug || "auto-generated-from-title"}
+              </p>
+            </div>
 
             <input
               name="category"
