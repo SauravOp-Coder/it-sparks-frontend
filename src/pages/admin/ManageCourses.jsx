@@ -18,6 +18,7 @@ const emptyForm = {
   syllabusText: "",
   careerOptions: "",
   overview: "",
+  slug: "",
   metaTitle: "",
   metaDescription: "",
   metaKeywords: "",
@@ -128,6 +129,7 @@ const ManageCourses = () => {
 
     setFormData({
       title: course.title || "",
+      slug: course.slug || "",
       dropdownName: course.dropdownName || "",
       category: course.category || "",
       duration: course.duration || "",
@@ -184,6 +186,7 @@ const ManageCourses = () => {
     payload.append("metaKeywords", formData.metaKeywords);
     payload.append("isPopular", formData.isPopular);
     payload.append("isVisible", formData.isVisible);
+    payload.append("slug", formData.slug);
 
     const sectionsForBackend = formData.detailSections.map((section) => ({
       type: section.type,
@@ -286,6 +289,22 @@ const ManageCourses = () => {
               required
               className="border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
             />
+
+            <div className="md:col-span-2">
+              <label className="text-xs font-bold text-textGray px-1">
+                URL Slug (leave blank to auto-generate from title)
+              </label>
+              <input
+                name="slug"
+                value={formData.slug}
+                onChange={handleChange}
+                placeholder="e.g. full-stack-development-course-pune"
+                className="w-full border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary mt-1"
+              />
+              <p className="text-xs text-textGray mt-1 px-1">
+                Live URL: itsparkstech.com/courses/{formData.slug || "auto-generated-from-title"}
+              </p>
+            </div>
 
             {/* Added input field UI for dropdownName */}
             <input
