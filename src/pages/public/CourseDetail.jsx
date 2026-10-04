@@ -324,7 +324,8 @@ const CourseDetail = () => {
                 </div>
               )}
 
-              <FaqSection faqs={course.faqs} />
+              <FaqSection faqs={course.faqs || []} />
+              
             </div>
 
             <aside className="bg-lightBg border border-borderSoft rounded-card p-6 h-fit sticky top-28">
