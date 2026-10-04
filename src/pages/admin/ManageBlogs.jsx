@@ -19,7 +19,13 @@ const emptyForm = {
   metaKeywords: "",
   isVisible: true,
   image: null,
+  faqs: [],
 };
+
+const createEmptyFaq = () => ({
+  question: "",
+  answer: "",
+});
 
 const ManageBlogs = () => {
   const [blogs, setBlogs] = useState([]);
@@ -76,6 +82,12 @@ const ManageBlogs = () => {
       metaKeywords: blog.metaKeywords || "",
       isVisible: Boolean(blog.isVisible),
       image: null,
+      faqs: Array.isArray(blog.faqs)
+        ? blog.faqs.map((faq) => ({
+            question: faq.question || "",
+            answer: faq.answer || "",
+          }))
+        : [],
     });
 
     setShowForm(true);
@@ -100,14 +112,45 @@ const ManageBlogs = () => {
     }));
   };
 
+  const addFaq = () => {
+    setFormData((prev) => ({
+      ...prev,
+      faqs: [...prev.faqs, createEmptyFaq()],
+    }));
+  };
+
+  const removeFaq = (index) => {
+    setFormData((prev) => ({
+      ...prev,
+      faqs: prev.faqs.filter((_, i) => i !== index),
+    }));
+  };
+
+  const updateFaq = (index, field, value) => {
+    setFormData((prev) => ({
+      ...prev,
+      faqs: prev.faqs.map((faq, i) =>
+        i === index ? { ...faq, [field]: value } : faq
+      ),
+    }));
+  };
+
   const buildPayload = () => {
     const payload = new FormData();
 
     Object.entries(formData).forEach(([key, value]) => {
+      if (key === "faqs") return; // handled separately below
       if (value !== null && value !== "") {
         payload.append(key, value);
       }
     });
+
+    const faqsForBackend = formData.faqs.map((faq) => ({
+      question: faq.question,
+      answer: faq.answer,
+    }));
+
+    payload.append("faqs", JSON.stringify(faqsForBackend));
 
     return payload;
   };
@@ -308,6 +351,51 @@ const ManageBlogs = () => {
                 className="border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
               />
             </div>
+          </div>
+
+          {/* FAQs */}
+          <div className="mt-6 border-t border-borderSoft pt-5">
+            <div className="flex justify-between items-center mb-4">
+              <h4 className="font-bold text-dark text-lg">Blog FAQs</h4>
+              <button
+                type="button"
+                onClick={addFaq}
+                className="secondary-btn flex items-center gap-1 py-1.5 px-3 text-sm"
+              >
+                <Plus size={16} /> Add FAQ
+              </button>
+            </div>
+
+            {formData.faqs.map((faq, index) => (
+              <div
+                key={index}
+                className="p-4 border border-borderSoft rounded-card mb-4 bg-lightBg/50 relative"
+              >
+                <button
+                  type="button"
+                  onClick={() => removeFaq(index)}
+                  className="absolute top-4 right-4 text-red-500 hover:text-red-700"
+                  aria-label="Delete FAQ"
+                >
+                  <Trash2 size={16} />
+                </button>
+
+                <input
+                  value={faq.question}
+                  onChange={(e) => updateFaq(index, "question", e.target.value)}
+                  placeholder="Question"
+                  className="w-full border border-borderSoft rounded-button px-3 py-2 text-sm outline-none bg-white mb-3 pr-8"
+                />
+
+                <textarea
+                  value={faq.answer}
+                  onChange={(e) => updateFaq(index, "answer", e.target.value)}
+                  placeholder="Answer"
+                  rows="2"
+                  className="w-full border border-borderSoft rounded-button px-3 py-2 text-sm outline-none resize-none bg-white"
+                />
+              </div>
+            ))}
           </div>
 
           <label className="flex items-center gap-2 font-semibold text-dark mt-5">

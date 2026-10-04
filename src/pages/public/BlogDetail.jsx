@@ -2,6 +2,7 @@ import { Link, useParams } from "react-router-dom";
 import { ArrowLeft, CalendarDays } from "lucide-react";
 import BlogCard from "../../components/blogs/BlogCard";
 import SEO from "../../components/common/SEO";
+import FaqSection from "../../components/common/FaqSection";
 import { useEffect, useState } from "react";
 import { getBlogsApi, getSingleBlogApi } from "../../api/blogApi";
 
@@ -176,6 +177,8 @@ const BlogDetail = () => {
               </Link>
             </div>
           </article>
+
+          <FaqSection faqs={blog.faqs} />
         </div>
       </section>
 
