@@ -7,6 +7,7 @@ import TopBar from "../components/common/TopBar";
 // Lazy-load floating popups and widgets
 const WhatsAppButton = lazy(() => import("../components/common/WhatsAppButton"));
 const EnquiryPopup = lazy(() => import("../components/common/EnquiryPopup"));
+const ScrollToTopButton = lazy(() => import("../components/common/ScrollToTopButton"));
 
 const PublicLayout = () => {
   return (
@@ -19,6 +20,7 @@ const PublicLayout = () => {
       <Suspense fallback={null}>
         <WhatsAppButton />
         <EnquiryPopup />
+        <ScrollToTopButton />
       </Suspense>
     </>
   );
