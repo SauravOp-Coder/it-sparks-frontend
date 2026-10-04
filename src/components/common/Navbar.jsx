@@ -1,18 +1,15 @@
 import { Link, NavLink } from "react-router-dom";
 import { ChevronDown, Menu, PhoneCall, X } from "lucide-react";
 import { useEffect, useState } from "react";
-import logo from "../../assets/logo/it-sparks-logo.webp";
+import logo from "../../assets/logo/it-sparks-logo.png";
 import { getCoursesApi } from "../../api/courseApi";
 import { getSettingsApi } from "../../api/settingApi";
-import FreeDemoPopup from "./FreeDemoPopup";
 
 const Navbar = () => {
   const [openMenu, setOpenMenu] = useState(false);
+  const [mobileCoursesOpen, setMobileCoursesOpen] = useState(false);
   const [courses, setCourses] = useState([]);
   const [settings, setSettings] = useState(null);
-
-  // NEW: Free Demo Popup state
-  const [demoPopupOpen, setDemoPopupOpen] = useState(false);
 
   const fetchData = async () => {
     try {
@@ -36,6 +33,11 @@ const Navbar = () => {
       isActive ? "text-primary" : "text-softDark hover:text-primary"
     }`;
 
+  const closeMobileMenu = () => {
+    setOpenMenu(false);
+    setMobileCoursesOpen(false);
+  };
+
   return (
     <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-xl border-b border-borderSoft">
       <div className="container-custom">
@@ -44,8 +46,6 @@ const Navbar = () => {
             <img
               src={logo}
               alt="IT Sparks Technologies"
-              width="160"
-              height="160"
               className="h-[56px] w-auto object-contain"
             />
 
@@ -53,7 +53,6 @@ const Navbar = () => {
               <p className="text-[18px] font-black tracking-tight text-dark">
                 IT Sparks
               </p>
-
               <p className="text-[12px] font-bold tracking-[0.2em] text-primary uppercase">
                 Technologies
               </p>
@@ -69,59 +68,61 @@ const Navbar = () => {
               About
             </NavLink>
 
-            <div className="relative group">
-              <NavLink
-                to="/courses"
-                className="text-[15px] font-bold text-softDark hover:text-primary transition flex items-center gap-1"
-              >
-                Courses <ChevronDown size={16} />
-              </NavLink>
+       <div className="relative group">
+  <NavLink
+    to="/courses"
+    className="text-[15px] font-bold text-softDark hover:text-primary transition flex items-center gap-1"
+  >
+    Courses <ChevronDown size={16} />
+  </NavLink>
 
-              <div className="absolute left-1/2 -translate-x-1/2 top-full pt-6 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
-                <div className="w-[520px] bg-white border border-borderSoft rounded-card shadow-soft p-4">
-                  <div className="grid grid-cols-2 gap-2">
-                    {courses.length > 0 ? (
-                      courses.map((course) => (
-                        <Link
-                          key={course._id}
-                          to={`/courses/${course.slug || course._id}`}
-                          className="p-4 rounded-[18px] hover:bg-lightBg transition"
-                        >
-                          <p className="font-extrabold text-dark text-sm">
-                            {/* FIXED HERE: replaced dropdownTitle with dropdownName */}
-                            {course.dropdownName || course.title}
-                          </p>
+  <div className="absolute left-1/2 -translate-x-1/2 top-full pt-6 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+    <div className="w-[520px] bg-white border border-borderSoft rounded-card shadow-soft p-4">
+      <div className="grid grid-cols-2 gap-2">
+        {courses.length > 0 ? (
+          courses.map((course) => (
+            <Link
+              key={course._id}
+              to={`/courses/${course.slug || course._id}`}
+              className="p-4 rounded-[18px] hover:bg-lightBg transition"
+            >
+              <p className="font-extrabold text-dark text-sm">
+                {/* FIXED HERE: replaced dropdownTitle with dropdownName */}
+                {course.dropdownName || course.title}
+              </p>
+              <p className="text-xs text-textGray mt-1 line-clamp-2">
+                {course.description}
+              </p>
+            </Link>
+          ))
+        ) : (
+          <Link
+            to="/courses"
+            className="col-span-2 p-4 rounded-[18px] hover:bg-lightBg transition"
+          >
+            <p className="font-extrabold text-dark">
+              Explore Courses
+            </p>
+            <p className="text-sm text-textGray mt-1">
+              View all available practical IT courses.
+            </p>
+          </Link>
+        )}
+      </div>
 
-                          <p className="text-xs text-textGray mt-1 line-clamp-2">
-                            {course.description}
-                          </p>
-                        </Link>
-                      ))
-                    ) : (
-                      <Link
-                        to="/courses"
-                        className="col-span-2 p-4 rounded-[18px] hover:bg-lightBg transition"
-                      >
-                        <p className="font-extrabold text-dark">
-                          Explore Courses
-                        </p>
+      <Link
+        to="/courses"
+        className="mt-4 w-full primary-btn text-sm py-3 flex items-center justify-center"
+      >
+        View All Courses
+      </Link>
+    </div>
+  </div>
+</div>
 
-                        <p className="text-sm text-textGray mt-1">
-                          View all available practical IT courses.
-                        </p>
-                      </Link>
-                    )}
-                  </div>
-
-                  <Link
-                    to="/courses"
-                    className="mt-4 w-full primary-btn text-sm py-3 flex items-center justify-center"
-                  >
-                    View All Courses
-                  </Link>
-                </div>
-              </div>
-            </div>
+            <NavLink to="/placements" className={navLinkClass}>
+              Placements
+            </NavLink>
 
             <NavLink to="/gallery" className={navLinkClass}>
               Gallery
@@ -137,13 +138,11 @@ const Navbar = () => {
           </div>
 
           <div className="hidden lg:flex items-center gap-4">
-            <button
-              type="button"
-              onClick={() => setDemoPopupOpen(true)}
-              className="primary-btn py-3"
-            >
+            
+
+            <Link to="/contact" className="primary-btn py-3">
               Book Free Demo
-            </button>
+            </Link>
           </div>
 
           <button
@@ -157,44 +156,122 @@ const Navbar = () => {
         {openMenu && (
           <div className="lg:hidden border-t border-borderSoft py-5">
             <div className="grid gap-4">
-              {[
-                ["/", "Home"],
-                ["/about", "About"],
-                ["/courses", "Courses"],
-              
-                ["/gallery", "Gallery"],
-                ["/blog", "Blog"],
-                ["/contact", "Contact"],
-              ].map(([to, label]) => (
-                <NavLink
-                  key={to}
-                  to={to}
-                  onClick={() => setOpenMenu(false)}
-                  className={navLinkClass}
-                >
-                  {label}
-                </NavLink>
-              ))}
+              <NavLink
+                to="/"
+                onClick={closeMobileMenu}
+                className={navLinkClass}
+              >
+                Home
+              </NavLink>
 
-              <button
-                type="button"
-                onClick={() => {
-                  setOpenMenu(false);
-                  setDemoPopupOpen(true);
-                }}
+              <NavLink
+                to="/about"
+                onClick={closeMobileMenu}
+                className={navLinkClass}
+              >
+                About
+              </NavLink>
+
+              {/* Courses with expandable dropdown */}
+              <div>
+                <div className="flex items-center justify-between">
+                  <NavLink
+                    to="/courses"
+                    onClick={closeMobileMenu}
+                    className={navLinkClass}
+                  >
+                    Courses
+                  </NavLink>
+
+                  <button
+                    type="button"
+                    onClick={() => setMobileCoursesOpen((prev) => !prev)}
+                    aria-label="Toggle courses list"
+                    aria-expanded={mobileCoursesOpen}
+                    className="h-9 w-9 rounded-button border border-borderSoft flex items-center justify-center text-softDark"
+                  >
+                    <ChevronDown
+                      size={18}
+                      className={`transition-transform duration-200 ${
+                        mobileCoursesOpen ? "rotate-180" : ""
+                      }`}
+                    />
+                  </button>
+                </div>
+
+                {mobileCoursesOpen && (
+                  <div className="mt-3 pl-4 border-l-2 border-borderSoft grid gap-3">
+                    {courses.length > 0 ? (
+                      courses.map((course) => (
+                        <Link
+                          key={course._id}
+                          to={`/courses/${course.slug || course._id}`}
+                          onClick={closeMobileMenu}
+                          className="text-sm font-semibold text-softDark hover:text-primary transition"
+                        >
+                          {course.dropdownName || course.title}
+                        </Link>
+                      ))
+                    ) : (
+                      <span className="text-sm text-textGray">
+                        No courses available right now.
+                      </span>
+                    )}
+
+                    <Link
+                      to="/courses"
+                      onClick={closeMobileMenu}
+                      className="text-sm font-extrabold text-primary"
+                    >
+                      View All Courses
+                    </Link>
+                  </div>
+                )}
+              </div>
+
+              <NavLink
+                to="/placements"
+                onClick={closeMobileMenu}
+                className={navLinkClass}
+              >
+                Placements
+              </NavLink>
+
+              <NavLink
+                to="/gallery"
+                onClick={closeMobileMenu}
+                className={navLinkClass}
+              >
+                Gallery
+              </NavLink>
+
+              <NavLink
+                to="/blog"
+                onClick={closeMobileMenu}
+                className={navLinkClass}
+              >
+                Blog
+              </NavLink>
+
+              <NavLink
+                to="/contact"
+                onClick={closeMobileMenu}
+                className={navLinkClass}
+              >
+                Contact
+              </NavLink>
+
+              <Link
+                to="/contact"
+                onClick={closeMobileMenu}
                 className="primary-btn w-full"
               >
                 Book Free Demo
-              </button>
+              </Link>
             </div>
           </div>
         )}
       </div>
-
-      <FreeDemoPopup
-        isOpen={demoPopupOpen}
-        onClose={() => setDemoPopupOpen(false)}
-      />
     </header>
   );
 };
