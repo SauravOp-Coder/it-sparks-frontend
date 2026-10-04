@@ -315,9 +315,7 @@ const CourseDetail = () => {
         <div className="container-custom">
           <div className="grid lg:grid-cols-[1fr_360px] gap-12">
             <div>
-              <h2 className="text-3xl font-black text-dark">
-                Course Details
-              </h2>
+              
 
               {hasDetailSections ? (
                 <div>
