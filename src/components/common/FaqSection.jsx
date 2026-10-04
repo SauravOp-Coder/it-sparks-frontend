@@ -2,22 +2,27 @@ import { useEffect, useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { getHomeContentApi } from "../../api/homeApi";
 
-const FaqSection = ({ source = "faqs" }) => {
-  const [faqs, setFaqs] = useState([]);
+const FaqSection = ({ faqs: faqsProp, source = "faqs" }) => {
+  const [fetchedFaqs, setFetchedFaqs] = useState([]);
   const [openFaqs, setOpenFaqs] = useState({});
 
+  const usingOwnFaqs = Array.isArray(faqsProp);
+  const faqs = usingOwnFaqs ? faqsProp : fetchedFaqs;
+
   useEffect(() => {
+    if (usingOwnFaqs) return;
+
     const loadFaqs = async () => {
       try {
         const data = await getHomeContentApi();
-        setFaqs(data.homeContent?.[source] || []);
+        setFetchedFaqs(data.homeContent?.[source] || []);
       } catch (error) {
         console.error(error);
       }
     };
 
     loadFaqs();
-  }, [source]);
+  }, [usingOwnFaqs, source]);
 
   if (faqs.length === 0) return null;
 
