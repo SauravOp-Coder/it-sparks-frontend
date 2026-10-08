@@ -4,10 +4,12 @@ import { useEffect, useState } from "react";
 import logo from "../../assets/logo/it-sparks-logo.webp";
 import { getCoursesApi } from "../../api/courseApi";
 import { getSettingsApi } from "../../api/settingApi";
+import FreeDemoPopup from "./FreeDemoPopup";
 
 const Navbar = () => {
   const [openMenu, setOpenMenu] = useState(false);
   const [mobileCoursesOpen, setMobileCoursesOpen] = useState(false);
+  const [demoPopupOpen, setDemoPopupOpen] = useState(false);
   const [courses, setCourses] = useState([]);
   const [settings, setSettings] = useState(null);
 
@@ -140,9 +142,13 @@ const Navbar = () => {
           <div className="hidden lg:flex items-center gap-4">
             
 
-            <Link to="/contact" className="primary-btn py-3">
+            <button
+              type="button"
+              onClick={() => setDemoPopupOpen(true)}
+              className="primary-btn py-3"
+            >
               Book Free Demo
-            </Link>
+            </button>
           </div>
 
           <button
@@ -261,17 +267,25 @@ const Navbar = () => {
                 Contact
               </NavLink>
 
-              <Link
-                to="/contact"
-                onClick={closeMobileMenu}
+              <button
+                type="button"
+                onClick={() => {
+                  closeMobileMenu();
+                  setDemoPopupOpen(true);
+                }}
                 className="primary-btn w-full"
               >
                 Book Free Demo
-              </Link>
+              </button>
             </div>
           </div>
         )}
       </div>
+
+      <FreeDemoPopup
+        isOpen={demoPopupOpen}
+        onClose={() => setDemoPopupOpen(false)}
+      />
     </header>
   );
 };
