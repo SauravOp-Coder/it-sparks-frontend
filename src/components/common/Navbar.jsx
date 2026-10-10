@@ -122,9 +122,7 @@ const Navbar = () => {
   </div>
 </div>
 
-            <NavLink to="/placements" className={navLinkClass}>
-              Placements
-            </NavLink>
+           
 
             <NavLink to="/gallery" className={navLinkClass}>
               Gallery
@@ -235,13 +233,7 @@ const Navbar = () => {
                 )}
               </div>
 
-              <NavLink
-                to="/placements"
-                onClick={closeMobileMenu}
-                className={navLinkClass}
-              >
-                Placements
-              </NavLink>
+              
 
               <NavLink
                 to="/gallery"
