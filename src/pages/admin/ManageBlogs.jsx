@@ -12,7 +12,7 @@ const emptyForm = {
   category: "",
   publishedDate: "",
   shortDescription: "",
-  content: "",
+  contentSections: [],
   slug: "",
   metaTitle: "",
   metaDescription: "",
@@ -26,6 +26,38 @@ const createEmptyFaq = () => ({
   question: "",
   answer: "",
 });
+
+const createEmptySection = () => ({
+  type: "paragraph",
+  title: "",
+  content: "",
+  itemsText: "",
+  textCase: "normal",
+});
+
+// Converts old plain-text blog content into sections so nothing is lost
+const legacyContentToSections = (text = "") =>
+  text
+    .split(/\n\s*\n/)
+    .map((block) => block.trim())
+    .filter(Boolean)
+    .map((block) =>
+      block.startsWith("## ")
+        ? {
+            type: "subheading",
+            title: block.replace(/^##\s+/, ""),
+            content: "",
+            itemsText: "",
+            textCase: "normal",
+          }
+        : {
+            type: "paragraph",
+            title: "",
+            content: block,
+            itemsText: "",
+            textCase: "normal",
+          }
+    );
 
 const ManageBlogs = () => {
   const [blogs, setBlogs] = useState([]);
@@ -68,6 +100,19 @@ const ManageBlogs = () => {
   const openEditForm = (blog) => {
     setEditingBlogId(blog._id);
 
+    const sectionsFromBlog =
+      Array.isArray(blog.contentSections) && blog.contentSections.length > 0
+        ? blog.contentSections.map((section) => ({
+            type: section.type || "paragraph",
+            title: section.title || "",
+            content: section.content || "",
+            itemsText: Array.isArray(section.items)
+              ? section.items.join("\n")
+              : "",
+            textCase: section.textCase || "normal",
+          }))
+        : legacyContentToSections(blog.content);
+
     setFormData({
       title: blog.title || "",
       slug: blog.slug || "",
@@ -76,7 +121,7 @@ const ManageBlogs = () => {
         ? blog.publishedDate.slice(0, 10)
         : "",
       shortDescription: blog.shortDescription || "",
-      content: blog.content || "",
+      contentSections: sectionsFromBlog,
       metaTitle: blog.metaTitle || "",
       metaDescription: blog.metaDescription || "",
       metaKeywords: blog.metaKeywords || "",
@@ -112,6 +157,45 @@ const ManageBlogs = () => {
     }));
   };
 
+  /* ---------- Content sections ---------- */
+
+  const addSection = () => {
+    setFormData((prev) => ({
+      ...prev,
+      contentSections: [...prev.contentSections, createEmptySection()],
+    }));
+  };
+
+  const removeSection = (index) => {
+    setFormData((prev) => ({
+      ...prev,
+      contentSections: prev.contentSections.filter((_, i) => i !== index),
+    }));
+  };
+
+  const updateSection = (index, field, value) => {
+    setFormData((prev) => ({
+      ...prev,
+      contentSections: prev.contentSections.map((section, i) =>
+        i === index ? { ...section, [field]: value } : section
+      ),
+    }));
+  };
+
+  const moveSection = (index, direction) => {
+    setFormData((prev) => {
+      const target = index + direction;
+      if (target < 0 || target >= prev.contentSections.length) return prev;
+
+      const next = [...prev.contentSections];
+      [next[index], next[target]] = [next[target], next[index]];
+
+      return { ...prev, contentSections: next };
+    });
+  };
+
+  /* ---------- FAQs ---------- */
+
   const addFaq = () => {
     setFormData((prev) => ({
       ...prev,
@@ -139,11 +223,26 @@ const ManageBlogs = () => {
     const payload = new FormData();
 
     Object.entries(formData).forEach(([key, value]) => {
-      if (key === "faqs") return; // handled separately below
+      if (key === "faqs" || key === "contentSections") return; // handled below
       if (value !== null && value !== "") {
         payload.append(key, value);
       }
     });
+
+    const sectionsForBackend = formData.contentSections.map((section) => ({
+      type: section.type,
+      title: section.title,
+      content: section.content,
+      textCase: section.textCase,
+      items: section.itemsText
+        ? section.itemsText
+            .split("\n")
+            .map((item) => item.trim())
+            .filter(Boolean)
+        : [],
+    }));
+
+    payload.append("contentSections", JSON.stringify(sectionsForBackend));
 
     const faqsForBackend = formData.faqs.map((faq) => ({
       question: faq.question,
@@ -247,7 +346,7 @@ const ManageBlogs = () => {
               className="border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
             />
 
-                        <div className="md:col-span-2">
+            <div className="md:col-span-2">
               <label className="text-xs font-bold text-textGray px-1">
                 URL Slug (leave blank to auto-generate from title)
               </label>
@@ -297,14 +396,142 @@ const ManageBlogs = () => {
             className="w-full border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary resize-none mt-5"
           />
 
-          <textarea
-            name="content"
-            value={formData.content}
-            onChange={handleChange}
-            placeholder="Full Blog Content"
-            rows="8"
-            className="w-full border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary resize-none mt-5"
-          />
+          {/* Content Sections */}
+          <div className="mt-6 border-t border-borderSoft pt-5">
+            <div className="flex justify-between items-center mb-2">
+              <h4 className="font-bold text-dark text-lg">Blog Content Sections</h4>
+              <button
+                type="button"
+                onClick={addSection}
+                className="secondary-btn flex items-center gap-1 py-1.5 px-3 text-sm"
+              >
+                <Plus size={16} /> Add Section
+              </button>
+            </div>
+            <p className="text-xs text-textGray mb-4">
+              Build the blog body block by block. Sections appear on the page in
+              the order shown here.
+            </p>
+
+            {formData.contentSections.length === 0 && (
+              <div className="rounded-card border-2 border-dashed border-borderSoft py-8 text-center text-sm text-textGray mb-4">
+                No sections yet. Click "Add Section" to start writing.
+              </div>
+            )}
+
+            {formData.contentSections.map((section, index) => {
+              const isList =
+                section.type === "bulletList" ||
+                section.type === "numberedList";
+              const isTitleOnly =
+                section.type === "heading" || section.type === "subheading";
+
+              return (
+                <div
+                  key={index}
+                  className="p-4 border border-borderSoft rounded-card mb-4 bg-lightBg/50 relative"
+                >
+                  <div className="absolute top-3 right-3 flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => moveSection(index, -1)}
+                      disabled={index === 0}
+                      className="text-xs font-bold text-textGray hover:text-primary disabled:opacity-30"
+                      aria-label="Move section up"
+                    >
+                      ↑
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => moveSection(index, 1)}
+                      disabled={index === formData.contentSections.length - 1}
+                      className="text-xs font-bold text-textGray hover:text-primary disabled:opacity-30"
+                      aria-label="Move section down"
+                    >
+                      ↓
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => removeSection(index)}
+                      className="text-red-500 hover:text-red-700"
+                      aria-label="Delete section"
+                    >
+                      <Trash2 size={16} />
+                    </button>
+                  </div>
+
+                  <div className="grid md:grid-cols-2 gap-4 mb-3 pr-24">
+                    <select
+                      value={section.type}
+                      onChange={(e) =>
+                        updateSection(index, "type", e.target.value)
+                      }
+                      className="border border-borderSoft rounded-button px-3 py-2 text-sm outline-none bg-white"
+                    >
+                      <option value="paragraph">Paragraph</option>
+                      <option value="heading">Heading</option>
+                      <option value="subheading">Subheading</option>
+                      <option value="bulletList">Bullet List</option>
+                      <option value="numberedList">Numbered List</option>
+                      <option value="highlight">Highlight Box</option>
+                    </select>
+
+                    <select
+                      value={section.textCase}
+                      onChange={(e) =>
+                        updateSection(index, "textCase", e.target.value)
+                      }
+                      className="border border-borderSoft rounded-button px-3 py-2 text-sm outline-none bg-white"
+                    >
+                      <option value="normal">Normal Case</option>
+                      <option value="uppercase">Uppercase</option>
+                      <option value="lowercase">Lowercase</option>
+                      <option value="capitalize">Capitalize</option>
+                    </select>
+                  </div>
+
+                  <input
+                    value={section.title}
+                    onChange={(e) =>
+                      updateSection(index, "title", e.target.value)
+                    }
+                    placeholder={
+                      isTitleOnly
+                        ? section.type === "heading"
+                          ? "Heading text"
+                          : "Subheading text"
+                        : "Section title (optional)"
+                    }
+                    className="w-full border border-borderSoft rounded-button px-3 py-2 text-sm outline-none bg-white mb-3"
+                  />
+
+                  {!isTitleOnly && !isList && (
+                    <textarea
+                      value={section.content}
+                      onChange={(e) =>
+                        updateSection(index, "content", e.target.value)
+                      }
+                      placeholder="Write the text here. Leave a blank line to start a new paragraph."
+                      rows="5"
+                      className="w-full border border-borderSoft rounded-button px-3 py-2 text-sm outline-none resize-y bg-white"
+                    />
+                  )}
+
+                  {isList && (
+                    <textarea
+                      value={section.itemsText}
+                      onChange={(e) =>
+                        updateSection(index, "itemsText", e.target.value)
+                      }
+                      placeholder="List items (one per line)"
+                      rows="4"
+                      className="w-full border border-borderSoft rounded-button px-3 py-2 text-sm outline-none resize-y bg-white"
+                    />
+                  )}
+                </div>
+              );
+            })}
+          </div>
 
           {/* SEO Fields */}
           <div className="mt-6 border-t border-borderSoft pt-5">

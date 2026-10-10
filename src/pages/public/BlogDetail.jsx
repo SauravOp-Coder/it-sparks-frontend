@@ -1,18 +1,32 @@
 import { Link, useParams } from "react-router-dom";
-import { ArrowLeft, CalendarDays } from "lucide-react";
+import { ArrowLeft, CalendarDays, CheckCircle2 } from "lucide-react";
 import BlogCard from "../../components/blogs/BlogCard";
 import SEO from "../../components/common/SEO";
 import FaqSection from "../../components/common/FaqSection";
 import { useEffect, useState } from "react";
 import { getBlogsApi, getSingleBlogApi } from "../../api/blogApi";
 
+const textCaseClass = {
+  normal: "",
+  uppercase: "uppercase",
+  lowercase: "lowercase",
+  capitalize: "capitalize",
+};
+
+const splitParagraphs = (text = "") =>
+  text
+    .split(/\n\s*\n/)
+    .map((p) => p.trim())
+    .filter(Boolean);
+
+// Fallback for old blogs that only have plain-text `content`
 const splitBlocks = (text = "") =>
   text
     .split(/\n\s*\n/)
     .map((block) => block.trim())
     .filter(Boolean);
 
-const renderContentBlock = (block, index) => {
+const renderLegacyBlock = (block, index) => {
   if (block.startsWith("## ")) {
     return (
       <h3
@@ -29,6 +43,132 @@ const renderContentBlock = (block, index) => {
       {block}
     </p>
   );
+};
+
+const renderSection = (section, index) => {
+  const caseClass = textCaseClass[section.textCase] || "";
+  const key = section._id || index;
+
+  if (section.type === "heading") {
+    return (
+      <div key={key} className="mt-4 border-l-4 border-primary pl-4">
+        <h2
+          className={`text-3xl md:text-4xl font-black text-dark leading-tight ${caseClass}`}
+        >
+          {section.title || section.content}
+        </h2>
+      </div>
+    );
+  }
+
+  if (section.type === "subheading") {
+    return (
+      <div key={key} className="mt-2">
+        <h3 className={`text-lg md:text-xl font-bold text-dark ${caseClass}`}>
+          {section.title || section.content}
+        </h3>
+      </div>
+    );
+  }
+
+  if (section.type === "paragraph") {
+    return (
+      <div key={key}>
+        {section.title && (
+          <h3
+            className={`text-2xl font-extrabold text-dark mb-3 ${caseClass}`}
+          >
+            {section.title}
+          </h3>
+        )}
+
+        <div className="space-y-3">
+          {splitParagraphs(section.content).map((para, i) => (
+            <p
+              key={i}
+              className={`text-textGray leading-8 text-lg whitespace-pre-line ${caseClass}`}
+            >
+              {para}
+            </p>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (section.type === "bulletList") {
+    return (
+      <div key={key}>
+        {section.title && (
+          <h3
+            className={`text-2xl font-extrabold text-dark mb-3 ${caseClass}`}
+          >
+            {section.title}
+          </h3>
+        )}
+
+        <ul className="grid gap-3">
+          {(section.items || []).map((item, itemIndex) => (
+            <li
+              key={itemIndex}
+              className={`flex gap-3 text-textGray leading-7 text-lg ${caseClass}`}
+            >
+              <CheckCircle2 size={20} className="text-primary shrink-0 mt-1" />
+              <span>{item}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+  }
+
+  if (section.type === "numberedList") {
+    return (
+      <div key={key}>
+        {section.title && (
+          <h3
+            className={`text-2xl font-extrabold text-dark mb-3 ${caseClass}`}
+          >
+            {section.title}
+          </h3>
+        )}
+
+        <ol className="grid gap-3 list-decimal pl-6">
+          {(section.items || []).map((item, itemIndex) => (
+            <li
+              key={itemIndex}
+              className={`text-textGray leading-7 text-lg pl-2 ${caseClass}`}
+            >
+              {item}
+            </li>
+          ))}
+        </ol>
+      </div>
+    );
+  }
+
+  if (section.type === "highlight") {
+    return (
+      <div
+        key={key}
+        className="bg-primary/10 border border-primary/20 rounded-card p-6"
+      >
+        {section.title && (
+          <h3 className={`text-2xl font-extrabold text-primary ${caseClass}`}>
+            {section.title}
+          </h3>
+        )}
+
+        <p
+          className={`text-dark leading-8 mt-3 font-semibold whitespace-pre-line ${caseClass}`}
+        >
+          {section.content}
+        </p>
+      </div>
+    );
+  }
+
+  return null;
 };
 
 const BlogDetail = () => {
@@ -95,6 +235,9 @@ const BlogDetail = () => {
     );
   }
 
+  const hasSections =
+    Array.isArray(blog.contentSections) && blog.contentSections.length > 0;
+
   return (
     <main>
       <SEO
@@ -159,8 +302,10 @@ const BlogDetail = () => {
           </div>
 
           <article className="bg-white border border-borderSoft rounded-card shadow-card p-7 md:p-10">
-            <div className="space-y-4">
-              {splitBlocks(blog.content).map(renderContentBlock)}
+            <div className="space-y-6">
+              {hasSections
+                ? blog.contentSections.map(renderSection)
+                : splitBlocks(blog.content).map(renderLegacyBlock)}
             </div>
 
             <div className="mt-8 bg-lightBg border border-borderSoft rounded-card p-6">
@@ -178,7 +323,7 @@ const BlogDetail = () => {
             </div>
           </article>
 
-          <FaqSection faqs={blog.faqs} />
+          <FaqSection faqs={blog.faqs || []} />
         </div>
       </section>
 
