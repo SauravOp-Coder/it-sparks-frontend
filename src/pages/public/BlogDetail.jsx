@@ -3,6 +3,7 @@ import { ArrowLeft, CalendarDays, CheckCircle2 } from "lucide-react";
 import BlogCard from "../../components/blogs/BlogCard";
 import SEO from "../../components/common/SEO";
 import FaqSection from "../../components/common/FaqSection";
+import FreeDemoPopup from "../../components/common/FreeDemoPopup";
 import { useEffect, useState } from "react";
 import { getBlogsApi, getSingleBlogApi } from "../../api/blogApi";
 
@@ -178,6 +179,7 @@ const BlogDetail = () => {
   const [relatedBlogs, setRelatedBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [demoPopupOpen, setDemoPopupOpen] = useState(false);
 
   const fetchBlog = async () => {
     try {
@@ -317,9 +319,13 @@ const BlogDetail = () => {
                 on your interest and career goal.
               </p>
 
-              <Link to="/contact" className="primary-btn mt-5">
+              <button
+                type="button"
+                onClick={() => setDemoPopupOpen(true)}
+                className="primary-btn mt-5"
+              >
                 Contact Now
-              </Link>
+              </button>
             </div>
           </article>
 
@@ -348,6 +354,11 @@ const BlogDetail = () => {
           </div>
         </section>
       )}
+
+      <FreeDemoPopup
+        isOpen={demoPopupOpen}
+        onClose={() => setDemoPopupOpen(false)}
+      />
     </main>
   );
 };
