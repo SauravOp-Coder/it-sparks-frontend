@@ -180,12 +180,6 @@ const Footer = () => {
                 Courses
               </Link>
 
-              <Link
-                to="/placements"
-                className="w-fit hover:text-primary hover:translate-x-1 transition-all"
-              >
-                Placements
-              </Link>
 
               <Link
                 to="/gallery"
