@@ -310,37 +310,7 @@ const ManageSettings = () => {
             className="border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
           />
 
-          <input
-            name="facebookLink"
-            value={formData.facebookLink}
-            onChange={handleChange}
-            placeholder="Facebook Link"
-            className="border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
-          />
-
-          <input
-            name="instagramLink"
-            value={formData.instagramLink}
-            onChange={handleChange}
-            placeholder="Instagram Link"
-            className="border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
-          />
-
-          <input
-            name="linkedinLink"
-            value={formData.linkedinLink}
-            onChange={handleChange}
-            placeholder="LinkedIn Link"
-            className="border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
-          />
-
-          <input
-            name="youtubeLink"
-            value={formData.youtubeLink}
-            onChange={handleChange}
-            placeholder="YouTube Link"
-            className="border border-borderSoft rounded-button px-4 py-3 outline-none focus:border-primary"
-          />
+          
         </div>
 
         <button type="submit" disabled={loading} className="primary-btn mt-7">
