@@ -53,11 +53,14 @@ const CourseDetail = () => {
 
   const renderSection = (section, index) => {
     const caseClass = textCaseClass[section.textCase] || "";
+    const key = section._id || index;
 
     if (section.type === "heading") {
       return (
-        <div key={section._id || index} className="mt-8 border-l-4 border-primary pl-4">
-          <h2 className={`text-4xl md:text-5xl font-black text-dark leading-tight ${caseClass}`}>
+        <div key={key} className="mt-4 border-l-4 border-primary pl-4">
+          <h2
+            className={`text-3xl md:text-4xl font-black text-dark leading-tight ${caseClass}`}
+          >
             {section.title || section.content}
           </h2>
         </div>
@@ -66,7 +69,7 @@ const CourseDetail = () => {
 
     if (section.type === "subheading") {
       return (
-        <div key={section._id || index} className="mt-5">
+        <div key={key} className="mt-2">
           <h3 className={`text-lg md:text-xl font-bold text-dark ${caseClass}`}>
             {section.title || section.content}
           </h3>
@@ -76,14 +79,16 @@ const CourseDetail = () => {
 
     if (section.type === "paragraph") {
       return (
-        <div key={section._id || index} className="mt-6">
+        <div key={key}>
           {section.title && (
-            <h3 className={`text-2xl font-extrabold text-dark ${caseClass}`}>
+            <h3
+              className={`text-2xl font-extrabold text-dark mb-3 ${caseClass}`}
+            >
               {section.title}
             </h3>
           )}
 
-          <div className="space-y-3 mt-3">
+          <div className="space-y-3">
             {splitParagraphs(section.content).map((para, i) => (
               <p
                 key={i}
@@ -99,14 +104,16 @@ const CourseDetail = () => {
 
     if (section.type === "bulletList") {
       return (
-        <div key={section._id || index} className="mt-7">
+        <div key={key}>
           {section.title && (
-            <h3 className={`text-2xl font-extrabold text-dark ${caseClass}`}>
+            <h3
+              className={`text-2xl font-extrabold text-dark mb-3 ${caseClass}`}
+            >
               {section.title}
             </h3>
           )}
 
-          <ul className="grid gap-3 mt-4">
+          <ul className="grid gap-3">
             {(section.items || []).map((item, itemIndex) => (
               <li
                 key={itemIndex}
@@ -123,14 +130,16 @@ const CourseDetail = () => {
 
     if (section.type === "numberedList") {
       return (
-        <div key={section._id || index} className="mt-7">
+        <div key={key}>
           {section.title && (
-            <h3 className={`text-2xl font-extrabold text-dark ${caseClass}`}>
+            <h3
+              className={`text-2xl font-extrabold text-dark mb-3 ${caseClass}`}
+            >
               {section.title}
             </h3>
           )}
 
-          <ol className="grid gap-3 mt-4 list-decimal pl-6">
+          <ol className="grid gap-3 list-decimal pl-6">
             {(section.items || []).map((item, itemIndex) => (
               <li
                 key={itemIndex}
@@ -147,8 +156,8 @@ const CourseDetail = () => {
     if (section.type === "highlight") {
       return (
         <div
-          key={section._id || index}
-          className="mt-7 bg-primary/10 border border-primary/20 rounded-card p-6"
+          key={key}
+          className="bg-primary/10 border border-primary/20 rounded-card p-6"
         >
           {section.title && (
             <h3 className={`text-2xl font-extrabold text-primary ${caseClass}`}>
@@ -156,7 +165,9 @@ const CourseDetail = () => {
             </h3>
           )}
 
-          <p className={`text-dark leading-8 mt-3 font-semibold whitespace-pre-line ${caseClass}`}>
+          <p
+            className={`text-dark leading-8 mt-3 font-semibold whitespace-pre-line ${caseClass}`}
+          >
             {section.content}
           </p>
         </div>
@@ -292,7 +303,9 @@ const CourseDetail = () => {
              
 
               {hasDetailSections ? (
-                <div>{course.detailSections.map(renderSection)}</div>
+                <div className="space-y-6">
+                  {course.detailSections.map(renderSection)}
+                </div>
               ) : (
                 <p className="text-textGray leading-8 mt-5">
                   {course.description}

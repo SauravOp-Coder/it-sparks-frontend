@@ -85,6 +85,18 @@ const ManageCourses = () => {
     }));
   };
 
+  const moveDetailSection = (index, direction) => {
+    setFormData((prev) => {
+      const target = index + direction;
+      if (target < 0 || target >= prev.detailSections.length) return prev;
+
+      const next = [...prev.detailSections];
+      [next[index], next[target]] = [next[target], next[index]];
+
+      return { ...prev, detailSections: next };
+    });
+  };
+
   const addFaq = () => {
     setFormData((prev) => ({
       ...prev,
@@ -499,67 +511,139 @@ const ManageCourses = () => {
 
           {/* Dynamic Detail Sections */}
           <div className="mt-6 border-t border-borderSoft pt-5">
-            <div className="flex justify-between items-center mb-4">
+            <div className="flex justify-between items-center mb-2">
               <h4 className="font-bold text-dark text-lg">Detail Sections</h4>
-              <button type="button" onClick={addDetailSection} className="secondary-btn flex items-center gap-1 py-1.5 px-3 text-sm">
+              <button
+                type="button"
+                onClick={addDetailSection}
+                className="secondary-btn flex items-center gap-1 py-1.5 px-3 text-sm"
+              >
                 <Plus size={16} /> Add Section
               </button>
             </div>
-            
-            {formData.detailSections.map((section, index) => (
-              <div key={index} className="p-4 border border-borderSoft rounded-card mb-4 bg-lightBg/50 relative">
-                <button 
-                  type="button" 
-                  onClick={() => removeDetailSection(index)} 
-                  className="absolute top-4 right-4 text-red-500 hover:text-red-700"
-                  aria-label="Delete Section"
+            <p className="text-xs text-textGray mb-4">
+              Build the course page body block by block. Sections appear on the
+              page in the order shown here.
+            </p>
+
+            {formData.detailSections.length === 0 && (
+              <div className="rounded-card border-2 border-dashed border-borderSoft py-8 text-center text-sm text-textGray mb-4">
+                No sections yet. Click "Add Section" to start writing.
+              </div>
+            )}
+
+            {formData.detailSections.map((section, index) => {
+              const isList =
+                section.type === "bulletList" ||
+                section.type === "numberedList";
+              const isTitleOnly =
+                section.type === "heading" || section.type === "subheading";
+
+              return (
+                <div
+                  key={index}
+                  className="p-4 border border-borderSoft rounded-card mb-4 bg-lightBg/50 relative"
                 >
-                  <Trash2 size={16} />
-                </button>
-                <div className="grid md:grid-cols-3 gap-4 mb-3 pr-8">
+                  <div className="absolute top-3 right-3 flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => moveDetailSection(index, -1)}
+                      disabled={index === 0}
+                      className="text-xs font-bold text-textGray hover:text-primary disabled:opacity-30"
+                      aria-label="Move section up"
+                    >
+                      ↑
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => moveDetailSection(index, 1)}
+                      disabled={index === formData.detailSections.length - 1}
+                      className="text-xs font-bold text-textGray hover:text-primary disabled:opacity-30"
+                      aria-label="Move section down"
+                    >
+                      ↓
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => removeDetailSection(index)}
+                      className="text-red-500 hover:text-red-700"
+                      aria-label="Delete Section"
+                    >
+                      <Trash2 size={16} />
+                    </button>
+                  </div>
+
+                  <div className="grid md:grid-cols-2 gap-4 mb-3 pr-24">
+                    <select
+                      value={section.type}
+                      onChange={(e) =>
+                        updateDetailSection(index, "type", e.target.value)
+                      }
+                      className="border border-borderSoft rounded-button px-3 py-2 text-sm outline-none bg-white"
+                    >
+                      <option value="paragraph">Paragraph</option>
+                      <option value="heading">Heading</option>
+                      <option value="subheading">Subheading</option>
+                      <option value="bulletList">Bullet List</option>
+                      <option value="numberedList">Numbered List</option>
+                      <option value="highlight">Highlight Box</option>
+                    </select>
+
+                    <select
+                      value={section.textCase}
+                      onChange={(e) =>
+                        updateDetailSection(index, "textCase", e.target.value)
+                      }
+                      className="border border-borderSoft rounded-button px-3 py-2 text-sm outline-none bg-white"
+                    >
+                      <option value="normal">Normal Case</option>
+                      <option value="uppercase">Uppercase</option>
+                      <option value="lowercase">Lowercase</option>
+                      <option value="capitalize">Capitalize</option>
+                    </select>
+                  </div>
+
                   <input
                     value={section.title}
-                    onChange={(e) => updateDetailSection(index, "title", e.target.value)}
-                    placeholder="Section Title"
-                    className="border border-borderSoft rounded-button px-3 py-2 text-sm outline-none bg-white"
+                    onChange={(e) =>
+                      updateDetailSection(index, "title", e.target.value)
+                    }
+                    placeholder={
+                      isTitleOnly
+                        ? section.type === "heading"
+                          ? "Heading text"
+                          : "Subheading text"
+                        : "Section title (optional)"
+                    }
+                    className="w-full border border-borderSoft rounded-button px-3 py-2 text-sm outline-none bg-white mb-3"
                   />
-                  <select
-                    value={section.type}
-                    onChange={(e) => updateDetailSection(index, "type", e.target.value)}
-                    className="border border-borderSoft rounded-button px-3 py-2 text-sm outline-none bg-white"
-                  >
-                    <option value="paragraph">Paragraph</option>
-                    <option value="subheading">Subheading</option>
-                    <option value="list">List</option>
-                  </select>
-                  <select
-                    value={section.textCase}
-                    onChange={(e) => updateDetailSection(index, "textCase", e.target.value)}
-                    className="border border-borderSoft rounded-button px-3 py-2 text-sm outline-none bg-white"
-                  >
-                    <option value="normal">Normal Case</option>
-                    <option value="uppercase">Uppercase</option>
-                    <option value="lowercase">Lowercase</option>
-                  </select>
+
+                  {!isTitleOnly && !isList && (
+                    <textarea
+                      value={section.content}
+                      onChange={(e) =>
+                        updateDetailSection(index, "content", e.target.value)
+                      }
+                      placeholder="Write the text here. Leave a blank line to start a new paragraph."
+                      rows="5"
+                      className="w-full border border-borderSoft rounded-button px-3 py-2 text-sm outline-none resize-y bg-white"
+                    />
+                  )}
+
+                  {isList && (
+                    <textarea
+                      value={section.itemsText}
+                      onChange={(e) =>
+                        updateDetailSection(index, "itemsText", e.target.value)
+                      }
+                      placeholder="List items (one per line)"
+                      rows="4"
+                      className="w-full border border-borderSoft rounded-button px-3 py-2 text-sm outline-none resize-y bg-white"
+                    />
+                  )}
                 </div>
-                <textarea
-                  value={section.content}
-                  onChange={(e) => updateDetailSection(index, "content", e.target.value)}
-                  placeholder="Section Content"
-                  rows="2"
-                  className="w-full border border-borderSoft rounded-button px-3 py-2 text-sm outline-none resize-none bg-white mb-3"
-                />
-                {section.type === "list" && (
-                  <textarea
-                    value={section.itemsText}
-                    onChange={(e) => updateDetailSection(index, "itemsText", e.target.value)}
-                    placeholder="List Items (One per line)"
-                    rows="3"
-                    className="w-full border border-borderSoft rounded-button px-3 py-2 text-sm outline-none resize-none bg-white"
-                  />
-                )}
-              </div>
-            ))}
+              );
+            })}
           </div>
 
           {/* FAQs */}
