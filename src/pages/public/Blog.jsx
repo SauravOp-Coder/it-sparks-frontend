@@ -34,10 +34,7 @@ const Blog = () => {
       />
       <section className="bg-gradient-to-br from-white via-lightBg to-white py-20">
         <div className="container-custom text-center max-w-3xl">
-          <span className="text-primary font-bold uppercase tracking-wide text-sm">
-            Blogs
-          </span>
-
+         
           <h1 className="text-4xl md:text-5xl font-extrabold text-dark mt-4">
             Career guidance and IT learning articles
           </h1>
