@@ -1,3 +1,4 @@
+
 import API from "./axiosConfig";
 
 export const createEnquiryApi = async (data) => {
@@ -11,7 +12,7 @@ export const getAdminEnquiriesApi = async () => {
 };
 
 export const updateEnquiryStatusApi = async (id, status) => {
-  const response = await API.put(`/enquiries/${id}`, { status });
+  const response = await API.put(`/enquiries/${id}/status`, { status });
   return response.data;
 };
 
