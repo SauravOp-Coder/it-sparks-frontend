@@ -1,4 +1,3 @@
-
 import {
   ArrowRight,
   ChevronLeft,
@@ -49,10 +48,10 @@ const HomeBannerSlider = () => {
 
   if (loading) {
     return (
-      <section className="relative h-[100vh] min-h-[700px] flex items-center justify-center bg-slate-900 text-white overflow-hidden">
-        <div className="animate-pulse text-center w-full max-w-md px-6">
-          <div className="h-8 w-48 max-w-full bg-slate-800 rounded mx-auto mb-4" />
-          <div className="h-12 w-full max-w-96 bg-slate-800 rounded mx-auto" />
+      <section className="relative h-[100vh] min-h-[700px] flex items-center justify-center bg-slate-900 text-white">
+        <div className="animate-pulse text-center">
+          <div className="h-8 w-48 bg-slate-800 rounded mx-auto mb-4" />
+          <div className="h-12 w-96 bg-slate-800 rounded mx-auto" />
         </div>
       </section>
     );
